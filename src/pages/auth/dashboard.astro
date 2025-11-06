@@ -1,0 +1,47 @@
+---
+import Layout from "@layouts/BaseLayout.astro";
+import { supabase } from "@shared/api";
+
+const accessToken = Astro.cookies.get("sb-access-token");
+const refreshToken = Astro.cookies.get("sb-refresh-token");
+
+if (!accessToken || !refreshToken) {
+  return Astro.redirect("/auh/signin");
+}
+
+let session;
+try {
+  session = await supabase.auth.setSession({
+    refresh_token: refreshToken.value,
+    access_token: accessToken.value,
+  });
+  if (session.error) {
+    Astro.cookies.delete("sb-access-token", {
+      path: "/",
+    });
+    Astro.cookies.delete("sb-refresh-token", {
+      path: "/",
+    });
+    return Astro.redirect("/signin");
+  }
+} catch (error) {
+  Astro.cookies.delete("sb-access-token", {
+    path: "/",
+  });
+  Astro.cookies.delete("sb-refresh-token", {
+    path: "/",
+  });
+  return Astro.redirect("/auth/signin");
+}
+
+const email = session.data.user?.email;
+export const prerender = false;
+---
+
+<Layout siteTitle="panel de control">
+  <h1>Bienvenido {email}</h1>
+  <p>Estamos felices de verte aquí</p>
+  <form action="/api/auth/signout">
+    <button type="submit">Cerrar sesión</button>
+  </form>
+</Layout>
