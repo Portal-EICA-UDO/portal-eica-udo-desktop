@@ -2,11 +2,9 @@
 import HelloWorld from "@shared/ui/astro/HelloWorld.astro";
 import { Counter } from "@shared/ui/react/Counter";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import Header from "@shared/ui/astro/Header.astro";
 ---
-
-<BaseLayout siteTitle="Hello World">
-  <div class="flex flex-col justify-center items-center h-screen">
-    <HelloWorld />
-    <Counter client:load />
-  </div>
+<BaseLayout siteTitle="Portal EICA UDO">
+	<Header />
 </BaseLayout>
+
