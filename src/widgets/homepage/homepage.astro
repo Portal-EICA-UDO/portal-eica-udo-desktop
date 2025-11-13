@@ -1,0 +1,70 @@
+---
+// Homepage widget: Hero + Mission/Vision cards
+// Props: title, subtitle, heroImage, mission, vision
+const {
+  title = "Escuela de Ingenierías y Ciencias Aplicadas",
+  subtitle = "Del pueblo venimos y hacia el pueblo vamos",
+  heroImage = "/images/fondoUDO.png",
+  mission = {
+    title: "Mision",
+    body: "Ser un ente Rector en la Educación Superior que asuma una filosofía democrática y participativa; orientada hacia la plena autonomía, comprometida a dedicar sus esfuerzos a la formación de recursos humanos competitivos para el mercado laboral, prestando servicio de calidad en las áreas del conocimiento científico, humanístico y tecnológico mediante la realizacion de funciones de investigación, docencia y extensión, atendiendo la pertinencia social de cada núcleo, respondiendo oportunamente a las exigencias de su entorno y a las demandas de cambios e innovacion que caracterizan a nuestra época.",
+  },
+  vision = {
+    title: "Vision",
+    body: "Contribuir a la formación de profesionales de excelencia, de valores éticos y morales, críticos, creativos e integrales en la prestación de servicios en las diferentes áreas del conocimiento y desarrollando actividades de investigación, docencia y extensión para cooperar en la construcción de una sociedad venezolana de la Región Oriental -Insular - Sur del pais.",
+  },
+} = Astro.props;
+---
+
+<section class="h-full homepage-hero max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="h-full relative rounded-3xl shadow-lg">
+    <!-- background image -->
+    <div
+      class="h-full md:h-full bg-center bg-cover rounded-3xl"
+      style={`background-image: url("${heroImage}")`}
+      aria-hidden="true"
+    >
+      <div class="relative h-full">
+        <div class="max-w-7xl mx-auto flex items-start px-6 pt-6 md:pt-25">
+          <div class="w-full md:w-2/3 lg:w-1/2 ml-auto text-right sm:text-center">
+            <h1
+              class="text-3xl md:text-5xl font-bold text-white leading-tight drop-shadow"
+            >
+              {title}
+            </h1>
+            <!-- subtitle card: centered content, consistent padding and backdrop blur -->
+            <div
+              class="inline-flex items-center justify-center bg-white/20 backdrop-blur-xs text-white p-1 md:p-1e rounded-3xl shadow-md mt-4 max-w-prose"
+            >
+              <p
+                class="m-0 mx-8 text-center text-white/90 text-sm md:text-base"
+              >
+                {subtitle}
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- mission & vision cards container -->
+        <div
+          class="left-4 right-4 bottom-4 p-4 md:left-10 md:right-10 flex flex-col md:flex-row md:items-end gap-6"
+        >
+          <article
+            class="bg-white/20 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md flex-1 max-h-56 md:max-h-72 overflow-y-auto no-scrollbar"
+          >
+            <h3 class="text-2xl font-semibold">{mission.title}</h3>
+            <p class="mt-3 text-sm">{mission.body}</p>
+          </article>
+
+          <article
+            class="bg-white/20 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md flex-1 max-h-35 md:max-h-51 overflow-y-auto no-scrollbar"
+          >
+            <h3 class="text-2xl font-semibold">{vision.title}</h3>
+            <p class="mt-3 text-sm">{vision.body}</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- mission & vision cards -->
+  </div>
+</section>
