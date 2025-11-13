@@ -7,65 +7,94 @@
 // - showLogin: boolean
 // - loginLabel: string
 // Usa Tailwind CSS clases del proyecto.
-export interface NavLink { label: string; href?: string }
-
-const {
-	logoSrc = '/images/logoUDO.png',
-	links = [
-		{ label: 'Carreras', href: '#' },
-		{ label: 'Staff', href: '#' },
-		{ label: 'Interes', href: '#' },
-		{ label: 'Mapa UDO', href: '#' },
-	] as NavLink[],
-	showLogin = true,
-	loginLabel = 'Iniciar Sesion',
-} = Astro.props as {
-	logoSrc?: string
-	links?: NavLink[]
-	showLogin?: boolean
-	loginLabel?: string
+export interface NavLink {
+  label: string;
+  href?: string;
 }
 
+const {
+  logoSrc = "/images/logoUDO.png",
+  links = [
+    { label: "Carreras", href: "#" },
+    { label: "Staff", href: "#" },
+    { label: "Interes", href: "#" },
+    { label: "Mapa UDO", href: "#" },
+  ] as NavLink[],
+  showLogin = true,
+  loginLabel = "Iniciar Sesion",
+} = Astro.props as {
+  logoSrc?: string;
+  links?: NavLink[];
+  showLogin?: boolean;
+  loginLabel?: string;
+};
 ---
 
 <header class="bg-white">
-	<div class="my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<!-- left button -->
-			<div class="flex items-center z-10">
-				<button type="button" class="inline-flex items-center gap-2 px-3 py-1 bg-sky-700 text-white text-sm font-medium rounded-full shadow">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-					stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe-icon"><circle cx="12" cy="12" r="10"/>
-						<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-						<path d="M2 12h20"/>
-					</svg>
-					<span class="sm:inline">Siceudo</span>
-				</button>
-			</div>
+  <div class="my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- left button -->
+    <div class="flex items-center z-10">
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-3 py-1 bg-sky-700 text-white text-sm font-medium rounded-full shadow"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-globe-icon"
+          ><circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>
+        <span class="sm:inline">Siceudo</span>
+      </button>
+    </div>
 
-			<!-- center nav: two links left, two links right -->
-			<nav class=" flex-1 items-center z-10">
-				<div class="justify-around flex flex-column items-center w-full">
-					{links.slice(0,2).map(link => (
-						<a href={link.href ?? '#'} class=" md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition">{link.label}</a>
-					))}
-				
-					<img src={logoSrc} alt="Logo" class=" top-4 w-20 h-20 rounded-full border-4 border-white shadow-md object-cover bg-white z-0" />
-				
-					{links.slice(2,4).map(link => (
-						<a href={link.href ?? '#'} class="md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition">{link.label}</a>
-					))}
-				</div>
-			</nav>
+    <!-- center nav: two links left, two links right -->
+    <nav class="flex-1 items-center z-10">
+      <div class="justify-around flex flex-column items-center w-full">
+        {
+          links.slice(0, 2).map((link) => (
+            <a
+              href={link.href ?? "#"}
+              class=" md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition"
+            >
+              {link.label}
+            </a>
+          ))
+        }
 
-			<!-- right actions -->
-			<div class="flex items-center z-10">
-				{showLogin && (
-					<a class="px-4 py-1 text-sm font-medium rounded-full border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition" href="#">
-						{loginLabel}
-					</a>
-				)}
-			</div>
+        <img
+          src={logoSrc}
+          alt="Logo"
+          class="top-4 w-20 h-20 rounded-full border-4 border-white shadow-md object-cover bg-white z-0"
+        />
 
-			<!-- centered logo overlapping header -->
-	</div>
+        {
+          links.slice(2, 4).map((link) => (
+            <a
+              href={link.href ?? "#"}
+              class="md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
+    <!-- right actions -->
+    <div class="flex items-center justify-center z-10 w-24">
+      <slot name="rightButton" />
+    </div>
+
+    <!-- centered logo overlapping header -->
+  </div>
 </header>
