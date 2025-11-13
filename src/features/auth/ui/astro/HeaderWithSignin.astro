@@ -1,0 +1,10 @@
+---
+import Header from "@shared/ui/astro/Header.astro";
+import { SigninWithGoogle } from "../react/SigninWithGoogle";
+---
+
+<Header>
+  <div slot="rightButton">
+    <SigninWithGoogle loginLabel="registrate" client:only="react" />
+  </div>
+</Header>
