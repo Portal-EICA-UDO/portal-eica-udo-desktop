@@ -4,7 +4,7 @@
 const {
   title = "Escuela de Ingenierías y Ciencias Aplicadas",
   subtitle = "Del pueblo venimos y hacia el pueblo vamos",
-  heroImage = "/images/fondoUDO.png",
+  heroImage = "/images/fondoUDO.webp",
   mission = {
     title: "Mision",
     body: "Ser un ente Rector en la Educación Superior que asuma una filosofía democrática y participativa; orientada hacia la plena autonomía, comprometida a dedicar sus esfuerzos a la formación de recursos humanos competitivos para el mercado laboral, prestando servicio de calidad en las áreas del conocimiento científico, humanístico y tecnológico mediante la realizacion de funciones de investigación, docencia y extensión, atendiendo la pertinencia social de cada núcleo, respondiendo oportunamente a las exigencias de su entorno y a las demandas de cambios e innovacion que caracterizan a nuestra época.",
@@ -16,7 +16,9 @@ const {
 } = Astro.props;
 ---
 
-<section class="h-full homepage-hero max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+<section
+  class="h-full homepage-hero max-w-8xl mx-auto px-4 sm:px-6 lg:px-4 pb-4"
+>
   <div class="h-full relative rounded-3xl shadow-lg">
     <!-- background image -->
     <div
@@ -24,9 +26,11 @@ const {
       style={`background-image: url("${heroImage}")`}
       aria-hidden="true"
     >
-      <div class="relative h-full">
-        <div class="max-w-7xl mx-auto flex items-start px-6 pt-6 md:pt-25">
-          <div class="w-full md:w-2/3 lg:w-1/2 ml-auto text-right sm:text-center">
+      <div class="flex flex-col h-full">
+        <div class="w-full flex items-start px-6 pt-6 md:pt-25">
+          <div
+            class="w-full md:w-2/3 lg:w-1/2 ml-auto text-right sm:text-center"
+          >
             <h1
               class="text-3xl md:text-5xl font-bold text-white leading-tight drop-shadow"
             >
@@ -46,7 +50,7 @@ const {
         </div>
         <!-- mission & vision cards container -->
         <div
-          class="left-4 right-4 bottom-4 p-4 md:left-10 md:right-10 flex flex-col md:flex-row md:items-end gap-6"
+          class="left-4 right-4 bottom-4 p-4 md:left-10 md:right-10 flex flex-col md:flex-row items-end gap-6 flex-1"
         >
           <article
             class="bg-white/20 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md flex-1 max-h-56 md:max-h-72 overflow-y-auto no-scrollbar"
