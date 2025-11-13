@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Utility to hide native scrollbars but keep scrolling available.
+	 Use by adding the `no-scrollbar` class alongside overflow-y-auto.
+	 Cross-browser rules: Edge/IE, Firefox and WebKit-based browsers.
+*/
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+	-webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+}
+.no-scrollbar::-webkit-scrollbar {
+	display: none; /* Chrome, Safari and Opera */
+}
