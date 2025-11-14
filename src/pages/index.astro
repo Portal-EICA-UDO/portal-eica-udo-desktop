@@ -2,13 +2,14 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Header from "@shared/ui/astro/Header.astro";
 import Homepage from "../widgets/homepage/homepage.astro";
+import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
 ---
-<BaseLayout siteTitle="Portal EICA UDO">
-	<div class="h-lvh flex flex-col">
-		<Header />
-		<div class="flex-1">
-			<Homepage />
-		</div>
-	</div>
-</BaseLayout>
 
+<BaseLayout siteTitle="Portal EICA UDO">
+  <div class="h-lvh flex flex-col">
+    <HeaderWithSignin />
+    <div class="flex-1">
+      <Homepage />
+    </div>
+  </div>
+</BaseLayout>
