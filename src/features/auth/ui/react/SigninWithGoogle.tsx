@@ -2,14 +2,15 @@ import { supabase } from "@shared/api";
 import { useEffect, useState } from "react";
 import { email, role, name } from "../../nanostore";
 import { useStore } from "@nanostores/react";
-import type { Session } from "../../types";
+
+import type { Session } from "@supabase/supabase-js";
 
 type props = {
   loginLabel: string;
 };
 
 export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
-  const [session, setSession] = useState<Session>(undefined);
+  const [session, setSession] = useState<Session>();
   const $role = useStore(role);
   const $email = useStore(email);
   const $name = useStore(name);
@@ -26,9 +27,11 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
             .select("*")
             .eq("user_id", user.id);
 
-          role.set(data[0].role_name);
-          email.set(user.email);
-          name.set(user.user_metadata.name);
+          if (data) {
+            role.set(data[0].role_name);
+            email.set(user.email as string);
+            name.set(user.user_metadata.name);
+          }
         } else {
           role.set("unauthenticated");
         }
@@ -37,7 +40,7 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
+      session && setSession(session);
     });
 
     return () => subscription.unsubscribe();
