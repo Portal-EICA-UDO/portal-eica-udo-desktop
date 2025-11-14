@@ -24,4 +24,22 @@ const { siteTitle, description } = Astro.props;
   </body>
 </html>
 
-<style></style>
+<style is:global>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+  html {
+    /* crear variables */
+    --font-tittle: 48px;
+    --font-sub-tittle: 32px;
+    --font-default: 16px;
+  }
+  * {
+    font-family: "Roboto", sans-serif;
+  }
+  p {
+    font-size: var(--font-default);
+  }
+  body {
+    background-color: #fafafa;
+  }
+</style>
