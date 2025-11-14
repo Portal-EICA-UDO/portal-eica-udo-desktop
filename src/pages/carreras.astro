@@ -1,0 +1,48 @@
+---
+import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
+import Card from "@shared/ui/astro/Card.astro";
+import Modal from "@shared/ui/astro/Modal.astro";
+import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+---
+
+<BaseLayout siteTitle="Carreras">
+  <h1 class="text-3xl">Carreras</h1>
+  <div class="flex flex-row gap-4 flex-wrap">
+    <Card
+      imageSrc="/images/fondoUDO.webp"
+      title="Ingeniería de Sistemas"
+      description="Descripción de la carrera de Ingeniería de Sistemas."
+    >
+      <ActiveModalButton label="Ver detalles" slot="action">
+        <Modal slot="modal-content" />
+      </ActiveModalButton>
+    </Card>
+    <Card
+      imageSrc="/images/fondoUDO.webp"
+      title="Ingeniería de Sistemas"
+      description="Descripción de la carrera de Ingeniería de Sistemas."
+    >
+      <ActiveModalButton label="Ver detalles" slot="action">
+        <Modal slot="modal-content" />
+      </ActiveModalButton>
+    </Card>
+    <Card
+      imageSrc="/images/fondoUDO.webp"
+      title="Ingeniería de Sistemas"
+      description="Descripción de la carrera de Ingeniería de Sistemas."
+    >
+      <ActiveModalButton label="Ver detalles" slot="action">
+        <Modal slot="modal-content" />
+      </ActiveModalButton>
+    </Card>
+    <Card
+      imageSrc="/images/fondoUDO.webp"
+      title="Ingeniería de Sistemas"
+      description="Descripción de la carrera de Ingeniería de Sistemas."
+    >
+      <ActiveModalButton label="Ver detalles" slot="action">
+        <Modal slot="modal-content" />
+      </ActiveModalButton>
+    </Card>
+  </div></BaseLayout
+>
