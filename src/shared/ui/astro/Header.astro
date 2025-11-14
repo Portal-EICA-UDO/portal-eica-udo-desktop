@@ -1,4 +1,6 @@
 ---
+import LinkButton from "./LinkButton.astro";
+import { Globe } from "lucide-react";
 // Header.astro
 // Componente reutilizable de cabecera (basado en la imagen adjunta).
 // Props:
@@ -30,11 +32,11 @@ const {
 };
 ---
 
-<header class="bg-white">
+<header>
   <div class="my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- left button -->
     <div class="flex items-center z-10">
-      <button
+      <!-- <button
         type="button"
         class="inline-flex items-center gap-2 px-3 py-1 bg-sky-700 text-white text-sm font-medium rounded-full shadow"
       >
@@ -54,7 +56,12 @@ const {
           <path d="M2 12h20"></path>
         </svg>
         <span class="sm:inline">Siceudo</span>
-      </button>
+      </button> -->
+      <LinkButton label="Siceudo" href="http://201.249.180.234/ne/estudiantes/">
+        <div slot="icon">
+          <Globe size={20} />
+        </div>
+      </LinkButton>
     </div>
 
     <!-- center nav: two links left, two links right -->
