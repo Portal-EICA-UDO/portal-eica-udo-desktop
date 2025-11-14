@@ -17,7 +17,7 @@ const {
 ---
 
 <section
-  class="h-full homepage-hero max-w-8xl mx-auto px-4 sm:px-6 lg:px-4 pb-4"
+  class="h-full homepage-hero max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pb-4"
 >
   <div class="h-full relative rounded-3xl shadow-lg">
     <!-- background image -->
@@ -27,9 +27,9 @@ const {
       aria-hidden="true"
     >
       <div class="flex flex-col h-full">
-        <div class="w-full flex items-start px-6 pt-6 md:pt-25">
+        <div class="w-full flex items-center px-6 pt-6 md:pt-25 flex-1">
           <div
-            class="w-full md:w-2/3 lg:w-1/2 ml-auto text-right sm:text-center"
+            class="w-full md:w-2/3 lg:w-1/2 ml-auto text-right sm:text-center flex flex-col items-center"
           >
             <h1
               class="text-3xl md:text-5xl font-bold text-white leading-tight drop-shadow"
@@ -50,21 +50,25 @@ const {
         </div>
         <!-- mission & vision cards container -->
         <div
-          class="left-4 right-4 bottom-4 p-4 md:left-10 md:right-10 flex flex-col md:flex-row items-end gap-6 flex-1"
+          class="left-4 right-4 bottom-4 p-4 md:left-10 md:right-10 flex flex-col md:flex-row gap-6 flex-1 items-center"
         >
-          <article
-            class="bg-white/20 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md flex-1 max-h-56 md:max-h-72 overflow-y-auto no-scrollbar"
-          >
-            <h3 class="text-2xl font-semibold">{mission.title}</h3>
-            <p class="mt-3 text-sm">{mission.body}</p>
-          </article>
+          <div class="grow flex flex-col items-center">
+            <article
+              class="max-w-155 bg-white/10 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md max-h-56 md:max-h-72 overflow-y-auto no-scrollbar"
+            >
+              <h3 class="text-2xl font-semibold">{mission.title}</h3>
+              <p class="mt-3 text-sm">{mission.body}</p>
+            </article>
+          </div>
 
-          <article
-            class="bg-white/20 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md flex-1 max-h-35 md:max-h-51 overflow-y-auto no-scrollbar"
-          >
-            <h3 class="text-2xl font-semibold">{vision.title}</h3>
-            <p class="mt-3 text-sm">{vision.body}</p>
-          </article>
+          <div class="grow flex flex-col items-center">
+            <article
+              class="max-w-155 bg-white/10 backdrop-blur-xs text-white p-5 md:p-6 rounded-3xl shadow-md max-h-35 md:max-h-51 overflow-y-auto no-scrollbar"
+            >
+              <h3 class="text-2xl font-semibold">{vision.title}</h3>
+              <p class="mt-3 text-sm">{vision.body}</p>
+            </article>
+          </div>
         </div>
       </div>
     </div>
