@@ -1,0 +1,24 @@
+---
+interface Props {
+  label: string;
+  href: string;
+}
+
+const { label, href } = Astro.props;
+---
+
+<a href={href} class="px-4 py-2.5 bg-[#0A5C8D] rounded-full" target="_blank">
+  <div class="flex items-center gap-2">
+    <slot name="icon" />
+    <span>{label}</span>
+  </div>
+</a>
+<style>
+  a {
+    transition: transform 0.2s ease-in-out;
+    color: white;
+  }
+  a:hover {
+    transform: scale(1.05);
+  }
+</style>
