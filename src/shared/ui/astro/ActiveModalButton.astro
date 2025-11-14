@@ -1,0 +1,97 @@
+---
+import { X } from "lucide-react";
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<button class="active-modal-button px-4 py-2.5 bg-[#0A5C8D] rounded-full">
+  <div class="flex items-center gap-2">
+    <slot name="icon" />
+    <span>{label}</span>
+  </div>
+</button>
+
+<dialog
+  id="dialog"
+  aria-labelledby="dialog-title"
+  class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent"
+>
+  <div class="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
+
+  <div
+    tabindex="0"
+    class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0"
+  >
+    <div
+      class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lvh"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <slot name="modal-content" />
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <form method="dialog">
+          <button
+            class="rotate absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            aria-label="close"
+            ><X />
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  button {
+    transition: transform 0.2s ease-in-out;
+  }
+  button:not(.rotate) {
+    color: white;
+  }
+  button:hover {
+    transform: scale(1.05);
+  }
+  button.rotate {
+    transition: transform 0.2s ease-in-out;
+  }
+  button.rotate:hover {
+    transform: scale(1.05) rotate(90deg);
+  }
+</style>
+
+<script>
+  // Esperar al DOM y enlazar todos los botones con su dialog hermano
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".active-modal-button").forEach((btn) => {
+      // Asume que el <dialog> está inmediatamente después del botón en el DOM
+      const modal = btn.nextElementSibling;
+      if (!(modal instanceof HTMLDialogElement)) return;
+
+      btn.addEventListener("click", () => {
+        if (typeof modal.showModal === "function") {
+          modal.showModal();
+        } else {
+          // Fallback simple si no hay soporte para <dialog>
+          modal.setAttribute("open", "true");
+        }
+      });
+
+      // Cerrar al hacer click fuera del contenido (sobre el propio dialog)
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.close?.();
+        }
+      });
+
+      // Cerrar botones internos marcados con data-close
+      modal.querySelectorAll("[data-close]").forEach((closeBtn) => {
+        closeBtn.addEventListener("click", () => modal.close?.());
+      });
+    });
+  });
+</script>
