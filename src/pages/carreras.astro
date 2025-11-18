@@ -3,46 +3,37 @@ import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
 import Card from "@shared/ui/astro/Card.astro";
 import Modal from "@shared/ui/astro/Modal.astro";
 import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
 ---
 
 <BaseLayout siteTitle="Carreras">
-  <h1 class="text-3xl">Carreras</h1>
-  <div class="flex flex-row gap-4 flex-wrap">
-    <Card
-      imageSrc="/images/fondoUDO.webp"
-      title="Ingeniería de Sistemas"
-      description="Descripción de la carrera de Ingeniería de Sistemas."
+  <div class="h-lvh flex flex-col">
+    <HeaderWithSignin />
+    <div
+      class="gap-4 grid grid-cols-cards justify-items-center max-w-7xl mx-auto w-full flex-1"
     >
-      <ActiveModalButton label="Ver detalles" slot="action">
-        <Modal slot="modal-content" />
-      </ActiveModalButton>
-    </Card>
-    <Card
-      imageSrc="/images/fondoUDO.webp"
-      title="Ingeniería de Sistemas"
-      description="Descripción de la carrera de Ingeniería de Sistemas."
-    >
-      <ActiveModalButton label="Ver detalles" slot="action">
-        <Modal slot="modal-content" />
-      </ActiveModalButton>
-    </Card>
-    <Card
-      imageSrc="/images/fondoUDO.webp"
-      title="Ingeniería de Sistemas"
-      description="Descripción de la carrera de Ingeniería de Sistemas."
-    >
-      <ActiveModalButton label="Ver detalles" slot="action">
-        <Modal slot="modal-content" />
-      </ActiveModalButton>
-    </Card>
-    <Card
-      imageSrc="/images/fondoUDO.webp"
-      title="Ingeniería de Sistemas"
-      description="Descripción de la carrera de Ingeniería de Sistemas."
-    >
-      <ActiveModalButton label="Ver detalles" slot="action">
-        <Modal slot="modal-content" />
-      </ActiveModalButton>
-    </Card>
-  </div></BaseLayout
->
+      {
+        Array(10)
+          .fill(0)
+          .map((_, i) => (
+            <Card
+              imageSrc="/images/fondoUDO.webp"
+              title="Ingeniería de Sistemas"
+              description="Descripción de la carrera de Ingeniería de Sistemas."
+            >
+              <ActiveModalButton label="Ver detalles" slot="action">
+                <Modal
+                  slot="modal-content"
+                  imageSrc="/images/fondoUDO.webp"
+                  imageAlt="imagen"
+                  title="Carrera"
+                  subtitle="Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi erat eros, sagittis non orci rhoncus, feugiat pharetra quam. Nam in sem tempus, elementum urna et, tincidunt turpis. Etiam et eleifend dolor. Nunc in tortor nec massa volutpat convallis ut eu odio. Integer tortor sapien, gravida vitae elementum vel, mattis eget nulla. Curabitur mattis ante id est mattis interdum. Maecenas libero augue, lobortis ut tortor et, condimentum lobortis lorem. Integer sit amet accumsan urna. Integer efficitur hendrerit massa, ac efficitur justo."
+                  buttonLabel="descargar"
+                />
+              </ActiveModalButton>
+            </Card>
+          ))
+      }
+    </div>
+  </div>
+</BaseLayout>
