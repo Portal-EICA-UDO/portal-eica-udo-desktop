@@ -78,7 +78,7 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
 
   if (session) {
     return (
-      <div className="w-24 text-center px-4 py-1 text-sm font-medium rounded-full border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition">
+      <div className="w-24 text-center px-4 py-1 text-(length:--font-default) font-medium rounded-full border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition">
         {$name.split(" ")[0]}
       </div>
     );

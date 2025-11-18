@@ -35,7 +35,7 @@ const {
 <header>
   <div class="my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- left button -->
-    <div class="flex items-center z-10">
+    <div class="flex items-center z-10 ">
       <!-- <button
         type="button"
         class="inline-flex items-center gap-2 px-3 py-1 bg-sky-700 text-white text-sm font-medium rounded-full shadow"
@@ -71,7 +71,7 @@ const {
           links.slice(0, 2).map((link) => (
             <a
               href={link.href ?? "#"}
-              class=" md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition"
+              class=" md:flex hidden text-(length:--font-default) text-gray-700 hover:text-sky-700 transition"
             >
               {link.label}
             </a>
@@ -81,14 +81,14 @@ const {
         <img
           src={logoSrc}
           alt="Logo"
-          class="top-4 w-20 h-20 rounded-full border-4 border-white shadow-md object-cover bg-white z-0"
+          class="top-4 w-20 h-20 rounded-full shadow-md object-cover"
         />
 
         {
           links.slice(2, 4).map((link) => (
             <a
               href={link.href ?? "#"}
-              class="md:flex hidden text-sm text-gray-700 hover:text-sky-700 transition"
+              class="md:flex hidden text-gray-700 hover:text-sky-700 transition text-(length:--font-default)"
             >
               {link.label}
             </a>
@@ -99,7 +99,7 @@ const {
 
     <!-- right actions -->
     <div class="flex items-center justify-center z-10 w-24">
-      <slot name="rightButton" />
+      <slot name="rightButton" class="text-(length:--font-default)"/>
     </div>
 
     <!-- centered logo overlapping header -->
