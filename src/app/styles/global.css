@@ -12,3 +12,7 @@
 .no-scrollbar::-webkit-scrollbar {
 	display: none; /* Chrome, Safari and Opera */
 }
+@theme {
+  /* Define una nueva variable para tu configuración de grid */
+  --grid-template-columns-cards: repeat(auto-fit, minmax(24ch, 1fr));
+}
