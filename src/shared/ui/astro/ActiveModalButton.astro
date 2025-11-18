@@ -7,7 +7,9 @@ interface Props {
 const { label } = Astro.props;
 ---
 
-<button class="active-modal-button px-4 py-1.5 bg-[#0A5C8D] rounded-full">
+<button
+  class="active-modal-button px-4 py-1.5 bg-[#0A5C8D] rounded-full w-[80%] flex justify-center"
+>
   <div class="flex items-center gap-2">
     <slot name="icon" />
     <span>{label}</span>
@@ -36,6 +38,7 @@ const { label } = Astro.props;
       <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
         <form method="dialog">
           <button
+            data-close
             class="rotate absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             aria-label="close"
             ><X />
@@ -75,6 +78,8 @@ const { label } = Astro.props;
       btn.addEventListener("click", () => {
         if (typeof modal.showModal === "function") {
           modal.showModal();
+          //evitar scroll en la pantalla cuando el modal está abierto
+          document.body.style.overflow = "hidden";
         } else {
           // Fallback simple si no hay soporte para <dialog>
           modal.setAttribute("open", "true");
@@ -82,15 +87,19 @@ const { label } = Astro.props;
       });
 
       // Cerrar al hacer click fuera del contenido (sobre el propio dialog)
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.close?.();
-        }
-      });
+      // modal.addEventListener("click", (e) => {
+      //   if (e.target === modal) {
+      //     document.body.style.overflow = "auto";
+      //     modal.close?.();
+      //   }
+      // });
 
       // Cerrar botones internos marcados con data-close
       modal.querySelectorAll("[data-close]").forEach((closeBtn) => {
-        closeBtn.addEventListener("click", () => modal.close?.());
+        closeBtn.addEventListener("click", () => {
+          document.body.style.overflow = "auto";
+          modal.close?.();
+        });
       });
     });
   });
