@@ -21,8 +21,10 @@ const {
 <article class="max-w-4xl overflow-hidden bg-white">
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 items-start">
     <!-- Imagen/Avatar -->
-    <div class="flex items-start justify-center sm:justify-start">
-      <div class="w-48 h-48 bg-gray-200 rounded-md overflow-hidden shrink-0">
+    <div class="flex items-start justify-center sm:justify-start h-full">
+      <div
+        class="bg-gray-200 rounded-md overflow-hidden shrink-0 w-full h-full"
+      >
         {
           imageSrc ? (
             <img
@@ -31,7 +33,7 @@ const {
               class="w-full h-full object-cover"
             />
           ) : (
-            <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500">
+            <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500 ">
               <span class="text-sm">No image</span>
             </div>
           )
@@ -42,18 +44,24 @@ const {
     <!-- Contenido principal -->
     <div class="sm:col-span-2 flex flex-col">
       <header class="mb-3">
-        {title && <h3 class="text-xl font-semibold text-gray-900">{title}</h3>}
-        {subtitle && <p class="text-sm text-gray-500 mt-1">{subtitle}</p>}
+        {
+          title && (
+            <h3 class="text-(length:--font-sub-tittle) font-semibold text-gray-900">
+              {title}
+            </h3>
+          )
+        }
+        {
+          subtitle && (
+            <p class="text-sm text-gray-500 mt-1 text-justify">{subtitle}</p>
+          )
+        }
       </header>
 
       <!-- Slot para contenido extendido (texto, listas, etc.) -->
       <div class="prose prose-sm max-w-none text-gray-700 mb-6">
         <slot name="content">
           <!-- contenido por defecto -->
-          <p>
-            Contenido de la tarjeta. Usa el slot "content" para pasar tu
-            HTML/texto.
-          </p>
         </slot>
       </div>
 
