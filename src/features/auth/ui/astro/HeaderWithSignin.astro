@@ -1,10 +1,26 @@
 ---
 import Header from "@shared/ui/astro/Header.astro";
 import { SigninWithGoogle } from "../react/SigninWithGoogle";
+import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
+import { ModalAuth } from "../react/ModalAuth";
+import Modal from "@shared/ui/astro/Modal.astro";
+import ReactActiveModalButton from "@shared/ui/react/ReactActiveModalButton";
+import { ChevronDown } from "lucide-react";
 ---
 
 <Header>
   <div slot="rightButton">
-    <SigninWithGoogle loginLabel="registrate" client:only="react" />
+    <SigninWithGoogle loginLabel="registrate" client:only="react">
+      <div slot="options">
+        <ReactActiveModalButton label="" client:only="react">
+          <div slot="content">
+            <ModalAuth client:only="react" />
+          </div>
+          <div slot="icon">
+            <ChevronDown size={16} />
+          </div>
+        </ReactActiveModalButton>
+      </div>
+    </SigninWithGoogle>
   </div>
 </Header>
