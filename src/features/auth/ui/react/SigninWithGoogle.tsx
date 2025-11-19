@@ -2,14 +2,17 @@ import { supabase } from "@shared/api";
 import { useEffect, useState } from "react";
 import { email, role, name } from "../../nanostore";
 import { useStore } from "@nanostores/react";
+import { Circle, CircleUserRound, ChevronDown } from "lucide-react";
+import { ShieldUser } from "lucide-react";
 
 import type { Session } from "@supabase/supabase-js";
 
 type props = {
   loginLabel: string;
+  options?: any;
 };
 
-export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
+export const SigninWithGoogle: React.FC<props> = ({ loginLabel, options }) => {
   const [session, setSession] = useState<Session>();
   const $role = useStore(role);
   const $email = useStore(email);
@@ -40,7 +43,8 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      session && setSession(session);
+      console.log(event, session);
+      session ? setSession(session) : setSession(undefined);
     });
 
     return () => subscription.unsubscribe();
@@ -53,6 +57,10 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
         redirectTo: window.location.origin + window.location.pathname,
       },
     });
+  };
+  const signOut = async () => {
+    console.log("signing out");
+    const { error } = await supabase.auth.signOut();
   };
 
   if ($role === "") {
@@ -78,8 +86,15 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
 
   if (session) {
     return (
-      <div className="w-24 text-center px-4 py-1 text-(length:--font-default) font-medium rounded-full border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition">
-        {$name.split(" ")[0]}
+      <div className="flex gap-0.5 items-center">
+        <div
+          onClick={signOut}
+          className="px-3 py-1 flex relative text-center gap-1  text-(length:--font-default) font-medium rounded-full border border-b-red-400 text-red-400 hover:bg-red-400 hover:text-white transition"
+        >
+          <div className="w-max h-full">Cerrar Sesion</div>
+          {/* <div className=" w-full h-full">{$name.split(" ")[0]}</div> */}
+        </div>
+        {options}
       </div>
     );
   }
