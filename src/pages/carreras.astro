@@ -4,6 +4,13 @@ import Card from "@shared/ui/astro/Card.astro";
 import Modal from "@shared/ui/astro/Modal.astro";
 import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
 import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
+import { supabase } from "@shared/api";
+
+function getImageUrl(bucketName: string, fileName: string): string {
+  const projectRef = "xyzcompany"; // Reemplaza con tu Project Ref
+  return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${fileName}`;
+}
+const { data, error } = await supabase.from("carreras").select("*");
 ---
 
 <BaseLayout siteTitle="Carreras">
@@ -13,21 +20,26 @@ import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
       class="gap-4 grid grid-cols-cards justify-items-center max-w-7xl mx-auto w-full flex-1"
     >
       {
-        Array(10)
-          .fill(0)
-          .map((_, i) => (
+        data &&
+          data.map((carrera, i) => (
             <Card
-              imageSrc="/images/fondoUDO.webp"
-              title="Ingeniería de Sistemas"
-              description="Descripción de la carrera de Ingeniería de Sistemas."
+              imageSrc={getImageUrl(
+                "carreras-imagenes",
+                `${carrera.imagen_url}.jpg`
+              )}
+              title={`${carrera.nombre}`}
+              description={carrera.descripcion}
             >
               <ActiveModalButton label="Ver detalles" slot="action">
                 <Modal
                   slot="modal-content"
-                  imageSrc="/images/fondoUDO.webp"
+                  imageSrc={getImageUrl(
+                    "carreras-imagenes",
+                    `${carrera.imagen_url}.jpg`
+                  )}
                   imageAlt="imagen"
-                  title="Carrera"
-                  subtitle="Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi erat eros, sagittis non orci rhoncus, feugiat pharetra quam. Nam in sem tempus, elementum urna et, tincidunt turpis. Etiam et eleifend dolor. Nunc in tortor nec massa volutpat convallis ut eu odio. Integer tortor sapien, gravida vitae elementum vel, mattis eget nulla. Curabitur mattis ante id est mattis interdum. Maecenas libero augue, lobortis ut tortor et, condimentum lobortis lorem. Integer sit amet accumsan urna. Integer efficitur hendrerit massa, ac efficitur justo."
+                  title={`${carrera.nombre}`}
+                  subtitle={carrera.descripcion}
                   buttonLabel="descargar"
                 />
               </ActiveModalButton>
