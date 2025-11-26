@@ -11,7 +11,6 @@ interface ReactActiveModalButtonProps {
 export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   label,
   icon,
-  content,
   children,
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -46,18 +45,16 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
       <dialog
         ref={modalRef}
         aria-labelledby="dialog-title"
-        className="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent"
+        className="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent "
       >
         <div className="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
 
         <div className="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lvh">
+          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-max">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                {content ? content : children}
-              </div>
+              <div className="sm:flex sm:items-start">{children}</div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <div className="bg-gray-50  sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 onClick={closeModal}
                 className="rotate absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

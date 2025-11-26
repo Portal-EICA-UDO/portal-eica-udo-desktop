@@ -1,26 +1,49 @@
 ---
+// components
 import Header from "@shared/ui/astro/Header.astro";
-import { SigninWithGoogle } from "../react/SigninWithGoogle";
-import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
-import { ModalAuth } from "../react/ModalAuth";
-import Modal from "@shared/ui/astro/Modal.astro";
-import ReactActiveModalButton from "@shared/ui/react/ReactActiveModalButton";
+import { RCActiveModalButton } from "@shared/ui/react/RCModalButton";
+import { AuthModal } from "../react/AuthModal";
+// icons
 import { ChevronDown } from "lucide-react";
+import { AuthButton } from "../react/AuthButton";
+import Drawer from "@shared/ui/react/Drawer";
 ---
 
 <Header>
   <div slot="rightButton">
-    <SigninWithGoogle loginLabel="registrate" client:only="react">
-      <div slot="options">
-        <ReactActiveModalButton label="" client:only="react">
-          <div slot="content">
-            <ModalAuth client:only="react" />
+    <AuthButton client:only="react">
+      <div slot="drawer">
+        <Drawer
+          triggerLabel="Abrir panel"
+          position="left"
+          width="w-96"
+          client:load
+        >
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Nueva carrera</h3>
+            {/* aquí va el formulario o contenido */}
           </div>
-          <div slot="icon">
-            <ChevronDown size={16} />
-          </div>
-        </ReactActiveModalButton>
+        </Drawer>
       </div>
-    </SigninWithGoogle>
+    </AuthButton>
   </div>
+
+  <!-- <script>
+  import { supabase } from "@shared/api";
+
+  const { data, error } = await supabase.from("staff").select(`
+  id,
+  nombre,
+  carreras (
+    id,
+    nombre,
+    materias (
+      id,
+      nombre
+    )
+  )
+`);
+  console.log(`data`, data);
+  console.log(`error`, error);
+</script> -->
 </Header>
