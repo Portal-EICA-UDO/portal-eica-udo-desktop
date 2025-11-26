@@ -5,12 +5,14 @@ interface ReactActiveModalButtonProps {
   label: string;
   icon?: React.ReactNode; // Prop para el ícono
   content?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const ReactActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
+export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   label,
   icon,
   content,
+  children,
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -31,13 +33,13 @@ const ReactActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   return (
     <>
       <button
-        className="active-modal-button px-4 py-1.5 bg-[#0A5C8D] rounded-full w-[80%] flex justify-center hover:scale-105 transition-transform"
+        className="active-modal-button px-4 py-1.5 bg-[#0A5C8D] rounded-full flex justify-center hover:scale-105 transition-transform"
         onClick={openModal}
       >
-        <div className="flex items-center gap-2 justify-center text-white">
+        <div className="flex items-center gap-2 justify-center text-white ">
           {icon && <div className="icon">{icon}</div>}{" "}
           {/* Renderiza el ícono si se proporciona */}
-          {label && <div>{label}</div>}
+          {label && <div className="w-max">{label}</div>}
         </div>
       </button>
 
@@ -51,7 +53,9 @@ const ReactActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
         <div className="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lvh">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">{content}</div>
+              <div className="sm:flex sm:items-start">
+                {content ? content : children}
+              </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
@@ -68,5 +72,3 @@ const ReactActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
     </>
   );
 };
-
-export default ReactActiveModalButton;
