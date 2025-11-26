@@ -4,17 +4,31 @@ interface Props {
   imageSrc?: string;
   imageAlt?: string;
   title?: string;
+  lastName?: string;
   subtitle?: string;
   buttonLabel?: string;
+  email?: string;
+  phone?: string;
+  position?: string;
+  carreras?: [];
+  pensum?: []; 
   readonly?: boolean;
+  materias?: [];
 }
 
 const {
   imageSrc = "",
   imageAlt = "imagen",
   title = "",
+  lastName = "",
   subtitle = "",
+  email = "",
+  phone = "",
+  position = "",
+  carreras = "",
   buttonLabel = "",
+  pensum = "",
+  materias = "",
 } = Astro.props;
 ---
 
@@ -47,7 +61,7 @@ const {
         {
           title && (
             <h3 class="text-(length:--font-sub-tittle) font-semibold text-gray-900">
-              {title}
+              {title} {lastName}
             </h3>
           )
         }
@@ -62,6 +76,14 @@ const {
       <div class="prose prose-sm max-w-none text-gray-700 mb-6">
         <slot name="content">
           <!-- contenido por defecto -->
+          {email ? <h3>Correo electronico: {email}</h3> : null}
+          {phone ? <h3>Telefono: {phone}</h3> : null}
+          {position ? <h3>Cargo: {position}</h3> : null}
+          {position == "Docente" ? (
+            <>
+              {pensum.map((pensum, i) =><h3>Materia {i+1}: {pensum.materia} de la carrera {pensum.carrera}</h3>)}
+            </>
+          ) : null}
         </slot>
       </div>
 
