@@ -1,29 +1,17 @@
 ---
 // components
 import Header from "@shared/ui/astro/Header.astro";
-import { RCActiveModalButton } from "@shared/ui/react/RCModalButton";
-import { AuthModal } from "../react/AuthModal";
 // icons
-import { ChevronDown } from "lucide-react";
 import { AuthButton } from "../react/AuthButton";
 import Drawer from "@shared/ui/react/Drawer";
+import { AuthDrawer } from "../react/AuthDrawer";
 ---
 
 <Header>
   <div slot="rightButton">
     <AuthButton client:only="react">
       <div slot="drawer">
-        <Drawer
-          triggerLabel="Abrir panel"
-          position="left"
-          width="w-96"
-          client:load
-        >
-          <div>
-            <h3 class="text-lg font-semibold mb-2">Nueva carrera</h3>
-            {/* aquí va el formulario o contenido */}
-          </div>
-        </Drawer>
+        <AuthDrawer client:only="react" />
       </div>
     </AuthButton>
   </div>
