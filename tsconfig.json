@@ -19,7 +19,13 @@
       ],
       "@app/*": [
         "./src/app/*"
-      ]
+      ],
+      "@widgets/*": [
+        "./src/widgets/*"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
     }
   }
 }
