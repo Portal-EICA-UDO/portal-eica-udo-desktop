@@ -1,26 +1,30 @@
 // ...existing code...
+import { email, name, role } from "@features/auth/nanostore";
+import { useStore } from "@nanostores/react";
 import { ShieldUser } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { navigate } from "astro:transitions/client";
 
 type DrawerProps = {
-  triggerLabel?: string;
-  children?: React.ReactNode;
   position?: "right" | "left";
   width?: string; // ejemplo: "w-80", "w-96"
   className?: string;
   closeOnOverlayClick?: boolean;
+  links?: { label: string; href?: string }[];
 };
 
 export const Drawer: React.FC<DrawerProps> = ({
-  triggerLabel = "Abrir",
-  children,
   position = "right",
   width = "w-80",
   className = "",
   closeOnOverlayClick = true,
+  links,
 }) => {
   const [open, setOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement | null>(null);
+  const $email = useStore(email);
+  const $name = useStore(name);
+  const $role = useStore(role);
 
   useEffect(() => {
     // bloquear scroll del body cuando el drawer está abierto
@@ -84,7 +88,13 @@ export const Drawer: React.FC<DrawerProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b">
-              <div className="text-lg font-semibold">Menu</div>
+              <div className="text-lg font-semibold">
+                <span className="text-sky-700">{$name}</span>
+                <br />
+                <span className="text-sky-700">{$email}</span>
+                <br />
+                <span className="text-sky-700">{$role}</span>
+              </div>
               <button
                 aria-label="Cerrar"
                 onClick={() => setOpen(false)}
@@ -94,7 +104,19 @@ export const Drawer: React.FC<DrawerProps> = ({
               </button>
             </div>
 
-            <div className="p-4 overflow-auto h-full">{children}</div>
+            <div className="p-4 overflow-auto h-full">
+              {links?.map((link) => (
+                <button
+                  key={link.label}
+                  onClick={() => {
+                    navigate(link.href || "/");
+                  }}
+                  className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100  focus:bg-gray-100 transition-colors duration-75 "
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
