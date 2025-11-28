@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, type JSX } from "react";
 import { AuthModal } from "./AuthModal";
 import type { Session } from "@supabase/supabase-js";
+import { isAdminOrSuperAdmin } from "../../lib/isAdminOrSuperAdmin";
 
 type props = {
   drawer?: JSX.Element;
@@ -71,7 +72,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
     name.set("");
   };
 
-  if ($role == "unauthenticated" || $role == "")
+  if ($role == "unauthenticated")
     return (
       <RCActiveModalButton
         label="Iniciar Sesión"
@@ -83,7 +84,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
       </RCActiveModalButton>
     );
 
-  if ($role === "admin")
+  if (isAdminOrSuperAdmin($role))
     return (
       <div className="flex gap-1.5 items-center">
         <div
@@ -108,8 +109,6 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
           <div className="w-max h-full">Cerrar Sesion</div>
           {/* <div className=" w-full h-full">{$name.split(" ")[0]}</div> */}
         </div>
-
-        {drawer}
       </div>
     );
 
