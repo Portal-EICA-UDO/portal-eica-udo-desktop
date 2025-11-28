@@ -57,7 +57,7 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
             <div className="bg-gray-50  sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 onClick={closeModal}
-                className="rotate absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="rotate z-30 absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 aria-label="close"
               >
                 <X />
