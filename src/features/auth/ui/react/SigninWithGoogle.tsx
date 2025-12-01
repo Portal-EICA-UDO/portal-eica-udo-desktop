@@ -6,6 +6,7 @@ import { Circle, CircleUserRound, ChevronDown } from "lucide-react";
 import { ShieldUser } from "lucide-react";
 
 import type { Session } from "@supabase/supabase-js";
+import { signUpWithOAuthRequest } from "@features/auth/api/requests";
 
 type props = {
   loginLabel: string;
@@ -16,12 +17,7 @@ export const SigninWithGoogle: React.FC<props> = ({ loginLabel }) => {
   const $role = useStore(role);
 
   const signIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        // redirectTo: window.location.origin + window.location.pathname,
-      },
-    });
+    await signUpWithOAuthRequest("google");
   };
 
   return (
