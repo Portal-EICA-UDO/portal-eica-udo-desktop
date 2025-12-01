@@ -6,6 +6,7 @@ import { use, useEffect, useState } from "react";
 import { supabase } from "@shared/api";
 import { useStore } from "@nanostores/react";
 import { role } from "@features/auth/nanostore";
+import { signUpRequest } from "@features/auth/api/requests";
 
 type RegisterForm = z.infer<typeof registerSchema>;
 export const CreateAdminUsers = () => {
@@ -25,11 +26,12 @@ export const CreateAdminUsers = () => {
     setLoading(true);
     console.log(data);
     try {
-      const { data: signupData, error } = await supabase.auth.signUp({
+      const signupData = await signUpRequest(data, {
         email: data.email,
-        password: data.password,
-      } as any);
-      if (error) throw error;
+        name: data.fullName.split(" ")[0],
+        full_name: data.fullName,
+      });
+
       console.log("signupData: ", signupData);
       //actualizar el role_name del usuario en la tabla roles siempre y cuando asi lo haya creado
       if (signupData.user !== null && data.role === "admin") {
@@ -81,6 +83,21 @@ export const CreateAdminUsers = () => {
       </div>
 
       <form onSubmit={handleRegisterSubmit(onRegister)} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Nombre Completo
+          </label>
+          <input
+            type="text"
+            {...registerRegister("fullName")}
+            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+          />
+          {registerErrors.fullName && (
+            <p className="text-sm text-red-600 mt-1">
+              {registerErrors.fullName.message}
+            </p>
+          )}
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Correo
