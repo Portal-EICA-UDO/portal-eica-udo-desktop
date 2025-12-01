@@ -9,7 +9,7 @@ import { AuthDrawer } from "../react/AuthDrawer";
 
 <Header>
   <div slot="rightButton">
-    <AuthButton client:only="react">
+    <AuthButton client:only="react" transition:persist transition:persist-props>
       <div slot="drawer">
         <AuthDrawer client:only="react" />
       </div>
