@@ -1,6 +1,7 @@
 import { role } from "@features/auth/nanostore";
 import { useStore } from "@nanostores/react";
 import Drawer from "@shared/ui/react/Drawer";
+import { ShieldUser, User } from "lucide-react";
 
 const SUPER_ADMIN_LINKS = [
   {
@@ -36,6 +37,15 @@ export const AuthDrawer = () => {
           : $role === "admin"
           ? ADMIN_LINKS
           : USER_LINKS
+      }
+      icon={
+        $role === "superAdmin" ? (
+          <ShieldUser />
+        ) : $role === "admin" ? (
+          <ShieldUser />
+        ) : (
+          <User />
+        )
       }
     ></Drawer>
   );
