@@ -4,7 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SigninWithGoogle } from "./SigninWithGoogle";
 import { supabase } from "@shared/api";
 import { loginSchema, registerSchema } from "../../validations";
-import z, { set } from "zod";
+import z from "zod";
+import {
+  getProfileRequest,
+  loginRequest,
+  signUpRequest,
+} from "./../../api/requests";
+import { email, fullName, role, name } from "./../../nanostore";
 
 type LoginForm = z.infer<typeof loginSchema>;
 type RegisterForm = z.infer<typeof registerSchema>;
@@ -31,12 +37,18 @@ export const AuthModal: React.FC = () => {
     setErrorMsg(null);
     setLoading(true);
     try {
-      const { error, data: resp } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      } as any);
-      if (error) throw error;
+      const resp = await loginRequest(data);
+      let profile = null;
       // login correcto → cerrar modal o manejar estado global
+      if (resp.user) {
+        profile = await getProfileRequest(resp.user.id);
+      }
+      if (profile) {
+        role.set(profile.role_name);
+        email.set(profile.email as string);
+        name.set(profile.name);
+        fullName.set(profile.full_name);
+      }
 
       console.log(resp);
     } catch (err: any) {
@@ -50,11 +62,11 @@ export const AuthModal: React.FC = () => {
     setErrorMsg(null);
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const resp = await signUpRequest(data, {
         email: data.email,
-        password: data.password,
-      } as any);
-      if (error) throw error;
+        name: data.fullName.split(" ")[0],
+        full_name: data.fullName,
+      });
       // Se pudo crear cuenta (puede requerir confirmación por email)
       setSuccessMsg("Cuenta creada correctamente, revise su correo");
       setMode("login");
@@ -146,6 +158,21 @@ export const AuthModal: React.FC = () => {
             onSubmit={handleRegisterSubmit(onRegister)}
             className="space-y-4"
           >
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Nombre Completo
+              </label>
+              <input
+                type="text"
+                {...registerRegister("fullName")}
+                className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+              />
+              {registerErrors.fullName && (
+                <p className="text-sm text-red-600 mt-1">
+                  {registerErrors.fullName.message}
+                </p>
+              )}
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Correo
