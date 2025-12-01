@@ -1,4 +1,4 @@
-import { email, role, name } from "../../nanostore";
+import { email, role, name, fullName } from "../../nanostore";
 import { useStore } from "@nanostores/react";
 import { supabase } from "@shared/api";
 import { RCActiveModalButton } from "@shared/ui/react/RCModalButton";
@@ -7,6 +7,11 @@ import { useEffect, type JSX } from "react";
 import { AuthModal } from "./AuthModal";
 import type { Session } from "@supabase/supabase-js";
 import { isAdminOrSuperAdmin } from "../../lib/isAdminOrSuperAdmin";
+import {
+  getProfileRequest,
+  getSessionRequest,
+  logoutRequest,
+} from "./../../api/requests";
 
 type props = {
   drawer?: JSX.Element;
@@ -15,47 +20,28 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
   const $role = useStore(role);
 
   useEffect(() => {
-    if (!$role) {
-      supabase.auth.getSession().then(async ({ data: { session } }) => {
-        if (session) {
-          console.log(session);
-          const { user } = session as Session;
-          const { data, error } = await supabase
-            .from("roles")
-            .select("*")
-            .eq("user_id", user.id);
+    (async () => {
+      const resp = await getSessionRequest();
+      const session = resp.session;
+      if (session && role.get() == "") {
+        const { user } = session as Session;
+        const profile = await getProfileRequest(user.id);
 
-          if (data) {
-            console.log("estoy entrandoooooo");
-            role.set(data[0].role_name);
-            email.set(user.email as string);
-            name.set(user.user_metadata.name);
-          }
-        } else {
-          role.set("unauthenticated");
+        if (profile) {
+          console.log("estoy entrandoooooo");
+          role.set(profile.role_name);
+          email.set(profile.email as string);
+          name.set(profile.name);
+          fullName.set(profile.full_name);
         }
-      });
-    }
+      }
+    })();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(event, session);
       !session && role.set("unauthenticated");
-
-      if (session && role.get() == "unauthenticated") {
-        console.log(session);
-        const { user } = session as Session;
-        const { data, error } = await supabase
-          .from("roles")
-          .select("*")
-          .eq("user_id", user.id);
-
-        if (data) {
-          console.log("estoy entrandoooooo");
-          role.set(data[0].role_name);
-          email.set(user.email as string);
-          name.set(user.user_metadata.name);
-        }
-      }
     });
 
     return () => subscription.unsubscribe();
@@ -66,7 +52,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
   }, [$role]);
   const signOut = async () => {
     console.log("signing out");
-    const { error } = await supabase.auth.signOut();
+    await logoutRequest();
     role.set("unauthenticated");
     email.set("");
     name.set("");
@@ -109,6 +95,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
           <div className="w-max h-full">Cerrar Sesion</div>
           {/* <div className=" w-full h-full">{$name.split(" ")[0]}</div> */}
         </div>
+        {drawer}
       </div>
     );
 
