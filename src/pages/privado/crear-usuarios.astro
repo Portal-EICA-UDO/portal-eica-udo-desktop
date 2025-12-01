@@ -7,6 +7,6 @@ import HeaderWithSignin from "@features/auth/ui/astro/HeaderWithSignin.astro";
 <BaseLayout siteTitle="Crear Usuarios">
   <div class="flex flex-col h-screen">
     <HeaderWithSignin />
-    <CreateAdminUsers client:load />
+    <CreateAdminUsers client:only="react" />
   </div>
 </BaseLayout>
