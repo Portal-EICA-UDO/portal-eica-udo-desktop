@@ -1,10 +1,37 @@
 ---
+// components
 import Header from "@shared/ui/astro/Header.astro";
-import { SigninWithGoogle } from "../react/SigninWithGoogle";
+// icons
+import { AuthButton } from "../react/AuthButton";
+import Drawer from "@shared/ui/react/Drawer";
+import { AuthDrawer } from "../react/AuthDrawer";
 ---
 
 <Header>
   <div slot="rightButton">
-    <SigninWithGoogle loginLabel="registrate" client:only="react" />
+    <AuthButton client:only="react" transition:persist transition:persist-props>
+      <div slot="drawer">
+        <AuthDrawer client:only="react" />
+      </div>
+    </AuthButton>
   </div>
+
+  <!-- <script>
+  import { supabase } from "@shared/api";
+
+  const { data, error } = await supabase.from("staff").select(`
+  id,
+  nombre,
+  carreras (
+    id,
+    nombre,
+    materias (
+      id,
+      nombre
+    )
+  )
+`);
+  console.log(`data`, data);
+  console.log(`error`, error);
+</script> -->
 </Header>

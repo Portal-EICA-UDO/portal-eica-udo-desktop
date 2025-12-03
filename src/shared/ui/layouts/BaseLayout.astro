@@ -1,6 +1,6 @@
 ---
 import "@app/styles/global.css";
-
+import { ClientRouter } from "astro:transitions";
 type Props = {
   siteTitle: string;
   description?: string;
@@ -17,6 +17,8 @@ const { siteTitle, description } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
+
     <title>{siteTitle}</title>
   </head>
   <body>

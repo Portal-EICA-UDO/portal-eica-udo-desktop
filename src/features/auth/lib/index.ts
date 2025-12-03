@@ -1,0 +1,1 @@
+export { isAdminOrSuperAdmin } from "./isAdminOrSuperAdmin";
