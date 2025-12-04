@@ -4,82 +4,36 @@ import Card from "@shared/ui/astro/Card.astro";
 import Modal from "@shared/ui/astro/Modal.astro";
 import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
 import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
+import StaffGrid from "../widgets/staff/StaffGrid.tsx";
 import { supabase } from "@shared/api";
-import Carreras from "./carreras.astro";
 
-function getImageUrl(bucketName: string, fileName: string): string {
-  const projectRef = "xyzcompany"; // Reemplaza con tu Project Ref
-  return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${fileName}`;
-}
 
-const { data, error } = await supabase.from("staff").select(`
-  id,
-  nombre,
-  apellido,
-  imagen_url,
-  carreras_materias(
-    materia,
-    carrera
-  ),
-  email,
-  telefono,
-  posicion
-`);
-console.log("Staff data:", data, error, JSON.stringify(data));
-// Procesar para eliminar duplicados
-/* const processedData = data.map((staff) => {
-  // Usar Map para eliminar carreras duplicadas por ID
-  const carrerasMap = new Map();
 
-  staff.carreras.forEach((carrera) => {
-    if (!carrerasMap.has(carrera.id)) {
-      carrerasMap.set(carrera.id, {
-        ...carrera,
-      });
-    }
-  });
 
-  return {
-    ...staff,
-    carreras: Array.from(carrerasMap.values()),
-  };
-}); */
 ---
 
 <BaseLayout siteTitle="Staff">
   <div class="h-lvh flex flex-col">
     <HeaderWithSignin />
-    <div
-      class="gap-4 grid grid-cols-cards justify-items-center max-w-7xl mx-auto w-full flex-1"
-    >
-      {
-        data &&
-          data.map((staff, i) => (
-            <Card
-              imageSrc={getImageUrl(
-                "staff-imagenes",
-                `${staff.imagen_url}.jpg`,
-              )}
-              title={`${staff.nombre} ${staff.apellido}`}
-            >
-              <ActiveModalButton label="Saber mas" slot="action">
-                <Modal
-                  slot="modal-content"
-                  imageSrc={getImageUrl(
-                    "staff-imagenes",
-                    `${staff.imagen_url}.jpg`,
-                  )}
-                  title={`${staff.nombre}`}
-                  lastName={`${staff.apellido}`}
-                  email={staff.email}
-                  phone={staff.telefono}
-                  position={staff.posicion}
-                  pensum={staff.carreras_materias}
-                />
-              </ActiveModalButton>
-            </Card>
-          ))
-      }
-    </div>
+    <StaffGrid client:load/>
   </div>
 </BaseLayout>
+
+<style>
+  /* Estilos responsivos */
+  @media (min-width: 640px) {
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1280px) {
+    .grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
