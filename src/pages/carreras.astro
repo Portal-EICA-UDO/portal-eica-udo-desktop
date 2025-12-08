@@ -5,6 +5,7 @@ import Modal from "@shared/ui/astro/Modal.astro";
 import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
 import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
 import { supabase } from "@shared/api";
+import CarrerasGrid from "@widgets/Carreras/ui/CarrerasGrid";
 
 function getImageUrl(bucketName: string, fileName: string): string {
   const projectRef = "xyzcompany"; // Reemplaza con tu Project Ref
@@ -17,36 +18,6 @@ const { data, error } = await supabase.from("carreras").select("*");
 <BaseLayout siteTitle="Carreras">
   <div class="h-lvh flex flex-col">
     <HeaderWithSignin />
-    <div
-      class="gap-4 grid grid-cols-cards justify-items-center max-w-7xl mx-auto w-full flex-1"
-    >
-      {
-        data &&
-          data.map((carrera, i) => (
-            <Card
-              imageSrc={getImageUrl(
-                "carreras-imagenes",
-                `${carrera.imagen_url}.jpg`
-              )}
-              title={`${carrera.nombre}`}
-              description={carrera.descripcion}
-            >
-              <ActiveModalButton label="Ver detalles" slot="action">
-                <Modal
-                  slot="modal-content"
-                  imageSrc={getImageUrl(
-                    "carreras-imagenes",
-                    `${carrera.imagen_url}.jpg`
-                  )}
-                  imageAlt="imagen"
-                  title={`${carrera.nombre}`}
-                  subtitle={carrera.descripcion}
-                  buttonLabel="descargar"
-                />
-              </ActiveModalButton>
-            </Card>
-          ))
-      }
-    </div>
+    <CarrerasGrid client:load/>
   </div>
 </BaseLayout>

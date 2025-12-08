@@ -5,7 +5,7 @@ import { supabase } from '@shared/api';
 import { Card } from "@shared/ui/react/Card";
 import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
 import {Modal} from "@shared/ui/react/Modal";
-import type { staffWithMaterias } from './types/type';
+import type { StaffWithMaterias, MateriasMap, Carrera } from '../types/type';
 
 // Función para obtener la URL de la imagen
 function getImageUrl(bucketName: string, fileName: string): string {
@@ -14,13 +14,13 @@ function getImageUrl(bucketName: string, fileName: string): string {
 
 const StaffGrid = () => {
   // 1. Estados para manejar los datos y el error
-  const [staffWithMaterias, setStaffWithMaterias] = useState<staffWithMaterias[]>([]);
+  const [staffWithMaterias, setStaffWithMaterias] = useState<StaffWithMaterias[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>("");
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null);
+      setError("");
 
       try {
         // ... (Lógica de consulta a Supabase, inalterada)
@@ -63,7 +63,7 @@ const StaffGrid = () => {
             materiasConCarreras = materiasFromDB || [];
           }
 
-          const materiasMap = {};
+          const materiasMap: { [key: number]: MateriasMap } = {};
           materiasConCarreras.forEach(materia => {
             const carreraData = Array.isArray(materia.carreras) ? materia.carreras[0] : materia.carreras;
 
@@ -83,7 +83,7 @@ const StaffGrid = () => {
 
           if (carrerasError) throw carrerasError;
 
-          const carrerasMap = {};
+          const carrerasMap: { [key: number]: Carrera } = {};
           todasCarreras?.forEach(carrera => {
             carrerasMap[carrera.id] = carrera;
           });
@@ -106,9 +106,10 @@ const StaffGrid = () => {
               })
               .filter(m => m);
 
-            const materiasUnicas = [];
+            const materiasUnicas: MateriasMap[] = [];
             const idsVistos = new Set();
             materiasDelStaff.forEach(materia => {
+              if (!materia) return;
               if (!idsVistos.has(materia.id)) {
                 idsVistos.add(materia.id);
                 materiasUnicas.push(materia);
@@ -134,7 +135,7 @@ const StaffGrid = () => {
 
       } catch (e) {
         console.error("Error en la carga de datos:", e);
-        setError(e);
+        setError(e as any);
         setStaffWithMaterias([]);
       } finally {
         setLoading(false);
@@ -145,7 +146,7 @@ const StaffGrid = () => {
   }, []);
 
   // Función para obtener la URL de la imagen
-  const getStaffImageUrl = (staff) => {
+  const getStaffImageUrl = (staff:StaffWithMaterias) => {
     if (!staff || !staff.imagen_url) {
       return getImageUrl("staff-imagenes", "default.jpg");
     }

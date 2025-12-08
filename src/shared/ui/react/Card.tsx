@@ -1,5 +1,5 @@
 
-export function Card({imageSrc, title, lastName, children}: {imageSrc: string, title: string, lastName: string, children: React.ReactNode}) {
+export function Card({imageSrc, title, lastName = "", children}: {imageSrc: string, title: string, lastName?: string , children: React.ReactNode}) {
     return (
         <section
             className="w-[202px] h-[338px] bg-white/80 rounded-lg shadow sm:shadow-md overflow-hidden border border-white/10 flex flex-col"

@@ -8,7 +8,8 @@ export function Modal({
     email,
     phone,
     materias,
-    buttonLabel
+    buttonLabel,
+    description
 }: {
     title?: string;
     imageSrc?: string;
@@ -26,6 +27,7 @@ export function Modal({
         } | null;
     }>;
     buttonLabel?: string;
+    description?: string;
 }) {
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
@@ -57,6 +59,11 @@ export function Modal({
                                 <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
                                     {title} {lastName}
                                 </h3>
+                            )
+                        }
+                        {
+                            description && (
+                                <p className="text-lg text-gray-600 mt-2">{description}</p>
                             )
                         }
                         {
