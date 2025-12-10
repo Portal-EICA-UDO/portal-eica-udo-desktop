@@ -12,12 +12,11 @@ function getImageUrl(bucketName: string, fileName: string): string {
   return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${fileName}`;
 }
 const { data, error } = await supabase.from("carreras").select("*");
-
 ---
 
 <BaseLayout siteTitle="Carreras">
   <div class="h-lvh flex flex-col">
     <HeaderWithSignin />
-    <CarrerasGrid client:load/>
+    <CarrerasGrid client:load />
   </div>
 </BaseLayout>
