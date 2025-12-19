@@ -5,18 +5,26 @@ import { ShieldUser, User } from "lucide-react";
 
 const SUPER_ADMIN_LINKS = [
   {
-    label: "Crear usuarios",
+    label: "Crear Usuarios",
     href: "/privado/crear-usuarios",
   },
   {
     label: "Carreras",
     href: "/carreras",
   },
+  {
+    label: "Gestionar Carreras",
+    href: "/privado/carreras",
+  },
 ];
 const ADMIN_LINKS = [
   {
     label: "Carreras",
     href: "/carreras",
+  },
+  {
+    label: "Gestionar Carreras",
+    href: "/privado/carreras",
   },
 ];
 const USER_LINKS = [

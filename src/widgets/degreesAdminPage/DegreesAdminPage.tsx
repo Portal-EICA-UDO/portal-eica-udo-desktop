@@ -9,6 +9,9 @@ import { supabase } from "@shared/api";
 import { UpdateDegrees } from "./ui/UpdateDegrees";
 import { DeleteDegrees } from "./ui/DeleteDegrees";
 import type { Data } from "./types";
+import { role } from "@features/auth/nanostore";
+import { useStore } from "@nanostores/react";
+import { isAdminOrSuperAdmin } from "@features/auth/lib";
 
 type Escuela = {
   id: string;
@@ -16,18 +19,8 @@ type Escuela = {
 };
 
 const UsuariosPage = () => {
-  // const initialData = [
-  //   { id: 1, name: "John Doe", age: 25, city: "New York" },
-  //   { id: 2, name: "Jane Smith", age: 30, city: "London" },
-  //   { id: 3, name: "Bob Johnson", age: 35, city: "Paris" },
-  //   { id: 4, name: "Alice Williams", age: 40, city: "Tokyo" },
-  //   { id: 5, name: "Charlie Brown", age: 45, city: "Sydney" },
-  //   { id: 6, name: "Eve Green", age: 50, city: "Beijing" },
-  //   { id: 7, name: "Frank White", age: 55, city: "Tokyo" },
-  //   { id: 8, name: "Grace Black", age: 60, city: "Paris" },
-  //   { id: 9, name: "Harry Green", age: 65, city: "New York" },
-  //   { id: 10, name: "Ivy Blue", age: 70, city: "London" },
-  // ];
+  const $role = useStore(role);
+
   // Estado centralizado en el padre
   const [data, setData] = useState<any[]>();
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
@@ -48,30 +41,6 @@ const UsuariosPage = () => {
     };
     fetchData();
   }, []);
-
-  // // Definición de filtros
-  // const filters: FilterConfig[] = [
-  //   {
-  //     key: "name",
-  //     label: "Nombre",
-  //     type: "text",
-  //     placeholder: "Buscar por nombre",
-  //   },
-  //   {
-  //     key: "city",
-  //     label: "Ciudad",
-  //     type: "select",
-  //     options: [
-  //       { label: "New York", value: "New York" },
-  //       { label: "London", value: "London" },
-  //       { label: "Paris", value: "Paris" },
-  //       { label: "Tokyo", value: "Tokyo" },
-  //       { label: "Sydney", value: "Sydney" },
-  //       { label: "Beijing", value: "Beijing" },
-  //     ],
-  //   },
-  //   { key: "age", label: "Edad", type: "range", min: 18, max: 100 },
-  // ];
 
   // Definición de filtros
   const filters: FilterConfig[] = [
@@ -142,14 +111,9 @@ const UsuariosPage = () => {
 
   // Handlers de CRUD
   const handleCreateRequest = useCallback((item: any) => {
-    // Abrir modal de crear (si usas estado para controlarlo)
     console.log("handleCreateRequest");
     setData((prev) => [...(prev as any[]), item]);
   }, []);
-
-  useEffect(() => {
-    console.log("data: ", data);
-  }, [data]);
 
   const handleEditRequest = useCallback((item: any) => {
     console.log("item in handleEdit: ", item);
@@ -181,43 +145,29 @@ const UsuariosPage = () => {
     ),
   };
 
-  return (
-    // <div className="p-6">
-    //   <DynamicTable
-    //     //selection
+  // gestionar quien entra a la pagina
+  useEffect(() => {
+    if (!isAdminOrSuperAdmin($role)) {
+      // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
+    }
+  }, [$role]);
+  if (!isAdminOrSuperAdmin($role)) {
+    return (
+      <section className="flex justify-start items-center h-full flex-col flex-1 pt-4">
+        <div>
+          no tiene permiso para acceder a esta pagina, sera rederijido en tres
+          segundo
+        </div>
+      </section>
+    );
+  }
 
-    //     // Datos
-    //     data={data}
-    //     columns={[
-    //       { accessorKey: "name", header: "Nombre" },
-    //       { accessorKey: "email", header: "Email" },
-    //       { accessorKey: "city", header: "Ciudad" },
-    //       { accessorKey: "age", header: "Edad" },
-    //     ]}
-    //     filters={filters}
-    //     modalContents={modalContents}
-    //     title="Usuarios"
-    //     pageSize={3}
-    //     // Estado controlado
-    //     activeFilters={activeFilters}
-    //     globalFilter={globalFilter}
-    //     // Callbacks
-    //     onFiltersChange={setActiveFilters}
-    //     onGlobalFilterChange={setGlobalFilter}
-    //     onApplyFilter={handleApplyFilter}
-    //     onClearFilter={handleClearFilter}
-    //     onClearAllFilters={handleClearAllFilters}
-    //     onEditRequest={handleEditRequest}
-    //     onDeleteRequest={handleDeleteRequest}
-    //     onCreateRequest={handleCreateRequest}
-    //     enableFilters={true}
-    //     enableRowSelection={true}
-    //   />
-    // </div>
+  return (
     <div className="p-6">
       <DynamicTable
-        //selection
-
         // Datos
         data={data || []}
         columns={[
