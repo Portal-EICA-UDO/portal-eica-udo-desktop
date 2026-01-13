@@ -119,15 +119,12 @@ export const DynamicTable = <T extends { id: string | number }>({
 
   // Obtener elementos seleccionados
   const selectedItems = useMemo(() => {
-    console.log("rowSelection", rowSelection);
     const selectedIds = Object.keys(rowSelection);
     return data.filter((_, index) => selectedIds.includes(index.toString()));
   }, [rowSelection, data]);
 
   // Handlers para acciones
   const handleEdit = (newData: T) => {
-    console.log("selectedItems", selectedItems);
-    console.log("newData", newData);
     if (selectedItems.length === 1) {
       onEditRequest?.(newData);
       // Limpiar selección luego de editar
