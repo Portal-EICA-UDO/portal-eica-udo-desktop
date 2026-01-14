@@ -16,6 +16,10 @@ const SUPER_ADMIN_LINKS = [
     label: "Gestionar Carreras",
     href: "/privado/carreras",
   },
+  {
+    label: "Gestionar materias",
+    href: "/privado/materias",
+  },
 ];
 const ADMIN_LINKS = [
   {
@@ -25,6 +29,10 @@ const ADMIN_LINKS = [
   {
     label: "Gestionar Carreras",
     href: "/privado/carreras",
+  },
+  {
+    label: "Gestionar materias",
+    href: "/privado/materias",
   },
 ];
 const USER_LINKS = [
