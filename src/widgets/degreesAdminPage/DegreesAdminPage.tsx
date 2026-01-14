@@ -58,7 +58,7 @@ const UsuariosPage = () => {
     },
     {
       key: "escuela",
-      label: "Ciudad",
+      label: "Escuela",
       type: "select",
       options: opciones.map((escuela) => ({
         label: escuela.nombre,
