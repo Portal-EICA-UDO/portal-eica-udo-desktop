@@ -66,7 +66,7 @@ const CarrerasGrid = () => {
                     <Card
                         imageSrc={getImageUrl(
                             "carreras-imagenes",
-                            `${carrera.imagen_url}.jpg`
+                            `${carrera.imagen_url}`
                         )}
                         title={carrera.nombre}
                     >
@@ -74,7 +74,7 @@ const CarrerasGrid = () => {
                             <Modal
                                 imageSrc={getImageUrl(
                                     "carreras-imagenes",
-                                    `${carrera.imagen_url}.jpg`
+                                    `${carrera.imagen_url}`
                                 )}
                                 imageAlt="imagen"
                                 title={carrera.nombre}

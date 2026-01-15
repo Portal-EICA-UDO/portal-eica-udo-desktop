@@ -2,7 +2,7 @@
 import { supabase } from "@shared/api";
 import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
 import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
-import Comunicados from "@widgets/comunicados/ui/Comunicados.tsx";
+import ComunicadosWidget from "@widgets/comunicados/ui/Comunicados.tsx";
 
 const { data, error } = await supabase.from("comunicados").select("*");
 ---
@@ -10,7 +10,7 @@ const { data, error } = await supabase.from("comunicados").select("*");
 <BaseLayout siteTitle="Comunicados">
     <div class="min-h-lvh flex flex-col">
         <HeaderWithSignin />
-        <Comunicados
+        <ComunicadosWidget
         client:load />
     </div>
 </BaseLayout>
