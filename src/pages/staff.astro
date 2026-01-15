@@ -1,0 +1,39 @@
+---
+import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
+import Card from "@shared/ui/astro/Card.astro";
+import Modal from "@shared/ui/astro/Modal.astro";
+import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
+import StaffGrid from "../widgets/staff/ui/StaffGrid.tsx";
+import { supabase } from "@shared/api";
+
+
+
+
+---
+
+<BaseLayout siteTitle="Staff">
+  <div class="h-lvh flex flex-col">
+    <HeaderWithSignin />
+    <StaffGrid client:load/>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Estilos responsivos */
+  @media (min-width: 640px) {
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1280px) {
+    .grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
