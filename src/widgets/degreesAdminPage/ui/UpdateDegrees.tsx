@@ -49,13 +49,14 @@ export const UpdateDegrees: React.FC<props> = ({
 
   useEffect(() => {
     const file = watchedFile?.[0];
-    console.log(file);
-    if (initialImage)
-      return setPreview(getImageUrl("carreras-imagenes", initialImage));
+
     if (file instanceof File) {
       const url = URL.createObjectURL(file);
       setPreview(url);
       return () => URL.revokeObjectURL(url);
+    }
+    if (initialImage) {
+      return setPreview(getImageUrl("carreras-imagenes", initialImage));
     }
 
     setPreview(null);
@@ -73,7 +74,7 @@ export const UpdateDegrees: React.FC<props> = ({
             imagen_url: data.imagen_url.name,
             id_escuela: data.escuela,
           },
-          initialData.id
+          initialData.id,
         );
       } else {
         await updateDegree(
@@ -82,7 +83,7 @@ export const UpdateDegrees: React.FC<props> = ({
             descripcion: data.descripcion,
             id_escuela: data.escuela,
           },
-          initialData.id
+          initialData.id,
         );
       }
 
