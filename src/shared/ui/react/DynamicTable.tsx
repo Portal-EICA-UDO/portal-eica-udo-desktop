@@ -11,6 +11,7 @@ import {
 import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import TableHeader from "./TableHeader";
 import type { TableProps } from "@shared/types/table";
+import { fi } from "zod/locales";
 
 export const DynamicTable = <T extends { id: string | number }>({
   data,
@@ -55,7 +56,9 @@ export const DynamicTable = <T extends { id: string | number }>({
   const tableColumns = useMemo(() => {
     const cols = columns.map((col) => ({
       accessorKey: col.accessorKey,
+      accessorFn: col.accessorFn,
       header: col.header,
+      filterFn: col.filterFn,
       cell:
         col.cell ||
         (({ getValue }: any) => (
