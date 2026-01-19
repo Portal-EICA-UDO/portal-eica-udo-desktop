@@ -20,6 +20,10 @@ const SUPER_ADMIN_LINKS = [
     label: "Gestionar materias",
     href: "/privado/materias",
   },
+  {
+    label: "Gestionar  Escuelas",
+    href: "/privado/escuelas",
+  },
 ];
 const ADMIN_LINKS = [
   {
@@ -33,6 +37,10 @@ const ADMIN_LINKS = [
   {
     label: "Gestionar materias",
     href: "/privado/materias",
+  },
+  {
+    label: "Gestionar  Escuelas",
+    href: "/privado/escuelas",
   },
 ];
 const USER_LINKS = [
@@ -51,8 +59,8 @@ export const AuthDrawer = () => {
         $role === "superAdmin"
           ? SUPER_ADMIN_LINKS
           : $role === "admin"
-          ? ADMIN_LINKS
-          : USER_LINKS
+            ? ADMIN_LINKS
+            : USER_LINKS
       }
       icon={
         $role === "superAdmin" ? (

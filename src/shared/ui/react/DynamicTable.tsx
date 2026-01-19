@@ -11,6 +11,7 @@ import {
 import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import TableHeader from "./TableHeader";
 import type { TableProps } from "@shared/types/table";
+import { fi } from "zod/locales";
 
 export const DynamicTable = <T extends { id: string | number }>({
   data,
@@ -48,7 +49,7 @@ export const DynamicTable = <T extends { id: string | number }>({
         id: filter.key,
         value: filter.value,
       })),
-    [activeFilters]
+    [activeFilters],
   );
 
   // Configurar columnas
@@ -64,6 +65,7 @@ export const DynamicTable = <T extends { id: string | number }>({
           </div>
         )),
       enableSorting: col.enableSorting ?? true,
+      ...col,
     }));
 
     if (enableRowSelection) {
@@ -199,7 +201,7 @@ export const DynamicTable = <T extends { id: string | number }>({
                         <span>
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                         </span>
                         {{
@@ -317,7 +319,7 @@ export const DynamicTable = <T extends { id: string | number }>({
                       {pageIndex + 1}
                     </button>
                   );
-                }
+                },
               )}
             </div>
 
