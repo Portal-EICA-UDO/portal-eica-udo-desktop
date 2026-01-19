@@ -49,16 +49,14 @@ export const DynamicTable = <T extends { id: string | number }>({
         id: filter.key,
         value: filter.value,
       })),
-    [activeFilters]
+    [activeFilters],
   );
 
   // Configurar columnas
   const tableColumns = useMemo(() => {
     const cols = columns.map((col) => ({
       accessorKey: col.accessorKey,
-      accessorFn: col.accessorFn,
       header: col.header,
-      filterFn: col.filterFn,
       cell:
         col.cell ||
         (({ getValue }: any) => (
@@ -67,6 +65,7 @@ export const DynamicTable = <T extends { id: string | number }>({
           </div>
         )),
       enableSorting: col.enableSorting ?? true,
+      ...col,
     }));
 
     if (enableRowSelection) {
@@ -202,7 +201,7 @@ export const DynamicTable = <T extends { id: string | number }>({
                         <span>
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                         </span>
                         {{
@@ -320,7 +319,7 @@ export const DynamicTable = <T extends { id: string | number }>({
                       {pageIndex + 1}
                     </button>
                   );
-                }
+                },
               )}
             </div>
 
