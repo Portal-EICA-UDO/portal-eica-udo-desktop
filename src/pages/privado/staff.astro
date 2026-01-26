@@ -1,0 +1,12 @@
+---
+import HeaderWithSignin from "@features/auth/ui/astro/HeaderWithSignin.astro";
+import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+import { StaffAdminPage } from "@widgets/staffAdminPage/ui/StaffAdminPage";
+---
+
+<BaseLayout siteTitle="Tablas">
+  <div class="flex flex-col">
+    <HeaderWithSignin />
+    <StaffAdminPage client:only="react" />
+  </div>
+</BaseLayout>

@@ -24,6 +24,10 @@ const SUPER_ADMIN_LINKS = [
     label: "Gestionar  Escuelas",
     href: "/privado/escuelas",
   },
+  {
+    label: "Gestionar  staff",
+    href: "/privado/staff",
+  },
 ];
 const ADMIN_LINKS = [
   {
@@ -41,6 +45,10 @@ const ADMIN_LINKS = [
   {
     label: "Gestionar  Escuelas",
     href: "/privado/escuelas",
+  },
+  {
+    label: "Gestionar  staff",
+    href: "/privado/staff",
   },
 ];
 const USER_LINKS = [

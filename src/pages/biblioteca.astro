@@ -1,0 +1,23 @@
+---
+import ActiveModalButton from "@shared/ui/astro/ActiveModalButton.astro";
+import Card from "@shared/ui/astro/Card.astro";
+import Modal from "@shared/ui/astro/Modal.astro";
+import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
+import { supabase } from "@shared/api";
+import CarrerasGrid from "@widgets/Carreras/ui/CarrerasGrid";
+import MyForm from "@widgets/biblioteca/ui/Biblioteca";
+
+function getImageUrl(bucketName: string, fileName: string): string {
+  const projectRef = "xyzcompany"; // Reemplaza con tu Project Ref
+  return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${fileName}`;
+}
+const { data, error } = await supabase.from("libros").select("*");
+---
+
+<BaseLayout siteTitle="Biblioteca">
+  <div class="h-lvh flex flex-col">
+    <HeaderWithSignin />
+    <MyForm client:load />
+  </div>
+</BaseLayout>

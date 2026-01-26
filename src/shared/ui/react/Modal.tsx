@@ -9,7 +9,9 @@ export function Modal({
     phone,
     materias,
     buttonLabel,
-    description
+    description,
+    tags,
+    buttonHref
 }: {
     title?: string;
     imageSrc?: string;
@@ -28,6 +30,8 @@ export function Modal({
     }>;
     buttonLabel?: string;
     description?: string;
+    tags?: string[];
+    buttonHref?: string;
 }) {
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
@@ -53,7 +57,7 @@ export function Modal({
                 </div>
 
                 <div className="sm:col-span-2 flex flex-col">
-                    <header className="mb-4 sm:mb-6">
+                    <header className="mb-4 sm:mb-1">
                         {
                             title && (
                                 <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
@@ -96,8 +100,8 @@ export function Modal({
                     </div>
 
 
-                    {
-                        position === "Docente" && materias && materias.length > 0 ? (
+                        {
+                            position === "Docente" && materias && materias.length > 0 ? (
                             <div className="mb-6 sm:mb-8">
                                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Materias que imparte:</h4>
                                 <ul className="space-y-2">
@@ -131,22 +135,39 @@ export function Modal({
                     }
 
 
+                    {
+                        tags && tags.length > 0 ? (
+                            <div className="mb-3 sm:mb-2 flex flex-wrap gap-2">
+                                {tags.map((t, i) => (
+                                    <span key={i} className="text-xs bg-gray-100 px-2 py-1 rounded">{t}</span>
+                                ))}
+                            </div>
+                        ) : null
+                    }
+
                     <div className="mt-auto pt-6 border-t border-gray-200">
-                        <slot name="actions">
-                            {
-                                buttonLabel ? (
-                                    <button
-                                        type="button"
-                                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0A5C8D] text-white font-medium hover:bg-[#084a6b] transition-colors duration-200 w-full sm:w-auto"
-                                    >
-                                        {buttonLabel}
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                        </svg>
-                                    </button>
-                                ) : null
-                            }
-                        </slot>
+                        {buttonHref ? (
+                            <a
+                                href={buttonHref}
+                                download
+                                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0A5C8D] text-white font-medium hover:bg-[#084a6b] transition-colors duration-200 w-full sm:w-auto"
+                            >
+                                {buttonLabel ?? 'Descargar'}
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                        ) : buttonLabel ? (
+                            <button
+                                type="button"
+                                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0A5C8D] text-white font-medium hover:bg-[#084a6b] transition-colors duration-200 w-full sm:w-auto"
+                            >
+                                {buttonLabel}
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                        ) : null}
                     </div>
                 </div>
             </div>
