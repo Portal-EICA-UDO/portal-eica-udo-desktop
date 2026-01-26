@@ -31,9 +31,6 @@ const StaffGrid = () => {
 
         if (staffError) throw staffError;
 
-        console.log("=== STAFF CONSULTA ===");
-        console.log("Staff encontrados:", staffList?.length);
-
         if (staffList && staffList.length > 0) {
           const { data: allPensumRelations, error: pensumError } = await supabase
             .from('pensum')
@@ -184,7 +181,7 @@ const StaffGrid = () => {
   }
 
   if (!staffWithMaterias || staffWithMaterias.length === 0) {
-    console.log("Renderizando sin datos");
+    
     return (
       <div className="col-span-full text-center py-12">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
