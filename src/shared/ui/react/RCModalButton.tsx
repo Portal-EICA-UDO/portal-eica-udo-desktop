@@ -3,8 +3,7 @@ import { X } from "lucide-react";
 
 interface ReactActiveModalButtonProps {
   label: string;
-  icon?: React.ReactNode; // Prop para el ícono
-  content?: React.ReactNode;
+  icon?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -23,47 +22,36 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   };
 
   const closeModal = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
-      document.body.style.overflow = "auto"; // Restaurar scroll
-    }
+    modalRef.current?.close();
+    document.body.style.overflow = "auto";
   };
 
   return (
     <>
       <button
-        className="active-modal-button px-4 py-1.5 bg-[#0A5C8D] rounded-full flex justify-center hover:scale-105 transition-transform"
+        className="px-4 py-1.5 bg-[#0A5C8D] rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform"
         onClick={openModal}
       >
-        <div className="flex items-center gap-2 justify-center text-white ">
-          {icon && <div className="icon">{icon}</div>}{" "}
-          {/* Renderiza el ícono si se proporciona */}
-          {label && <div className="w-max">{label}</div>}
-        </div>
+        {icon && <span>{icon}</span>}
+        {label && <span className="w-max">{label}</span>}
       </button>
 
       <dialog
         ref={modalRef}
-        aria-labelledby="dialog-title"
-        className="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent "
+        className="m-auto rounded-lg shadow-xl p-0 backdrop:bg-gray-900/50 backdrop:backdrop-blur-sm open:flex open:flex-col"
+        onClose={() => (document.body.style.overflow = "auto")}
       >
-        <div className="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
+        <div className="relative bg-white p-6 min-w-[300px]">
+          {/* Botón de cerrar */}
+          <button
+            onClick={closeModal}
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <X size={20} />
+          </button>
 
-        <div className="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-max">
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">{children}</div>
-            </div>
-            <div className="bg-gray-50  sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                onClick={closeModal}
-                className="rotate z-30 absolute top-3 right-3 rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                aria-label="close"
-              >
-                <X />
-              </button>
-            </div>
-          </div>
+          {/* Contenido */}
+          <div className="mt-2">{children}</div>
         </div>
       </dialog>
     </>
