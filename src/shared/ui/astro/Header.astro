@@ -33,7 +33,9 @@ const {
 ---
 
 <header>
-  <div class="my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div
+    class="my-2 md:my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+  >
     <!-- left button -->
     <div class="flex items-center z-10">
       <!-- <button
@@ -57,15 +59,20 @@ const {
         </svg>
         <span class="sm:inline">Siceudo</span>
       </button> -->
-      <LinkButton label="Siceudo" href="http://201.249.180.234/ne/estudiantes/">
-        <div slot="icon">
-          <Globe size={20} />
-        </div>
-      </LinkButton>
+      <div class="hidden md:flex w-max">
+        <LinkButton
+          label="Siceudo"
+          href="http://201.249.180.234/ne/estudiantes/"
+        >
+          <div slot="icon">
+            <Globe size={20} />
+          </div>
+        </LinkButton>
+      </div>
     </div>
 
     <!-- center nav: two links left, two links right -->
-    <nav class="flex-1 items-center z-10">
+    <nav class="flex-1 items-center z-10 md:flex hidden">
       <div class="justify-around flex flex-column items-center w-full">
         {
           links.slice(0, 2).map((link) => (
@@ -77,7 +84,12 @@ const {
             </a>
           ))
         }
-        <a href="/" transition:name="logo-UDO" transition:persist>
+        <a
+          href="/"
+          transition:name="logo-UDO"
+          transition:persist
+          class="hidden md:block"
+        >
           <img
             src={logoSrc}
             alt="Logo"
@@ -99,7 +111,7 @@ const {
     </nav>
 
     <!-- right actions -->
-    <div class="flex items-center justify-center z-10">
+    <div class="flex items-center justify-center z-10 w-full md:w-auto">
       <slot name="rightButton" class="text-(length:--font-default)" />
     </div>
 

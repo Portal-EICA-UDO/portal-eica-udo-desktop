@@ -53,8 +53,20 @@ const ADMIN_LINKS = [
 ];
 const USER_LINKS = [
   {
+    label: "Biblioteca",
+    href: "/biblioteca",
+  },
+  {
     label: "Carreras",
     href: "/carreras",
+  },
+  {
+    label: "Comunicados",
+    href: "/comunicados",
+  },
+  {
+    label: "Staff",
+    href: "/staff",
   },
 ];
 export const AuthDrawer = () => {
@@ -62,7 +74,7 @@ export const AuthDrawer = () => {
   return (
     <Drawer
       position="left"
-      width="w-96"
+      width="md:w-96"
       links={
         $role === "superAdmin"
           ? SUPER_ADMIN_LINKS

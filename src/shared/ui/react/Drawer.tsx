@@ -1,8 +1,9 @@
-// ...existing code...
 import { email, fullName, name, role } from "@features/auth/nanostore";
 import { useStore } from "@nanostores/react";
 import React, { useEffect, useRef, useState } from "react";
 import { navigate } from "astro:transitions/client";
+//lucide icons
+import { FolderPen, Mail, UserStar } from "lucide-react";
 
 type DrawerProps = {
   position?: "right" | "left";
@@ -62,7 +63,7 @@ export const Drawer: React.FC<DrawerProps> = ({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className=" text-center hover:bg-transparent px-4 py-1 text-(length:--font-default) font-medium rounded-full border border-sky-700 text-sky-700 hover:scale-105 transition"
+        className=" text-center hover:bg-transparent px-4 py-1 md:text-(length:--font-default) font-medium rounded-full border border-sky-700 text-sky-700 hover:scale-105 transition "
         aria-expanded={open}
         aria-controls="site-drawer"
       >
@@ -83,19 +84,41 @@ export const Drawer: React.FC<DrawerProps> = ({
             ref={drawerRef}
             role="dialog"
             aria-modal="true"
-            className={`fixed top-0 ${sidePosition} h-full z-50 ${width} bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+            className={`fixed top-0 ${sidePosition} h-full z-50 ${width} w-full  bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
               open ? translateClass : offscreenClass
             } ${className}`}
             // evitar que el click en el panel propague al overlay
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b">
-              <div className="text-lg font-semibold">
-                <span className="text-sky-700">{$fullname}</span>
-                <br />
-                <span className="text-sky-700">{$email}</span>
-                <br />
-                <span className="text-sky-700">{$role}</span>
+              <div className="text-lg font-semibold flex md:flex-row flex-col gap-1.5">
+                <a href="/" className="">
+                  <img
+                    src={"/images/logoUDO.png"}
+                    alt="Logo"
+                    className="top-4 w-20 h-20 rounded-full shadow-md object-cover"
+                  />
+                </a>
+                {$role !== "unauthenticated" && $role && (
+                  <div>
+                    <div className=" flex gap-1.5 items-center">
+                      <FolderPen className="w-4 h-4 text-gray-600" />
+                      <div className="text-gray-600">{$fullname}</div>
+                    </div>
+
+                    <div className="flex gap-1.5 items-center">
+                      <Mail className="w-4 h-4 text-gray-600" />
+                      <div className="text-gray-600">{$email}</div>
+                    </div>
+
+                    {$role !== "user" && (
+                      <div className=" flex gap-1.5 items-center">
+                        <UserStar className="w-4 h-4 text-gray-600" />
+                        <div className="text-gray-600">{$role}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               <button
                 aria-label="Cerrar"
