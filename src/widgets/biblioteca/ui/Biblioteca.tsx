@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, type FC } from 'react';
 import { useForm } from 'react-hook-form';
 import FiltradoBiblioteca from './FiltradoBiblioteca';
 import BibliotecaCard from '@shared/ui/react/BibliotecaCard';
@@ -35,7 +35,7 @@ function isHttpUrl(value: any) {
   return typeof value === 'string' && /^(https?:)?\/\//.test(value);
 }
 
-export default function Biblioteca(): JSX.Element {
+export default function Biblioteca() {
   const { control, watch } = useForm({ defaultValues: { interests: [], name: '' } });
   const selectedInterests = watch('interests') as Array<string | number> | undefined;
   const searchName = watch('name') as string | undefined;

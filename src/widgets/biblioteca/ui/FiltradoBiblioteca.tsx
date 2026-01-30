@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useController, type Control } from 'react-hook-form';
 import MultiSelect from '@shared/ui/react/FiltradoBibliotecaLogic';
 import { supabase } from '@shared/api/lib/supabaseClient';
+import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
+import Upload from './upload';
+
 
 interface Props {
   control: Control<any>;
@@ -40,7 +43,14 @@ export default function FiltradoBiblioteca({ control, name = 'interests' }: Prop
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Biblioteca</h2>
-          <p className="text-gray-600 mt-1">Buscar libros por nombre y etiquetas</p>
+          <p className="text-gray-600 mt-1">Buscar libros por Nombre y Etiquetas</p>
+        </div>
+        <div>
+          <RCActiveModalButton
+            label="Agregar Libro"
+          >
+            <Upload />
+          </RCActiveModalButton>
         </div>
       </div>
 
