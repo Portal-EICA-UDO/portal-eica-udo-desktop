@@ -13,16 +13,18 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   children,
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
-
+  const [isOpen, setIsOpen] = React.useState(false);
   const openModal = () => {
     if (modalRef.current) {
+      setIsOpen(true); // Primero permitimos que se renderice
       modalRef.current.showModal();
-      document.body.style.overflow = "hidden"; // Evitar scroll
+      document.body.style.overflow = "hidden";
     }
   };
 
   const closeModal = () => {
     modalRef.current?.close();
+    setIsOpen(false); // Al cerrar, desmontamos los hijos
     document.body.style.overflow = "auto";
   };
 
@@ -39,7 +41,10 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
       <dialog
         ref={modalRef}
         className="m-auto rounded-lg shadow-xl p-0 backdrop:bg-gray-900/50 backdrop:backdrop-blur-sm open:flex open:flex-col"
-        onClose={() => (document.body.style.overflow = "auto")}
+        onClose={() => {
+          document.body.style.overflow = "auto";
+          setIsOpen(false);
+        }} // Importante: manejar el cierre por tecla ESC
       >
         <div className="relative bg-white p-6 min-w-[300px]">
           {/* Botón de cerrar */}
@@ -51,7 +56,8 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
           </button>
 
           {/* Contenido */}
-          <div className="mt-2">{children}</div>
+          {/* Solo renderiza children si isOpen es true */}
+          <div className="mt-2">{isOpen && children}</div>
         </div>
       </dialog>
     </>
