@@ -35,7 +35,7 @@ function isHttpUrl(value: any) {
   return typeof value === 'string' && /^(https?:)?\/\//.test(value);
 }
 
-export default function Biblioteca(): JSX.Element {
+export default function Biblioteca(){
   const { control, watch } = useForm({ defaultValues: { interests: [], name: '' } });
   const selectedInterests = watch('interests') as Array<string | number> | undefined;
   const searchName = watch('name') as string | undefined;
@@ -44,6 +44,19 @@ export default function Biblioteca(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [modalLibro, setModalLibro] = useState<any | null>(null);
   
+  const reloadLibros = async () => {
+      try {
+        const { data, error } = await supabase.from('libros').select('*');
+        if (error) throw error;
+        if (Array.isArray(data)) {
+          setLibros(data as any[]);
+        }
+      } catch (err) {
+        console.error('loadLibros error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   useEffect(() => {
     let mounted = true;
@@ -138,7 +151,7 @@ export default function Biblioteca(): JSX.Element {
   return (
     <div className="w-full">
       <div className="max-w-7xl mx-auto w-full flex flex-col min-h-[80vh]">
-        <FiltradoBiblioteca control={control} name="interests" />
+        <FiltradoBiblioteca control={control} name="interests" reloadLibros={reloadLibros}/>
         
         {loading ? (
           <p className="text-gray-600">Cargando libros...</p>
