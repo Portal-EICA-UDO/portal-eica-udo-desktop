@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import { createQuestionSchema } from "../validations/createQuestionSchema";
+import { createQuestionSchema } from "../validations/";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type z from "zod";
-import emailjs from "@emailjs/browser"; // Importación necesaria
 import { useState } from "react";
 import Toast from "@shared/ui/react/Toast";
+import { sendEmail } from "../api/requests";
 
 type FormData = z.infer<typeof createQuestionSchema>;
 
@@ -28,17 +28,10 @@ export const QuestionsPage = () => {
     try {
       // Tu lógica de envío aquí
 
-      await emailjs.send(
-        "service_t1r1dvn",
-        "template_egf6neh",
-        {
-          ...data,
-          time: new Date().toLocaleString(),
-        },
-        {
-          publicKey: "6VXiuzMko4JHhssPS",
-        },
-      );
+      await sendEmail({
+        ...data,
+        time: new Date().toLocaleString(),
+      });
       // Ejemplo rápido de integración con EmailJS usando el objeto 'data'
       // await emailjs.send('SERVICE_ID', 'TEMPLATE_ID', data as any, 'PUBLIC_KEY');
 
