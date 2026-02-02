@@ -9,8 +9,20 @@ const SUPER_ADMIN_LINKS = [
     href: "/privado/crear-usuarios",
   },
   {
+    label: "Biblioteca",
+    href: "/biblioteca",
+  },
+  {
     label: "Carreras",
     href: "/carreras",
+  },
+  {
+    label: "Comunicados",
+    href: "/comunicados",
+  },
+  {
+    label: "Staff",
+    href: "/staff",
   },
   {
     label: "Gestionar Carreras",
@@ -27,12 +39,28 @@ const SUPER_ADMIN_LINKS = [
   {
     label: "Gestionar  staff",
     href: "/privado/staff",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
   },
 ];
 const ADMIN_LINKS = [
   {
+    label: "Biblioteca",
+    href: "/biblioteca",
+  },
+  {
     label: "Carreras",
     href: "/carreras",
+  },
+  {
+    label: "Comunicados",
+    href: "/comunicados",
+  },
+  {
+    label: "Staff",
+    href: "/staff",
   },
   {
     label: "Gestionar Carreras",
@@ -49,6 +77,10 @@ const ADMIN_LINKS = [
   {
     label: "Gestionar  staff",
     href: "/privado/staff",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
   },
 ];
 const USER_LINKS = [
@@ -67,6 +99,10 @@ const USER_LINKS = [
   {
     label: "Staff",
     href: "/staff",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
   },
 ];
 export const AuthDrawer = () => {
