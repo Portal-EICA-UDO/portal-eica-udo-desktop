@@ -2,7 +2,7 @@ import { email, role, name, fullName } from "../../nanostore";
 import { useStore } from "@nanostores/react";
 import { supabase } from "@shared/api";
 import { RCActiveModalButton } from "@shared/ui/react/RCModalButton";
-import { ChevronDown } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { useEffect, type JSX } from "react";
 import { AuthModal } from "./AuthModal";
 import type { Session } from "@supabase/supabase-js";
@@ -58,21 +58,22 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
     name.set("");
   };
 
-  if ($role == "unauthenticated")
+  if ($role === "unauthenticated")
     return (
-      <RCActiveModalButton
-        label="Iniciar Sesión"
-        icon={<ChevronDown size={16} />}
-      >
-        <div>
-          <AuthModal />
-        </div>
-      </RCActiveModalButton>
+      <div className="flex gap-1.5  md:w-auto w-full items-center  justify-between">
+        <RCActiveModalButton label="Iniciar Sesión" icon={<LogIn size={16} />}>
+          <div>
+            <AuthModal />
+          </div>
+        </RCActiveModalButton>
+
+        {drawer}
+      </div>
     );
 
   if (isAdminOrSuperAdmin($role))
     return (
-      <div className="flex gap-1.5 items-center">
+      <div className="flex gap-1.5 md:w-auto w-full items-center  justify-between">
         <div
           onClick={signOut}
           className="px-3 py-2.5  flex relative text-center gap-1  text-(length:--font-default) font-medium rounded-full  text-red-400    border-2 border-red-400 hover:scale-105 transition"
@@ -87,7 +88,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
 
   if ($role === "miembro")
     return (
-      <div className="flex gap-1.5 items-center">
+      <div className="flex gap-1.5 md:w-auto w-full items-center justify-between">
         <div
           onClick={signOut}
           className="px-3 py-2.5  flex relative text-center gap-1  text-(length:--font-default) font-medium rounded-full  text-red-400    border-2 border-red-400 hover:scale-105 transition"

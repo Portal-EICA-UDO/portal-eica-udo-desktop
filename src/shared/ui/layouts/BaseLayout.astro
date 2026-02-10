@@ -35,6 +35,7 @@ const { siteTitle, description } = Astro.props;
     --font-sub-tittle: 32px;
     --font-default: 16px;
   }
+
   * {
     font-family: "Roboto", sans-serif;
   }
@@ -43,5 +44,13 @@ const { siteTitle, description } = Astro.props;
   }
   body {
     background-color: #fafafa;
+  }
+  @media screen and (max-width: 768) {
+    /* CSS styles to be applied when the condition is true */
+    :root {
+      --font-tittle: 32px;
+      --font-sub-tittle: 24px;
+      --font-default: 14px;
+    }
   }
 </style>
