@@ -41,6 +41,10 @@ export const DynamicTable = <T extends { id: string | number }>({
   // Estado interno para selección y sorting
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  });
 
   // Convertir activeFilters a formato TanStack
   const columnFilters = useMemo<ColumnFiltersState>(
@@ -102,12 +106,7 @@ export const DynamicTable = <T extends { id: string | number }>({
       columnFilters,
       globalFilter,
       rowSelection,
-    },
-    initialState: {
-      pagination: {
-        pageIndex: 0,
-        pageSize,
-      },
+      pagination,
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: (value) => onGlobalFilterChange?.(value as string),
@@ -116,6 +115,7 @@ export const DynamicTable = <T extends { id: string | number }>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onPaginationChange: setPagination,
     enableRowSelection,
   });
 
@@ -264,8 +264,9 @@ export const DynamicTable = <T extends { id: string | number }>({
       </div>
 
       {/* Paginación */}
-      {table.getPageCount() > 1 && (
-        <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+
+      <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+        {table.getPageCount() > 1 && (
           <div className="text-sm text-gray-700">
             Página{" "}
             <span className="font-medium">
@@ -278,7 +279,33 @@ export const DynamicTable = <T extends { id: string | number }>({
             </span>{" "}
             resultado(s) total
           </div>
+        )}
 
+        {/* seccion para cambiar la cantidad de filas */}
+        <div className="flex items-center gap-1">
+          <label className="text-sm text-gray-700">Filas por página:</label>
+          <select
+            value={pagination.pageSize}
+            onChange={(e) => {
+              setPagination({
+                pageIndex: 0,
+                pageSize: Number(e.target.value),
+              });
+              console.log({
+                pageIndex: 0,
+                pageSize: Number(e.target.value),
+              });
+            }}
+            className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 "
+          >
+            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+        {table.getPageCount() > 1 && (
           <div className="flex items-center space-x-2">
             <button
               onClick={() => table.previousPage()}
@@ -331,8 +358,8 @@ export const DynamicTable = <T extends { id: string | number }>({
               Siguiente
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
