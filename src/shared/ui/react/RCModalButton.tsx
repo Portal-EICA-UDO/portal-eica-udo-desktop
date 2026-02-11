@@ -5,12 +5,14 @@ interface ReactActiveModalButtonProps {
   label: string;
   icon?: React.ReactNode;
   children?: React.ReactNode;
+  color?: string;
 }
 
 export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   label,
   icon,
   children,
+  color = "bg-[#0A5C8D]",
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -29,7 +31,7 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   return (
     <>
       <button
-        className="px-4 py-1.5 bg-[#0A5C8D] rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform"
+        className={`px-4 py-1.5 ${color} rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform`}
         onClick={openModal}
       >
         {icon && <span>{icon}</span>}

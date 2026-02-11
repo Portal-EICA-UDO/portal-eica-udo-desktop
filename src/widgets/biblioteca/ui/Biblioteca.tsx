@@ -163,6 +163,7 @@ export default function Biblioteca(){
                   key={libro.id}
                   libro={libro}
                   onOpenDescription={(l, thumbnail) => setModalLibro({ ...l, __thumbnail: thumbnail })}
+                  reloadLibros={reloadLibros}
                 />
               );
             })}

@@ -19,7 +19,7 @@ export function guardarArchivo(file, extras = {}) {
           fname: "uploadFilesToGoogleDrive"
         };
 
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxYPwMk61_sNO8TarCVgN5ZJSVPVAv0-_-aN4dWtMrHQILJsXvQjsZWShx2n_5icdTVMQ/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwPJ1m-3xbCm7kOG4hKHgZnFyuB7Xn9b5qjNCvByTJhF7iCTdU1F6ZtOLDvLjEmC7chVA/exec', {
           method: "POST",
           body: JSON.stringify(dataSend)
         });

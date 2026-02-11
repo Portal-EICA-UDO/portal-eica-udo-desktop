@@ -6,6 +6,7 @@ import { Modal } from '@shared/ui/react/Modal';
 type Props = {
   libro: any;
   onOpenDescription: (libro: any, thumbnail?: string | null) => void;
+  reloadLibros: () => void;
 };
 
 function extractDriveId(url: string | null | undefined) {
@@ -65,7 +66,7 @@ async function renderPdfToDataUrl(url: string) {
   }
 }
 
-export default function BibliotecaCard({ libro, onOpenDescription }: Props) {
+export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros }: Props) {
   const [thumbnail, setThumbnail] = useState<string>('/images/placeholder.png');
 
   useEffect(() => {
@@ -153,6 +154,7 @@ export default function BibliotecaCard({ libro, onOpenDescription }: Props) {
         {libro.descripcion && (
           <RCActiveModalButton label={"Descripción"}>
             <Modal
+              id={libro.id}
               title={libro.nombre}
               imageSrc={thumbnail ?? '/images/placeholder.png'}
               imageAlt={libro.nombre}
@@ -168,6 +170,8 @@ export default function BibliotecaCard({ libro, onOpenDescription }: Props) {
               })()}
               buttonLabel="Descargar"
               buttonHref={downloadHref}
+              isBook={true}
+              reloadLibros={reloadLibros}
             />
           </RCActiveModalButton>
         )}
