@@ -1,5 +1,9 @@
-
+import { role } from '@features/auth/nanostore';
+import { useStore } from '@nanostores/react';
+import { RCActiveModalButton } from './RCModalButton';
+import { EliminarLibro } from './EliminarLibro';
 export function Modal({
+    id,
     title,
     imageSrc,
     imageAlt,
@@ -11,8 +15,11 @@ export function Modal({
     buttonLabel,
     description,
     tags,
-    buttonHref
+    buttonHref,
+    isBook = false,
+    reloadLibros,
 }: {
+    id?: string;
     title?: string;
     imageSrc?: string;
     imageAlt?: string;
@@ -32,7 +39,11 @@ export function Modal({
     description?: string;
     tags?: string[];
     buttonHref?: string;
+    isBook?: boolean;
+    reloadLibros?: () => void;
 }) {
+    const $role = useStore(role);
+
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 sm:p-8 items-start">
@@ -100,8 +111,8 @@ export function Modal({
                     </div>
 
 
-                        {
-                            position === "Docente" && materias && materias.length > 0 ? (
+                    {
+                        position === "Docente" && materias && materias.length > 0 ? (
                             <div className="mb-6 sm:mb-8">
                                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Materias que imparte:</h4>
                                 <ul className="space-y-2">
@@ -168,6 +179,13 @@ export function Modal({
                                 </svg>
                             </button>
                         ) : null}
+                        {isBook && ($role === 'admin' || $role === 'superAdmin') && id && (
+                            <div className="mt-4">
+                                <RCActiveModalButton label="Eliminar Archivo" color='bg-[#CF3115]'>
+                                    <EliminarLibro libroId={id} reloadLibros={reloadLibros} />
+                                </RCActiveModalButton>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
