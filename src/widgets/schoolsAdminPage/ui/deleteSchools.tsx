@@ -9,19 +9,20 @@ type Props = {
 
 export const DeleteSchools: FC<Props> = ({ data, onSuccess }) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   const handleDelete = async () => {
+    setErrorMsg(null);
+    setLoading(true);
     try {
       await deleteSchools(data.map((item) => item.id));
       console.log("Carreras eliminadas correctamente: ", data);
-      setSuccessMsg("Escuelas eliminadas correctamente");
       onSuccess();
     } catch (error) {
       console.error(error);
       setErrorMsg("Error al eliminar las carreras");
-      return;
     }
+    setLoading(false);
   };
 
   return (
@@ -39,11 +40,10 @@ export const DeleteSchools: FC<Props> = ({ data, onSuccess }) => {
         className="px-4 py-2 rounded bg-sky-700 text-white"
         onClick={handleDelete}
       >
-        Eliminar
+        {isLoading ? "Eliminando..." : "Eliminar"}
       </button>
 
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-      {successMsg && <p className="text-green-500">{successMsg}</p>}
     </div>
   );
 };

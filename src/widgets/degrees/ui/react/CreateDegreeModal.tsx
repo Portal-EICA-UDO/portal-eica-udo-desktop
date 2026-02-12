@@ -81,7 +81,7 @@ export const CreateDegreeModal: React.FC = () => {
               maxLength: { value: 120, message: "Máx 120 caracteres" },
             })}
             type="text"
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
             placeholder="Nombre de la carrera"
           />
           {errors.name && (
@@ -99,7 +99,7 @@ export const CreateDegreeModal: React.FC = () => {
               required: "La descripción es obligatoria",
               maxLength: { value: 2000, message: "Máx 2000 caracteres" },
             })}
-            className="w-full border rounded px-3 py-2 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
             placeholder="Descripción breve de la carrera"
           />
           {errors.description && (

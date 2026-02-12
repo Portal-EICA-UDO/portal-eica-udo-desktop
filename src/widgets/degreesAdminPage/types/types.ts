@@ -1,10 +1,13 @@
-export type Data = {
+export type DegreeTable = {
   id: string;
   nombre: string;
   descripcion: string;
   imagen_url: string;
   escuela: string;
+  codigo: string;
+  horario_url: string;
   escuela_id: string;
+  nombre_horario: string;
 };
 
 export type Escuela = {
@@ -19,4 +22,7 @@ export type TableProps = {
   imagen_url: string;
   escuela: string;
   escuela_id: string;
+  codigo: string;
+  horario_url: string;
+  nombre_horario: string;
 };

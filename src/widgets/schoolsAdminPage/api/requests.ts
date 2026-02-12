@@ -1,5 +1,9 @@
 import { supabase } from "@shared/api";
-import type { SchoolTable } from "../types";
+import type {
+  SchoolCreateFormData,
+  SchoolTable,
+  SchoolUpdateFormData,
+} from "../types";
 
 export const getSchools = async () => {
   const { data, error } = await supabase.from("escuelas").select(`
@@ -7,7 +11,15 @@ export const getSchools = async () => {
     nombre,
     carreras (
       count
-    )
+    ),
+      mision,
+      objetivos,
+      descripcion,
+      codigo,
+      vision,
+      dependencias (
+        count
+      )
   `);
   console.log("Schools data:", data);
 
@@ -18,10 +30,11 @@ export const getSchools = async () => {
   return data;
 };
 
-export const createSchool = async (nombre: string) => {
+export const createSchool = async (schoolData: SchoolCreateFormData) => {
+  console.log("Creating school with data:", schoolData);
   const { data, error } = await supabase
     .from("escuelas")
-    .insert({ nombre })
+    .insert(schoolData)
     .select("*, carreras (count)")
     .single();
 
@@ -32,10 +45,10 @@ export const createSchool = async (nombre: string) => {
   return data as SchoolTable;
 };
 
-export const updateSchool = async (id: number, data: { nombre: string }) => {
+export const updateSchool = async (id: number, data: SchoolUpdateFormData) => {
   const { data: requestData, error } = await supabase
     .from("escuelas")
-    .update({ nombre: data.nombre })
+    .update(data)
     .eq("id", id)
     .select();
 
@@ -58,4 +71,34 @@ export const deleteSchools = async (ids: string[]) => {
   }
 
   return data;
+};
+
+export const schoolCodeExists = async (code: string) => {
+  // Busca coincidencias por código (case-insensitive)
+  const { data, error } = await supabase
+    .from("escuelas")
+    .select("id")
+    .ilike("codigo", code)
+    .limit(1);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return Array.isArray(data) && data.length > 0;
+};
+
+export const schoolNameExists = async (name: string) => {
+  // Busca coincidencias por nombre (case-insensitive)
+  const { data, error } = await supabase
+    .from("escuelas")
+    .select("id")
+    .ilike("nombre", name)
+    .limit(1);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return Array.isArray(data) && data.length > 0;
 };

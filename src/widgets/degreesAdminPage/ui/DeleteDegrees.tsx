@@ -1,23 +1,40 @@
 import { useState, type FC } from "react";
 import { deleteDegreeImage, deleteDegrees } from "../api";
-import type { Data } from "../types";
+import type { DegreeTable } from "../types";
+import { eliminarArchivo } from "@shared/ui/react/EliminarArchive";
+import { set } from "zod";
 
 type Props = {
-  data: Data[];
+  data: DegreeTable[];
   onSuccess: () => void;
 };
 
 export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   const handleDelete = async () => {
     console.log("data: ", data);
+    setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
     try {
       await deleteDegrees(data.map((item) => item.id));
 
-      await deleteDegreeImage(data.map((item) => item.imagen_url)[0]);
+      // await deleteDegreeImage(data.map((item) => item.imagen_url)[0]);
+      await Promise.all(
+        data.map(async (item) => {
+          await deleteDegreeImage(item.imagen_url);
+        }),
+      );
+
+      await Promise.all(
+        data.map(async (item) => {
+          await eliminarArchivo(item.horario_url);
+        }),
+      );
 
       onSuccess();
       setSuccessMsg("Carreras eliminadas correctamente");
@@ -27,6 +44,8 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
       console.error(error);
       return;
     }
+
+    setLoading(false);
   };
 
   return (
@@ -44,7 +63,7 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
         className="px-4 py-2 rounded bg-sky-700 text-white"
         onClick={handleDelete}
       >
-        Eliminar
+        {isLoading ? "Eliminando..." : "Eliminar"}
       </button>
 
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}

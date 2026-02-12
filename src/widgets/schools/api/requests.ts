@@ -12,7 +12,8 @@ export const getSchools = async () => {
             dependencias (
               nombre,
               staff (
-                nombre
+                nombre,
+                apellido
               )
 
             )

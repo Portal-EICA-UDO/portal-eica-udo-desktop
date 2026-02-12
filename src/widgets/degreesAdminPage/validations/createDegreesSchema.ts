@@ -17,7 +17,7 @@ export const createDegreesSchema = (selectOptions: Escuela[]) => {
     },
     {
       message: "Seleccione una opción válida",
-    }
+    },
   );
   // Preprocess: si recibe FileList (input file), toma el primer File; si no, undefined
   const fileOrUndefined = z.preprocess((val) => {
@@ -38,9 +38,8 @@ export const createDegreesSchema = (selectOptions: Escuela[]) => {
   const base = z.object({
     nombre: z.string().min(1, { message: "Ingrese un nombre válido" }),
     descripcion: z.string().min(1, { message: "Ingrese una descripción" }),
-
+    codigo: z.string().min(1, { message: "Ingrese un código" }),
     imagen_url: fileOrUndefined,
-
     // campo que representa el select (puedes cambiar el nombre a lo que uses en el form)
     escuela: schoolsSelectSchema,
   });
