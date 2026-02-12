@@ -5,12 +5,16 @@ interface ReactActiveModalButtonProps {
   label: string;
   icon?: React.ReactNode;
   children?: React.ReactNode;
+  color?: string;
+  iconPosition?: "left" | "right";
 }
 
 export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   label,
   icon,
   children,
+  color = "bg-[#0A5C8D]",
+  iconPosition = "left",
 }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -31,11 +35,12 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
   return (
     <>
       <button
-        className="px-4 py-1.5 bg-[#0A5C8D] rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform"
+        className={`px-4 py-2 ${color} rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform font-light`}
         onClick={openModal}
       >
-        {icon && <span>{icon}</span>}
+        {icon && iconPosition === "left" && <span>{icon}</span>}
         {label && <span className="w-max">{label}</span>}
+        {icon && iconPosition === "right" && <span>{icon}</span>}
       </button>
 
       <dialog

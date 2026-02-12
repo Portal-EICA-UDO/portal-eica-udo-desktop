@@ -1,6 +1,7 @@
 ---
 import "@app/styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import Charging from "../astro/Charging.astro";
 type Props = {
   siteTitle: string;
   description?: string;
@@ -22,9 +23,40 @@ const { siteTitle, description } = Astro.props;
     <title>{siteTitle}</title>
   </head>
   <body>
+    <div
+      class="charging-container fixed top-0 left-0 w-full h-full z-50 items-center justify-center bg-white dark:bg-[#13151a] hidden"
+    >
+      <Charging />
+    </div>
     <slot />
   </body>
 </html>
+<script>
+  document.addEventListener("astro:before-preparation", (ev) => {
+    const chargingContainer = document.querySelector(".charging-container");
+    if (chargingContainer) {
+      chargingContainer.classList.remove("hidden");
+      chargingContainer.classList.add("flex");
+    }
+    console.log(ev.loader);
+    // This event is triggered before the page is prepared
+    console.log("Preparando la página...");
+  });
+  document.addEventListener("astro:after-preparation", () => {
+    // This event is triggered before the page is prepared
+    console.log("Página preparada");
+  });
+  document.addEventListener("astro:after-swap", () => {
+    const chargingContainer = document.querySelector(".charging-container");
+
+    if (chargingContainer) {
+      chargingContainer.classList.remove("flex");
+      chargingContainer.classList.add("hidden");
+    }
+    // This event is triggered after the page transition
+    console.log("Página cargada");
+  });
+</script>
 
 <style is:global>
   @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");

@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { useController, type Control } from 'react-hook-form';
 import MultiSelect from '@shared/ui/react/FiltradoBibliotecaLogic';
 import { supabase } from '@shared/api/lib/supabaseClient';
+import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
+import { CreateBook } from './CrearLibro';
 
 interface Props {
   control: Control<any>;
   name?: string;
+  reloadLibros: () => void;
 }
 
-export default function FiltradoBiblioteca({ control, name = 'interests' }: Props) {
+export default function FiltradoBiblioteca({ control, name = 'interests', reloadLibros }: Props) {
   const [options, setOptions] = useState<{ id: string | number; name: string }[]>([]);
 
   const { field: nameField } = useController({ name: 'name', control, defaultValue: '' });
@@ -42,6 +45,9 @@ export default function FiltradoBiblioteca({ control, name = 'interests' }: Prop
           <h2 className="text-2xl font-bold text-gray-800">Biblioteca</h2>
           <p className="text-gray-600 mt-1">Buscar libros por nombre y etiquetas</p>
         </div>
+        <RCActiveModalButton label="Agregar Libro" icon="📚">
+          <CreateBook reloadLibros={reloadLibros} />
+        </RCActiveModalButton>
       </div>
 
       <div className="space-y-3">
