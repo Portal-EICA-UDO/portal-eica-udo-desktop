@@ -44,6 +44,10 @@ const SUPER_ADMIN_LINKS = [
     label: "Realizar una pregunta",
     href: "/preguntas",
   },
+  {
+    label: "Escuelas",
+    href: "/escuelas",
+  },
 ];
 const ADMIN_LINKS = [
   {
@@ -82,6 +86,10 @@ const ADMIN_LINKS = [
     label: "Realizar una pregunta",
     href: "/preguntas",
   },
+  {
+    label: "Escuelas",
+    href: "/escuelas",
+  },
 ];
 const USER_LINKS = [
   {
@@ -103,6 +111,10 @@ const USER_LINKS = [
   {
     label: "Realizar una pregunta",
     href: "/preguntas",
+  },
+  {
+    label: "Escuelas",
+    href: "/escuelas",
   },
 ];
 export const AuthDrawer = () => {

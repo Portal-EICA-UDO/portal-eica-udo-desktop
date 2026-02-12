@@ -10,8 +10,8 @@ export function Card({
   children: React.ReactNode;
 }) {
   return (
-    <section className="w-[202px] h-[338px] bg-white/80 rounded-lg shadow sm:shadow-md overflow-hidden border border-white/10 flex flex-col">
-      <div className="h-[262px] px-2.5 pt-2.5 flex items-center justify-center overflow-hidden">
+    <section className="w-full aspect-[2.5/4] max-w-sm bg-white/80 rounded-lg shadow sm:shadow-md overflow-hidden border border-white/10 flex flex-col gap-2.5 p-2.5">
+      <div className="  flex items-center justify-center overflow-hidden flex-1">
         <img
           src={imageSrc}
           alt={title}
@@ -24,15 +24,15 @@ export function Card({
         />
       </div>
 
-      <div className="pt-1.5 h-16.5 flex flex-col justify-between">
+      <div className=" flex flex-col justify-between gap-1.5">
         <h3
-          className="text-center h-[19px] px-2 truncate"
+          className="text-center font-normal truncate"
           title={`${title} ${lastName}`}
         >
           {title} {lastName}
         </h3>
 
-        <div className="mt-1 flex justify-center">{children}</div>
+        <div className=" flex justify-center">{children}</div>
       </div>
     </section>
   );
