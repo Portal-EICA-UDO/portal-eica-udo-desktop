@@ -61,8 +61,8 @@ export const createDependence = async (formData: {
   mision: string;
   objetivos: string;
   descripcion: string;
-  id_escuela: string;
-  id_carrera: string;
+  id_escuela: string | null;
+  id_carrera: string | null;
   id_coordinador: string;
 }) => {
   const { data, error } = await supabase

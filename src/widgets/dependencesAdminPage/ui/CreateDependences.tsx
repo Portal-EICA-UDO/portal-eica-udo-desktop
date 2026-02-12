@@ -40,8 +40,8 @@ export const CreateDependences: React.FC<Props> = ({
         objetivos: data.objetivos,
         descripcion: data.descripcion,
         id_coordinador: data.coordinador,
-        id_carrera: data.carrera,
-        id_escuela: data.escuela,
+        id_carrera: data.carrera ? data.carrera : null,
+        id_escuela: data.escuela ? data.escuela : null,
       });
 
       onSuccess({
