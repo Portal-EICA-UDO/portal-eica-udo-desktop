@@ -75,7 +75,7 @@ const MultiSelect = ({ control, name, options, placeholder = 'Buscar y seleccion
             <button
               type="button"
               onClick={() => handleRemove(option.id)}
-              className="ml-1 text-blue-600 hover:text-blue-800"
+              className="ml-1 text-blue-600 hover:text-blue-800 cursor-pointer"
             >
               ×
             </button>

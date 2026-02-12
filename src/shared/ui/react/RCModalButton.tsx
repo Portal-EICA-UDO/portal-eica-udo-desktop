@@ -32,10 +32,29 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
     document.body.style.overflow = "auto";
   };
 
+  const handleNativeClose = (e: React.SyntheticEvent) => {
+    // ESTA ES LA PARTE VITAL:
+    // e.target es quien disparó el cierre. 
+    // modalRef.current es el diálogo de este componente específico.
+    if (e.target === modalRef.current) {
+      setIsOpen(false);
+      
+      // Solo devolvemos el scroll si no hay más modales abiertos en el DOM
+      const dialogsOpen = document.querySelectorAll('dialog[open]');
+      if (dialogsOpen.length === 0) {
+        document.body.style.overflow = "auto";
+      }
+    } else {
+      // Si el evento viene de un hijo, detenemos la propagación aquí
+      // para que no siga subiendo a otros posibles abuelos.
+      e.stopPropagation();
+    }
+  };
+
   return (
     <>
       <button
-        className={`px-4 py-2 ${color} rounded-full flex items-center gap-2 text-white hover:scale-105 transition-transform font-light`}
+        className={`px-4 py-2 ${color} rounded-full cursor-pointer flex items-center gap-2 text-white hover:scale-105 transition-transform font-light`}
         onClick={openModal}
       >
         {icon && iconPosition === "left" && <span>{icon}</span>}
@@ -46,16 +65,13 @@ export const RCActiveModalButton: React.FC<ReactActiveModalButtonProps> = ({
       <dialog
         ref={modalRef}
         className="m-auto rounded-lg shadow-xl p-0 backdrop:bg-gray-900/50 backdrop:backdrop-blur-sm open:flex open:flex-col"
-        onClose={() => {
-          document.body.style.overflow = "auto";
-          setIsOpen(false);
-        }} // Importante: manejar el cierre por tecla ESC
+        onClose={handleNativeClose}
       >
         <div className="relative bg-white p-6 min-w-[300px]">
           {/* Botón de cerrar */}
           <button
             onClick={closeModal}
-            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createBookSchema } from "../validations/"; // Asegúrate de actualizar tu schema Zod
 import type z from "zod";
 import { MultiSelect } from "@shared/ui/react/MultiSelect";
-import { guardarArchivo } from './GuardarArchivo';
+import { guardarArchivo } from '../api/GuardarArchivo';
 import { supabase } from '@shared/api/lib/supabaseClient';
 
 type FormData = z.infer<typeof createBookSchema>;
@@ -147,7 +147,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
                     <textarea
                         {...register("descripcion" as any)}
                         rows={3}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-all resize-none"
                         placeholder="Describe brevemente el contenido..."
                     />
                 </div>
@@ -190,7 +190,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
                                     <button
                                         type="button"
                                         onClick={() => { setValue("archivo" as any, null); setPreview(null); }}
-                                        className="mt-2 text-xs text-red-500 underline"
+                                        className="mt-2 text-xs text-red-500 underline cursor-pointer"
                                     >
                                         Quitar archivo
                                     </button>
@@ -206,7 +206,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
                                             <input {...register("archivo" as any)} type="file" className="sr-only" />
                                         </label>
                                     </div>
-                                    <p className="text-xs text-gray-500">PNG, JPG, PDF hasta 10MB</p>
+                                    <p className="text-xs text-gray-500">PNG, JPG, PDF...</p>
                                 </>
                             )}
                         </div>
@@ -218,7 +218,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`px-6 py-2.5 rounded-lg font-bold text-white shadow-md transition-all ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-sky-600 hover:bg-sky-700 active:scale-95"
+                        className={`px-6 py-2.5 cursor-pointer rounded-lg font-bold text-white shadow-md transition-all ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-sky-600 hover:bg-sky-700 active:scale-95"
                             }`}
                     >
                         {isSubmitting ? "Guardando..." : "Guardar Archivo"}

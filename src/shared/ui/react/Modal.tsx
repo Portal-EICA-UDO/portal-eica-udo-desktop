@@ -43,6 +43,7 @@ export function Modal({
     reloadLibros?: () => void;
 }) {
     const $role = useStore(role);
+    console.log(tags);
 
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
