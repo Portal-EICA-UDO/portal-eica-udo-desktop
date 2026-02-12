@@ -1,0 +1,12 @@
+---
+import BaseLayout from "@shared/ui/layouts/BaseLayout.astro";
+import HeaderWithSignin from "../features/auth/ui/astro/HeaderWithSignin.astro";
+import { Schools } from "@widgets/schools/ui/Schools";
+---
+
+<BaseLayout siteTitle="Escuelas">
+  <div class="h-lvh flex flex-col">
+    <HeaderWithSignin />
+    <Schools client:load />
+  </div>
+</BaseLayout>

@@ -36,6 +36,18 @@ const {
   <div
     class="my-2 md:my-4 flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
   >
+    <a
+      href="/"
+      transition:name="logo-UDO"
+      transition:persist
+      class="hidden md:block"
+    >
+      <img
+        src={logoSrc}
+        alt="Logo"
+        class="top-4 w-20 h-20 rounded-full shadow-md object-cover"
+      />
+    </a>
     <!-- left button -->
     <div class="flex items-center z-10">
       <!-- <button
@@ -59,21 +71,21 @@ const {
         </svg>
         <span class="sm:inline">Siceudo</span>
       </button> -->
-      <div class="hidden md:flex w-max">
-        <LinkButton
-          label="Siceudo"
-          href="http://201.249.180.234/ne/estudiantes/"
-        >
-          <div slot="icon">
-            <Globe size={20} />
-          </div>
-        </LinkButton>
-      </div>
     </div>
 
     <!-- center nav: two links left, two links right -->
     <nav class="flex-1 items-center z-10 md:flex hidden">
       <div class="justify-around flex flex-column items-center w-full">
+        <div class="hidden md:flex w-max">
+          <LinkButton
+            label="Siceudo"
+            href="http://201.249.180.234/ne/estudiantes/"
+          >
+            <div slot="icon">
+              <Globe size={20} />
+            </div>
+          </LinkButton>
+        </div>
         {
           links.slice(0, 2).map((link) => (
             <a
@@ -84,18 +96,6 @@ const {
             </a>
           ))
         }
-        <a
-          href="/"
-          transition:name="logo-UDO"
-          transition:persist
-          class="hidden md:block"
-        >
-          <img
-            src={logoSrc}
-            alt="Logo"
-            class="top-4 w-20 h-20 rounded-full shadow-md object-cover"
-          />
-        </a>
 
         {
           links.slice(2, 4).map((link) => (
