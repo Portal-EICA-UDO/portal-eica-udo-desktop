@@ -29,7 +29,7 @@ export const Schools = () => {
             dependencias: escuela.dependencias.map((dep: any) => {
               return {
                 nombre: dep.nombre,
-                coordinador: dep.nombre,
+                coordinador: dep.staff.nombre + " " + dep.staff.apellido,
               };
             }),
           };

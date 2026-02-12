@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import React, { useState } from "react";
 import type { SchoolTable } from "../types";
-import { createSchool } from "../api";
+import { createSchool, schoolCodeExists, schoolNameExists } from "../api";
 
 type FormData = z.infer<typeof createSchoolsSchema>; // para tipado
 type Props = {
@@ -13,46 +13,192 @@ type Props = {
 
 export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const {
-    register: registerUpdate,
+    register: registerRegister,
     handleSubmit: handleUpdateSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    setError,
+    clearErrors,
   } = useForm<FormData>({
     resolver: zodResolver(createSchoolsSchema as any),
   });
 
   const onSubmit = async (data: FormData) => {
+    console.log(data);
     try {
-      const schoolData = await createSchool(data.nombre);
+      // verificar unicidad del nombre en el submit
+      clearErrors("nombre");
+      const exists = await schoolNameExists(data.nombre);
+      if (exists) {
+        setError("nombre", {
+          type: "manual",
+          message: "Ya existe una escuela con ese nombre",
+        });
+        return;
+      }
+      // verificar unicidad del codigo en el submit
+      if (data.codigo) {
+        clearErrors("codigo");
+
+        const existsCode = await schoolCodeExists(data.codigo);
+        if (existsCode) {
+          setError("codigo", {
+            type: "manual",
+            message: "Ya existe una escuela con ese codigo",
+          });
+          return;
+        }
+      }
+      const schoolData = await createSchool({
+        ...data,
+        codigo: data.codigo ? data.codigo : "sin codigo",
+      });
       console.log(schoolData);
-      onSuccess(schoolData);
+      onSuccess({
+        id: schoolData.id,
+        carreras: [
+          {
+            count: 0,
+          },
+        ],
+        dependencias: [
+          {
+            count: 0,
+          },
+        ],
+        codigo: data.codigo ? data.codigo : "sin codigo",
+        descripcion: data.descripcion,
+        mision: data.mision,
+        nombre: data.nombre,
+        objetivos: data.objetivos,
+        vision: data.vision,
+      });
+
+      setSuccessMsg("Escuela creada correctamente");
       console.log(data);
     } catch (error) {
       console.error(error);
     }
   };
   return (
-    <section className="max-w-2xl p-6 bg-white rounded shadow">
-      <h3 className="text-lg font-semibold mb-4">Crear Escuela</h3>
+    <section className="  p-6 bg-white rounded-lg w-[clamp(300px,calc(100vw-77px),672px)]">
+      <header className="mb-4">
+        <h3 className="text-lg font-semibold">Crear Escuela</h3>
+        <p className="text-sm text-gray-600 mt-1">
+          Rellena los datos de la escuela
+        </p>
+      </header>
 
-      {errorMsg && <p className="text-red-600">{errorMsg}</p>}
+      {errorMsg && <p className="text-red-600 mb-3">{errorMsg}</p>}
+      {successMsg && <p className="text-green-600 mb-3">{successMsg}</p>}
       <form onSubmit={handleUpdateSubmit(onSubmit)}>
-        <div>
-          <label>Nombre</label>
-          <input
-            {...registerUpdate("nombre")}
-            type="text"
-            className="mt-1 block w-full border rounded px-3 py-2"
-            placeholder="Nombre de la carrera"
-          />
-          {errors.nombre && <span>{errors.nombre.message}</span>}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-2 md:col-span-2 ">
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre
+            </label>
+            <input
+              {...registerRegister("nombre")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Nombre"
+            />
+            {errors.nombre && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.nombre.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2 md:col-span-2 ">
+            <label className="block text-sm font-medium text-gray-700">
+              Codigo
+            </label>
+            <input
+              {...registerRegister("codigo")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Codigo"
+            />
+            {errors.codigo && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.codigo.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Descripción
+            </label>
+            <textarea
+              {...registerRegister("descripcion")}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              rows={4}
+              placeholder="Descripción"
+            />
+            {errors && errors.descripcion && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.descripcion.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Mision
+            </label>
+            <textarea
+              {...registerRegister("mision")}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              rows={4}
+              placeholder="Mision"
+            />
+            {errors && errors.mision && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.mision.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Vision
+            </label>
+            <textarea
+              {...registerRegister("vision")}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              rows={4}
+              placeholder="Descripción breve"
+            />
+            {errors && errors.vision && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.vision.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Objetivos
+            </label>
+            <textarea
+              {...registerRegister("objetivos")}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              rows={4}
+              placeholder="Descripción breve"
+            />
+            {errors && errors.objetivos && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.objetivos.message}
+              </p>
+            )}
+          </div>
         </div>
-        <div className="flex mt-0.5">
+
+        <div className="flex justify-end mt-6">
           <button
             type="submit"
-            className="px-4 py-2 rounded bg-sky-700 text-white"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"
           >
-            Crear Escuela
+            {isSubmitting ? "Cargando..." : "Crear Escuela"}
           </button>
         </div>
       </form>
