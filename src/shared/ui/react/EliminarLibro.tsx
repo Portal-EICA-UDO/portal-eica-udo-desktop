@@ -50,16 +50,15 @@ export const EliminarLibro: FC<Props> = ({ libroId, reloadLibros}) => {
 
     return (
         <div>
-            <h2>Eliminar libro</h2>
             <p>
                 ¿Estás seguro de que deseas eliminar el libro?
             </p>
             <button
                 type="button"
-                className="px-4 py-2 rounded bg-sky-700 text-white"
+                className="px-4 py-2 rounded cursor-pointer bg-[#CF3115] text-white"
                 onClick={handleDelete}
             >
-                Eliminar
+                {loading ? "Eliminando..." : "Eliminar"}
             </button>
             {errorMsg && <p className="text-red-500">{errorMsg}</p>}
         </div>

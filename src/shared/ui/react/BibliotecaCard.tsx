@@ -160,11 +160,14 @@ export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros 
               imageAlt={libro.nombre}
               description={libro.descripcion}
               tags={(() => {
-                const etiquetas = libro.etiquetas ?? libro.tags ?? libro.etiquetas_json ?? [];
+                const etiquetas = libro.etiquetas ?? [];
+                console.log('Raw etiquetas:', etiquetas);
                 let arr = etiquetas;
                 if (typeof etiquetas === 'string') {
                   try { arr = JSON.parse(etiquetas); } catch { arr = []; }
                 }
+                console.log('Parsed etiquetas:', arr);
+                arr = Object.values(arr);
                 if (!Array.isArray(arr)) arr = [];
                 return arr.map((a: any) => String(a));
               })()}

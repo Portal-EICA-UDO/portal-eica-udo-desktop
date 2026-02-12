@@ -66,6 +66,8 @@ const Comunicados: React.FC = () => {
         return () => { mounted = false; };
     }, []);
 
+    
+
     // Calcular el número total de páginas
     const totalPages = useMemo(() => {
         return Math.ceil(totalCount / pageSize);
