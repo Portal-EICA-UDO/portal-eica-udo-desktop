@@ -10,11 +10,10 @@ import { supabase } from '@shared/api/lib/supabaseClient';
 type FormData = z.infer<typeof createBookSchema>;
 
 type Props = {
-    onSuccess: (data: any) => void;
     reloadLibros: () => void;
 };
 
-export const CreateBook: FC<Props> = ({ onSuccess, reloadLibros }) => {
+export const CreateBook: FC<Props> = ({reloadLibros }) => {
     const [loading, setLoading] = useState(false);
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
