@@ -116,6 +116,21 @@ export const SchoolsAdminPage = () => {
           )
         ),
       },
+      {
+        accessorFn: (row) => row.dependencias[0].count,
+        id: "dependencias",
+
+        header: "Cantidad de dependencias",
+
+        cell: (info) => (
+          console.log("info: ", info),
+          (
+            <div className="px-3 py-2 truncate max-w-xs">
+              {info.getValue()?.toString() || "-"}
+            </div>
+          )
+        ),
+      },
     ],
     [],
   );

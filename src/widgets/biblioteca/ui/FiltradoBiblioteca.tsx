@@ -4,6 +4,7 @@ import MultiSelect from '@shared/ui/react/FiltradoBibliotecaLogic';
 import { supabase } from '@shared/api/lib/supabaseClient';
 import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
 import { CreateBook } from './CrearLibro';
+import { ManageEtiquetas } from './GestionarEtiquetas';
 
 interface Props {
   control: Control<any>;
@@ -16,15 +17,13 @@ export default function FiltradoBiblioteca({ control, name = 'interests', reload
 
   const { field: nameField } = useController({ name: 'name', control, defaultValue: '' });
 
-  useEffect(() => {
-    let mounted = true;
-    const loadEtiquetas = async () => {
+  const loadEtiquetas = async () => {
       try {
         const { data, error } = await supabase
           .from('etiquetas')
           .select('id, nombre');
         if (error) throw error;
-        if (mounted && Array.isArray(data)) {
+        if (Array.isArray(data)) {
           // Use tag name as id so the multi-select returns tag names (matches libro.etiquetas)
           setOptions(data.map((e: any) => ({ id: e.nombre, name: e.nombre })));
         }
@@ -32,6 +31,10 @@ export default function FiltradoBiblioteca({ control, name = 'interests', reload
         console.error('loadEtiquetas error:', err);
       }
     };
+    
+  useEffect(() => {
+    let mounted = true;
+    
     loadEtiquetas();
     return () => {
       mounted = false;
@@ -45,9 +48,14 @@ export default function FiltradoBiblioteca({ control, name = 'interests', reload
           <h2 className="text-2xl font-bold text-gray-800">Biblioteca</h2>
           <p className="text-gray-600 mt-1">Buscar libros por nombre y etiquetas</p>
         </div>
-        <RCActiveModalButton label="Agregar Libro" icon="📚">
-          <CreateBook reloadLibros={reloadLibros} />
-        </RCActiveModalButton>
+        <div className="flex gap-2">
+          <RCActiveModalButton label="Agregar Libro" icon="📚">
+            <CreateBook reloadLibros={reloadLibros} />
+          </RCActiveModalButton>
+          <RCActiveModalButton label="Etiquetas" icon="🏷️">
+            <ManageEtiquetas reloadEtiquetas={loadEtiquetas} />
+          </RCActiveModalButton>
+        </div>
       </div>
 
       <div className="space-y-3">

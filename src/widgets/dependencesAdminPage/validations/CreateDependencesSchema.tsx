@@ -7,8 +7,8 @@ export const createDependencesSchema = z
     vision: z.string().min(1, { message: "Ingrese una visión" }),
     objetivos: z.string().min(1, { message: "Ingrese unos objetivos" }),
     descripcion: z.string().min(1, { message: "Ingrese una descripción" }),
-    escuela: z.string().min(1, { message: "Seleccione una escuela valida" }),
-    carrera: z.string().min(1, { message: "Seleccione una carrera valida" }),
+    escuela: z.string().optional(),
+    carrera: z.string().optional(),
     coordinador: z
       .string()
       .min(1, { message: "Seleccione un coordinador valido" }),

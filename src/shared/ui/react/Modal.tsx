@@ -2,6 +2,7 @@ import { role } from '@features/auth/nanostore';
 import { useStore } from '@nanostores/react';
 import { RCActiveModalButton } from './RCModalButton';
 import { EliminarLibro } from './EliminarLibro';
+import type { DependencyWithStaff } from '@widgets/Carreras/type/type';
 export function Modal({
     id,
     title,
@@ -17,6 +18,7 @@ export function Modal({
     tags,
     buttonHref,
     isBook = false,
+    dependency,
     reloadLibros,
 }: {
     id?: string;
@@ -27,6 +29,7 @@ export function Modal({
     position?: string;
     email?: string;
     phone?: string;
+    dependency?: DependencyWithStaff[];
     materias?: Array<{
         id: number;
         nombre: string;
@@ -43,6 +46,8 @@ export function Modal({
     reloadLibros?: () => void;
 }) {
     const $role = useStore(role);
+    console.log(tags);
+    console.log(dependency);
 
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
@@ -86,6 +91,31 @@ export function Modal({
                                 <p className="text-lg text-[#0A5C8D] font-medium mt-2">{position}</p>
                             )
                         }
+                        {dependency && dependency.length > 0 && (
+                            <div className="mt-4 mb-6">
+                                <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                                    Dependencias y Responsables:
+                                </h4>
+                                <div className="grid grid-cols-1 gap-3">
+                                    {dependency.map((dep) => (
+                                        <div key={dep.id} className="p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                            <p className="font-bold text-gray-800 text-sm">{dep.nombre}</p>
+                                            {dep.staff ? (
+                                                <div className="flex flex-wrap gap-1 mt-1">
+                                                    
+                                                        <span className="text-xs text-[#0A5C8D] bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                                                            👤 {dep.staff.nombre} {dep.staff.apellido}
+                                                        </span>
+                                                    
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs text-gray-400 italic">Sin staff asignado</span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </header>
 
 

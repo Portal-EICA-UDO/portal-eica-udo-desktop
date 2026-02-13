@@ -5,10 +5,10 @@ export type DependenceTable = {
   mision: string;
   objetivos: string;
   descripcion: string;
-  id_escuela: string;
-  escuela: string;
-  id_carrera: string;
-  carrera: string;
+  id_escuela?: string;
+  escuela?: string;
+  id_carrera?: string;
+  carrera?: string;
   id_coordinador: string;
   coordinador: string;
 };

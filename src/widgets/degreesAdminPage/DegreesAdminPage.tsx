@@ -8,7 +8,7 @@ import { getDegress } from "./api";
 import { supabase } from "@shared/api";
 import { UpdateDegrees } from "./ui/UpdateDegrees";
 import { DeleteDegrees } from "./ui/DeleteDegrees";
-import type { Data } from "./types";
+import type { DegreeTable } from "./types";
 import { role } from "@features/auth/nanostore";
 import { useStore } from "@nanostores/react";
 import { isAdminOrSuperAdmin } from "@features/auth/lib";
@@ -97,7 +97,7 @@ const UsuariosPage = () => {
         ];
       });
     },
-    [filters]
+    [filters],
   );
 
   const handleClearFilter = useCallback((key: string) => {
@@ -119,7 +119,7 @@ const UsuariosPage = () => {
     console.log("item in handleEdit: ", item);
     console.log("data in handleEdit: ", data);
     setData((prev) =>
-      (prev as any[]).map((u) => (u.id === item.id ? item : u))
+      (prev as any[]).map((u) => (u.id === item.id ? item : u)),
     );
   }, []);
 
@@ -133,7 +133,7 @@ const UsuariosPage = () => {
     create: (onSuccess: (data: any) => void) => (
       <CreateDegrees onSuccess={onSuccess} />
     ),
-    edit: (initialData: Data, onSubmitProp: any) => (
+    edit: (initialData: DegreeTable, onSubmitProp: any) => (
       <UpdateDegrees
         initialData={initialData}
         onSubmitProp={onSubmitProp}
