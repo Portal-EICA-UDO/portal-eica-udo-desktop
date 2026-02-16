@@ -45,7 +45,7 @@ export const CreateAdminUsers = () => {
 
       // Se pudo crear cuenta (puede requerir confirmación por email)
       setSuccessMsg(
-        "Cuenta creada correctamente, Habra llegado un correo al correo ingresado"
+        "Cuenta creada correctamente, Habra llegado un correo al correo ingresado",
       );
     } catch (err: any) {
       setErrorMsg(err.message || "Error al crear la cuenta");
@@ -74,104 +74,110 @@ export const CreateAdminUsers = () => {
 
   return (
     <section className="flex justify-start items-center h-full flex-col flex-1 pt-4">
-      {/* un elemeento para mostrar mensajes de exito o error */}
-      <div>
-        {errorMsg && <p className="text-sm text-red-600 mt-1">{errorMsg}</p>}
-        {successMsg && (
-          <p className="text-sm text-green-600 mt-1">{successMsg}</p>
-        )}
+      <div className="w-full max-w-xl bg-white rounded-lg shadow border border-gray-200 p-6 mx-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Crear Usuarios
+        </h3>
+        {/* un elemento para mostrar mensajes de exito o error dentro de la card */}
+        <div>
+          {errorMsg && <p className="text-sm text-red-600 mt-1">{errorMsg}</p>}
+          {successMsg && (
+            <p className="text-sm text-green-600 mt-1">{successMsg}</p>
+          )}
+        </div>
+        <form onSubmit={handleRegisterSubmit(onRegister)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre Completo
+            </label>
+            <input
+              type="text"
+              {...registerRegister("fullName")}
+              className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+            />
+            {registerErrors.fullName && (
+              <p className="text-sm text-red-600 mt-1">
+                {registerErrors.fullName.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Correo
+            </label>
+            <input
+              type="email"
+              {...registerRegister("email")}
+              className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+            />
+            {registerErrors.email && (
+              <p className="text-sm text-red-600 mt-1">
+                {registerErrors.email.message}
+              </p>
+            )}
+          </div>
+          {/* select para el rol */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Rol
+            </label>
+            <select
+              {...registerRegister("role")}
+              className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+            >
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
+            {registerErrors.role && (
+              <p className="text-sm text-red-600 mt-1">
+                {registerErrors.role.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              {...registerRegister("password")}
+              className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+            />
+            {registerErrors.password && (
+              <p className="text-sm text-red-600 mt-1">
+                {registerErrors.password.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Repetir contraseña
+            </label>
+            <input
+              type="password"
+              {...registerRegister("confirmPassword")}
+              className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
+            />
+            {registerErrors.confirmPassword && (
+              <p className="text-sm text-red-600 mt-1">
+                {registerErrors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 rounded-full bg-[#0A5C8D] text-white hover:bg-[#084a6b] transition disabled:opacity-60"
+            >
+              {loading ? "Creando..." : "Crear cuenta"}
+            </button>
+          </div>
+        </form>
       </div>
-
-      <form onSubmit={handleRegisterSubmit(onRegister)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Nombre Completo
-          </label>
-          <input
-            type="text"
-            {...registerRegister("fullName")}
-            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
-          />
-          {registerErrors.fullName && (
-            <p className="text-sm text-red-600 mt-1">
-              {registerErrors.fullName.message}
-            </p>
-          )}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Correo
-          </label>
-          <input
-            type="email"
-            {...registerRegister("email")}
-            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
-          />
-          {registerErrors.email && (
-            <p className="text-sm text-red-600 mt-1">
-              {registerErrors.email.message}
-            </p>
-          )}
-        </div>
-        {/* select para el rol */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Rol</label>
-          <select
-            {...registerRegister("role")}
-            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
-          >
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-          </select>
-          {registerErrors.role && (
-            <p className="text-sm text-red-600 mt-1">
-              {registerErrors.role.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
-          <input
-            type="password"
-            {...registerRegister("password")}
-            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
-          />
-          {registerErrors.password && (
-            <p className="text-sm text-red-600 mt-1">
-              {registerErrors.password.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Repetir contraseña
-          </label>
-          <input
-            type="password"
-            {...registerRegister("confirmPassword")}
-            className="mt-1 block w-full border rounded px-3 py-2 focus:ring-sky-500"
-          />
-          {registerErrors.confirmPassword && (
-            <p className="text-sm text-red-600 mt-1">
-              {registerErrors.confirmPassword.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between gap-3">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 rounded-full bg-[#0A5C8D] text-white hover:bg-[#084a6b] transition disabled:opacity-60"
-          >
-            {loading ? "Creando..." : "Crear cuenta"}
-          </button>
-        </div>
-      </form>
     </section>
   );
 };

@@ -240,7 +240,7 @@ export const CreateStaffs: React.FC<Props> = ({ onSuccess, materias }) => {
                 <div className="text-center text-sm text-gray-500 px-2">
                   <p>Arrastra o selecciona una imagen</p>
                   <p className="mt-2 text-xs text-gray-400">
-                    JPG, PNG · max 2MB
+                    JPG, PNG 
                   </p>
                 </div>
               )}

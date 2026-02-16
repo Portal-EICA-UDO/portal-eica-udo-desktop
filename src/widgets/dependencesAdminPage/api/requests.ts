@@ -45,10 +45,10 @@ export const getDependences = async (): Promise<DependenceTable[]> => {
   }
   const newData = data.map((dependence) => ({
     ...dependence,
-    id_escuela: (dependence.escuelas as any).id,
-    escuela: (dependence.escuelas as any).nombre,
-    id_carrera: (dependence.carreras as any).id,
-    carrera: (dependence.carreras as any).nombre,
+    id_escuela: (dependence.escuelas as any).id || null,
+    escuela: (dependence.escuelas as any).nombre || null,
+    id_carrera: (dependence.carreras as any)?.id || null,
+    carrera: (dependence.carreras as any)?.nombre || null,
     id_coordinador: (dependence.staff as any).id,
     coordinador: (dependence.staff as any).nombre,
   }));
