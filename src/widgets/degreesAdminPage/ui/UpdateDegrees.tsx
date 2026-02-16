@@ -291,9 +291,7 @@ export const UpdateDegrees: React.FC<props> = ({
               ) : (
                 <div className="text-center text-sm text-gray-500 px-2">
                   <p>Arrastra o selecciona una imagen</p>
-                  <p className="mt-2 text-xs text-gray-400">
-                    JPG, PNG · max 2MB
-                  </p>
+                  <p className="mt-2 text-xs text-gray-400">JPG, PNG</p>
                 </div>
               )}
             </div>
