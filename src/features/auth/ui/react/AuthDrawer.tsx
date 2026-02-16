@@ -25,6 +25,18 @@ const SUPER_ADMIN_LINKS = [
     href: "/staff",
   },
   {
+    label: "Escuelas",
+    href: "/escuelas",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
+  },
+  {
+    label: "Gestionar  Escuelas",
+    href: "/privado/escuelas",
+  },
+  {
     label: "Gestionar Carreras",
     href: "/privado/carreras",
   },
@@ -33,20 +45,12 @@ const SUPER_ADMIN_LINKS = [
     href: "/privado/materias",
   },
   {
-    label: "Gestionar  Escuelas",
-    href: "/privado/escuelas",
-  },
-  {
     label: "Gestionar  staff",
     href: "/privado/staff",
   },
   {
-    label: "Realizar una pregunta",
-    href: "/preguntas",
-  },
-  {
-    label: "Escuelas",
-    href: "/escuelas",
+    label: "Gestionar Dependencias",
+    href: "/privado/dependencias",
   },
 ];
 const ADMIN_LINKS = [
@@ -67,6 +71,18 @@ const ADMIN_LINKS = [
     href: "/staff",
   },
   {
+    label: "Escuelas",
+    href: "/escuelas",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
+  },
+  {
+    label: "Gestionar  Escuelas",
+    href: "/privado/escuelas",
+  },
+  {
     label: "Gestionar Carreras",
     href: "/privado/carreras",
   },
@@ -75,20 +91,12 @@ const ADMIN_LINKS = [
     href: "/privado/materias",
   },
   {
-    label: "Gestionar  Escuelas",
-    href: "/privado/escuelas",
-  },
-  {
     label: "Gestionar  staff",
     href: "/privado/staff",
   },
   {
-    label: "Realizar una pregunta",
-    href: "/preguntas",
-  },
-  {
-    label: "Escuelas",
-    href: "/escuelas",
+    label: "Gestionar Dependencias",
+    href: "/privado/dependencias",
   },
 ];
 const USER_LINKS = [
@@ -109,12 +117,12 @@ const USER_LINKS = [
     href: "/staff",
   },
   {
-    label: "Realizar una pregunta",
-    href: "/preguntas",
-  },
-  {
     label: "Escuelas",
     href: "/escuelas",
+  },
+  {
+    label: "Realizar una pregunta",
+    href: "/preguntas",
   },
 ];
 export const AuthDrawer = () => {
