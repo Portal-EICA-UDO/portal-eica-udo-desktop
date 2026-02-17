@@ -11,7 +11,7 @@ export async function eliminarArchivo(fileUrl) {
       fname: "deleteFileFromGoogleDrive"
     };
 
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwPJ1m-3xbCm7kOG4hKHgZnFyuB7Xn9b5qjNCvByTJhF7iCTdU1F6ZtOLDvLjEmC7chVA/exec', {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbysiik-3IbMroDCFlMIieb1rj5XsrQFR2IFB3ZNd0DmJPyT3JzRJ_Fhe-7AuKLCOxnI/exec', {
       method: "POST",
       body: JSON.stringify(dataSend)
     });
