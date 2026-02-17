@@ -2,9 +2,10 @@ import emailjs from "@emailjs/browser"; // Importación necesaria
 import type { EmailFormData } from "../types";
 
 export const sendEmail = async (data: EmailFormData) => {
+  console.log("Sending email with data:", data);
   await emailjs.send(
-    "service_t1r1dvn",
-    "template_egf6neh",
+    "service_vi5t9xs",
+    "template_0nzgjuo",
     {
       ...data,
     },
