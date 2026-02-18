@@ -9,7 +9,29 @@ import { role } from '@features/auth/nanostore';
 function getImageUrl(bucketName: string, fileName: string): string {
     if (!fileName) return '';
     const name = fileName.includes('.') ? fileName : `${fileName}.jpg`;
-    return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${name}`;
+    return `https://ldnmltnoowonkijxtrag.supabase.co/storage/v1/object/public/${bucketName}/${encodeURIComponent(name)}`;
+}
+
+// Sanitiza y normaliza un nombre de archivo: elimina acentos y caracteres no ASCII,
+// reemplaza espacios y caracteres inválidos por guiones bajos y mantiene la extensión.
+function sanitizeFilename(originalName: string): string {
+    if (!originalName) return '';
+    const parts = originalName.split('.');
+    const ext = parts.length > 1 ? parts.pop() : '';
+    const base = parts.join('.');
+
+    // Normalizar unicode y quitar diacríticos (acentos)
+    let name = base.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    // Reemplazar espacios por guiones bajos y eliminar otros caracteres no permitidos
+    name = name.replace(/\s+/g, '_');
+    name = name.replace(/[^a-zA-Z0-9\-_]/g, '_');
+    name = name.replace(/_+/g, '_');
+
+    // Limitar longitud razonable
+    if (name.length > 180) name = name.slice(0, 180);
+
+    return ext ? `${name}.${ext}` : name;
 }
 
 
@@ -142,8 +164,10 @@ const Comunicados: React.FC = () => {
             let imagenFilename: string | null = null;
 
             if (newImageFile) {
-                // Crear nombre único
-                const filename = `${Date.now()}_${newImageFile.name}`;
+                // Crear nombre único y sanitizar espacios/caracteres problemáticos
+                let filename = `${Date.now()}_${newImageFile.name}`.replace(/\s+/g, '_');
+                filename = filename.replace(/[#?\/\\]/g, '_');
+                filename = sanitizeFilename(filename);
 
                 const { data: uploadData, error: uploadError } = await supabase
                     .storage
@@ -152,7 +176,7 @@ const Comunicados: React.FC = () => {
 
                 if (uploadError) throw uploadError;
 
-                imagenFilename = filename; // guardamos el nombre tal cual
+                imagenFilename = filename; // guardamos el nombre sanitizado
             }
 
             const newComunicado = {
@@ -282,7 +306,7 @@ const Comunicados: React.FC = () => {
                                 </svg>
                             </div>
                             {($role === 'admin' || $role === 'superAdmin') && currentUser && (
-                                <button type="button" onClick={() => { setDeleteTarget({ id: item.id, imagen: item.imagen_url }); setDeleteModalOpen(true); }} className="text-red-500 hover:text-red-700 ml-auto flex items-center space-x-2">
+                                <button type="button" onClick={() => { setDeleteTarget({ id: item.id, imagen: item.imagen_url }); setDeleteModalOpen(true); }} className="text-red-500 hover:text-red-700 ml-auto flex items-center space-x-2 cursor-pointer">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
                                     </svg>
@@ -392,7 +416,7 @@ const Comunicados: React.FC = () => {
                     <div className="p-4 border-b">
                         <div className="flex items-start justify-between">
                             <h3 className="text-sm font-semibold text-gray-800">Crear nuevo comunicado</h3>
-                            <button onClick={() => setIsCreateOpen(prev => !prev)} className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">{isCreateOpen ? 'Cerrar' : 'Nuevo'}</button>
+                            <button onClick={() => setIsCreateOpen(prev => !prev)} className="px-3 py-1 text-sm bg-blue-600 text-white cursor-pointer rounded-md hover:bg-blue-700 transition">{isCreateOpen ? 'Cerrar' : 'Nuevo'}</button>
                         </div>
 
                         {isCreateOpen && (
@@ -413,8 +437,8 @@ const Comunicados: React.FC = () => {
                                     )}
 
                                     <div className="ml-auto space-x-2">
-                                        <button type="button" onClick={() => { setIsCreateOpen(false); setNewContent(''); setNewImageFile(null); }} className="px-3 py-1 text-sm bg-gray-200 rounded-md">Cancelar</button>
-                                        <button type="submit" disabled={isCreating} className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md">{isCreating ? 'Creando...' : 'Crear'}</button>
+                                        <button type="button" onClick={() => { setIsCreateOpen(false); setNewContent(''); setNewImageFile(null); }} className="px-3 py-1 text-sm bg-gray-200 rounded-md cursor-pointer">Cancelar</button>
+                                        <button type="submit" disabled={isCreating} className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md cursor-pointer">{isCreating ? 'Creando...' : 'Crear'}</button>
                                     </div>
                                 </div>
                             </form>
@@ -466,8 +490,8 @@ const Comunicados: React.FC = () => {
                         <h3 className="text-lg font-semibold mb-2">Confirmar eliminación</h3>
                         <p className="text-sm text-gray-600 mb-4">¿Seguro que deseas eliminar este comunicado? Esta acción no se puede deshacer.</p>
                         <div className="flex justify-end space-x-2">
-                            <button onClick={() => { setDeleteModalOpen(false); setDeleteTarget(null); }} className="px-3 py-1 bg-gray-200 rounded">Cancelar</button>
-                            <button onClick={() => handleDeleteComunicado(deleteTarget.id, deleteTarget.imagen)} className="px-3 py-1 bg-red-600 text-white rounded">{loading ? 'Eliminando...' : 'Eliminar'}</button>
+                            <button onClick={() => { setDeleteModalOpen(false); setDeleteTarget(null); }} className="px-3 py-1 bg-gray-200 rounded cursor-pointer">Cancelar</button>
+                            <button onClick={() => handleDeleteComunicado(deleteTarget.id, deleteTarget.imagen)} className="px-3 py-1 bg-red-600 text-white rounded cursor-pointer">{loading ? 'Eliminando...' : 'Eliminar'}</button>
                         </div>
                     </div>
                 </div>
