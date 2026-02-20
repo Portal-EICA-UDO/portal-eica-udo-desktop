@@ -15,12 +15,21 @@ import { DeleteStaffs } from "./DeleteStaffs";
 import { isAdminOrSuperAdmin } from "@features/auth/lib";
 import { useStore } from "@nanostores/react";
 import { role } from "@features/auth/nanostore";
+import Toast from "@shared/ui/react/Toast";
 
 export const StaffAdminPage = () => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [data, setData] = useState<StaffTable[]>([]);
   const [materias, setMaterias] = useState<MateriaMultiSelect[]>([]);
+  const [toast, setToast] = useState<{
+    id: string;
+    type: string;
+    message: string;
+    title: string;
+    duration: number;
+  } | null>(null);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout | null>(null);
   // Definición de filtros
   const [filters, setFilters] = useState<FilterConfig[]>([
     {
@@ -84,10 +93,27 @@ export const StaffAdminPage = () => {
     setData((prev) => {
       return (prev as any[]).map((u) => (u.id === item.id ? item : u));
     });
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: "Staff editado",
+      message: "Staff editado correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const handleDeleteRequest = useCallback((items: any[]) => {
     setData((prev) => (prev as []).filter((u) => !items.includes(u)));
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: items.length > 1 ? "Staff's eliminados" : "Staff eliminado",
+      message:
+        items.length > 1
+          ? "Staff's eliminados correctamente"
+          : "Staff eliminado correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const columns = useMemo<ColumnDef<StaffTable, any>[]>(
@@ -211,10 +237,13 @@ export const StaffAdminPage = () => {
   // gestionar quien entra a la pagina
   useEffect(() => {
     if (!isAdminOrSuperAdmin($role)) {
-      // navegar pero que sea despues de tres segundo y que no sea del lado del cliente
-      setTimeout(() => {
+      // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
+      const set = setTimeout(() => {
         window.location.href = "/";
       }, 3000);
+      setTimerID(set);
+    } else {
+      timerID && clearTimeout(timerID);
     }
   }, [$role]);
   if (!isAdminOrSuperAdmin($role)) {
@@ -229,6 +258,17 @@ export const StaffAdminPage = () => {
   }
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          duration={toast.duration}
+          message={toast.message}
+          title={toast.title}
+          type="success"
+          onClose={() => {
+            setToast(null);
+          }}
+        />
+      )}
       <DynamicTable
         //selection
 
