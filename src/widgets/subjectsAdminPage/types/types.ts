@@ -12,6 +12,7 @@ export type SubjectTable = {
   carrera_nombre: string;
   id_escuela: string;
   escuela_nombre: string;
+  materia_codigo: string;
 };
 
 export type DegreesBySchool = {
