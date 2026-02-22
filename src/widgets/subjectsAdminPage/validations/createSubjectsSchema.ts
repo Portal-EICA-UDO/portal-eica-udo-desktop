@@ -10,11 +10,12 @@ export const createSubjectsSchema = (selectOptions: Degree[]) => {
         return false;
       return selectOptions.map((c) => c.id).includes(val);
     },
-    { message: "Seleccione una opción válida" }
+    { message: "Seleccione una opción válida" },
   );
 
   const base = z.object({
     nombre: z.string().min(1, { message: "Ingrese un nombre válido" }),
+    codigo: z.string().min(1, { message: "Ingrese un código válido" }),
     id_carrera: degreeSelectSchema,
   });
 
