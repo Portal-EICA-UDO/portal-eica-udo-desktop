@@ -162,10 +162,10 @@ export const DependencesAdminPage = () => {
 
   const columns = useMemo<ColumnDef<DependenceTable, any>[]>(
     () => [
+      { accessorKey: "codigo", header: "Codigo" },
       { accessorKey: "nombre", header: "Nombre" },
-
       { accessorKey: "carrera", header: "Carrera" },
-      { accessorKey: "coordinador", header: "Coordinador" },
+      { accessorKey: "coordinador", header: "Encargado" },
       { accessorKey: "descripcion", header: "Descripción" },
       { accessorKey: "escuela", header: "Escuela" },
       { accessorKey: "mision", header: "Mision" },
