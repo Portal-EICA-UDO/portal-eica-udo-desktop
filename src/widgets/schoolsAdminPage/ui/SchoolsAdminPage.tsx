@@ -125,6 +125,7 @@ export const SchoolsAdminPage = () => {
   };
   const columns = useMemo<ColumnDef<any, any>[]>(
     () => [
+      { accessorKey: "codigo", header: "Código" },
       { accessorKey: "nombre", header: "Nombre" },
 
       {

@@ -45,7 +45,7 @@ export const createSchool = async (schoolData: SchoolCreateFormData) => {
   return data as SchoolTable;
 };
 
-export const updateSchool = async (id: number, data: SchoolUpdateFormData) => {
+export const updateSchool = async (id: string, data: SchoolUpdateFormData) => {
   const { data: requestData, error } = await supabase
     .from("escuelas")
     .update(data)
@@ -73,32 +73,45 @@ export const deleteSchools = async (ids: string[]) => {
   return data;
 };
 
-export const schoolCodeExists = async (code: string) => {
+export const schoolCodeExists = async (code: string, excludeId?: string) => {
   // Busca coincidencias por código (case-insensitive)
-  const { data, error } = await supabase
+  let query = supabase
     .from("escuelas")
     .select("id")
-    .ilike("codigo", code)
+    .eq("codigo", code)
     .limit(1);
 
-  if (error) {
-    throw new Error(error.message);
+  // Si estamos excluyendo un ID, lo agregamos a la consulta
+  if (excludeId) {
+    query = query.neq("id", excludeId);
   }
 
-  return Array.isArray(data) && data.length > 0;
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
 };
 
-export const schoolNameExists = async (name: string) => {
-  // Busca coincidencias por nombre (case-insensitive)
-  const { data, error } = await supabase
+export const schoolNameExists = async (name: string, excludeId?: string) => {
+  let query = supabase
     .from("escuelas")
     .select("id")
     .ilike("nombre", name)
     .limit(1);
 
-  if (error) {
-    throw new Error(error.message);
+  // Si estamos excluyendo un ID, lo agregamos a la consulta
+  if (excludeId) {
+    query = query.neq("id", excludeId);
   }
 
-  return Array.isArray(data) && data.length > 0;
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
 };
