@@ -261,6 +261,7 @@ export const SubjectsAdminPage = () => {
         // Datos
         data={data || []}
         columns={[
+          { accessorKey: "materia_codigo", header: "Código" },
           { accessorKey: "materia_nombre", header: "Nombre" },
 
           {

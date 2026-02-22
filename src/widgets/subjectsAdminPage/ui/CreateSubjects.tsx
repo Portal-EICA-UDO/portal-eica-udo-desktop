@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSubjectsSchema } from "../validations/index";
 import type z from "zod";
-import { createSubject } from "../api";
+import { createSubject, subjectCodeExists } from "../api";
 import type { Degree, DegreesBySchool, SubjectTable } from "../types";
 
 type FormData = z.infer<ReturnType<typeof createSubjectsSchema>>;
@@ -38,13 +38,14 @@ export const CreateSubjects: FC<Props> = ({ onSuccess, degreesBySchool }) => {
 
   const schema = useMemo(
     () => createSubjectsSchema(degreeOptions),
-    [degreeOptions]
+    [degreeOptions],
   );
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    setError,
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
@@ -52,19 +53,32 @@ export const CreateSubjects: FC<Props> = ({ onSuccess, degreesBySchool }) => {
 
   const onSubmit = async (data: FormData) => {
     try {
+      // check codigo uniqueness
+      if (data.codigo) {
+        const exists = await subjectCodeExists(data.codigo);
+        if (exists) {
+          setError("codigo", {
+            type: "manual",
+            message: "Ya existe una materia con ese código",
+          } as any);
+          return;
+        }
+      }
       const created = await createSubject({
         nombre: data.nombre,
         id_carrera: data.id_carrera,
+        codigo: data.codigo,
       });
 
       const carrera = degreeOptions.find(
-        (option) => option.id === data.id_carrera
+        (option) => option.id === data.id_carrera,
       );
       if (!carrera) return;
 
       onSuccess({
         id_materia: created.id,
         materia_nombre: created.nombre,
+        materia_codigo: created.codigo,
         id_carrera: carrera.id,
         carrera_nombre: carrera.nombre,
         id_escuela: carrera.id_escuela,
@@ -84,20 +98,44 @@ export const CreateSubjects: FC<Props> = ({ onSuccess, degreesBySchool }) => {
   if (loadingOptions) return <div>Cargando opciones...</div>;
 
   return (
-    <section className="max-w-2xl p-6 bg-white rounded shadow">
+    <section className="max-w-2xl p-6 bg-white rounded shadow w-[clamp(300px,calc(100vw-77px),672px)]">
       <h3 className="text-lg font-semibold mb-4">Crear Materia</h3>
       {successMsg && <p className="text-green-600">{successMsg}</p>}
       {errorMsg && <p className="text-red-600">{errorMsg}</p>}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Código
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
+            </label>
+            <input
+              {...register("codigo")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Código de la materia"
+            />
+            {errors.codigo && (
+              <p className="text-sm text-red-600 mt-1">
+                {(errors as any).codigo.message}
+              </p>
+            )}
+          </div>
           <label className="block text-sm font-medium text-gray-700">
-            Nombre
+            Nombre{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <input
             {...register("nombre")}
             type="text"
-            className="mt-1 block w-full border rounded px-3 py-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
             placeholder="Nombre de la materia"
           />
           {errors.nombre && (
@@ -109,11 +147,15 @@ export const CreateSubjects: FC<Props> = ({ onSuccess, degreesBySchool }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Carrera
+            Carrera{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <select
             {...register("id_carrera")}
-            className="mt-1 block w-full border rounded px-3 py-2"
+            className="block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
           >
             <option value="">-- Seleccionar --</option>
             {degreeOptions.map((opt) => (
@@ -132,9 +174,9 @@ export const CreateSubjects: FC<Props> = ({ onSuccess, degreesBySchool }) => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-4 py-2 rounded bg-sky-700 text-white"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"
           >
-            Crear materia
+            {isSubmitting ? "Cargando..." : "Crear Materia"}
           </button>
         </div>
       </form>

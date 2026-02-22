@@ -37,8 +37,8 @@ export const updateDegree = async (
     imagen_url?: string;
     id_escuela?: string;
     codigo?: string;
-    horario_url?: string;
-    nombre_horario?: string;
+    horario_url?: string | null;
+    nombre_horario?: string | null;
   },
   id: string,
 ) => {
@@ -105,7 +105,10 @@ export const uploadDegreeImage = async (file: File) => {
       upsert: false,
     });
   if (error) {
-    throw new Error(error.message);
+    console.log("Error uploading image:", error);
+    throw new Error(
+      "Hubó un error al subir la imagen. Por favor compruebe que no tenga el mismo nombre de otra imagen.",
+    );
   }
 };
 
@@ -122,10 +125,14 @@ export const updateDegreeImage = async (file: File) => {
   return data;
 };
 
-export const updateDegreeFile = async (file: File, oldFilePath: string) => {
+export const updateDegreeFile = async (
+  file?: File,
+  oldFilePath?: string | null,
+) => {
   // Primero eliminamos el archivo antiguo
-  await eliminarArchivo(oldFilePath);
+  if (oldFilePath) await eliminarArchivo(oldFilePath);
   // Luego subimos el nuevo archivo
+  if (!file) return;
   return await guardarArchivo(file);
 };
 

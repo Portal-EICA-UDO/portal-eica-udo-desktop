@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const createDependencesSchema = z
   .object({
+    codigo: z.string().optional().nullable(),
     nombre: z.string().min(1, { message: "Ingrese un nombre válido" }),
     mision: z.string().min(1, { message: "Ingrese una misión" }),
     vision: z.string().min(1, { message: "Ingrese una visión" }),

@@ -20,6 +20,7 @@ export const getDegrees = async () => {
 
 export const getDependences = async (): Promise<DependenceTable[]> => {
   const { data, error } = await supabase.from("dependencias").select(`
+    codigo,
     id,
     nombre,
     vision,
@@ -45,17 +46,21 @@ export const getDependences = async (): Promise<DependenceTable[]> => {
   }
   const newData = data.map((dependence) => ({
     ...dependence,
-    id_escuela: (dependence.escuelas as any).id || null,
-    escuela: (dependence.escuelas as any).nombre || null,
+    // por si la escuela es null, para evitar errores
+    id_escuela: (dependence.escuelas as any)?.id || null,
+    escuela: (dependence.escuelas as any)?.nombre || null,
+    // por si la carrera es null, para evitar errores
     id_carrera: (dependence.carreras as any)?.id || null,
     carrera: (dependence.carreras as any)?.nombre || null,
-    id_coordinador: (dependence.staff as any).id,
-    coordinador: (dependence.staff as any).nombre,
+    // por si el staff es null, para evitar errores
+    id_coordinador: (dependence.staff as any)?.id || null,
+    coordinador: (dependence.staff as any)?.nombre || null,
   }));
   return newData;
 };
 
 export const createDependence = async (formData: {
+  codigo?: string | null;
   nombre: string;
   vision: string;
   mision: string;
@@ -78,13 +83,14 @@ export const createDependence = async (formData: {
 
 export const updateDependence = async (
   formData: {
+    codigo?: string | null;
     nombre?: string;
     vision?: string;
     mision?: string;
     objetivos?: string;
     descripcion?: string;
-    id_escuela?: string;
-    id_carrera?: string;
+    id_escuela?: string | null;
+    id_carrera?: string | null;
     id_coordinador?: string;
   },
   id: string,
@@ -103,11 +109,11 @@ export const updateDependence = async (
   return data;
 };
 
-export const deleteDependences = async (id: string[]) => {
+export const deleteDependences = async (ids: string[]) => {
   const { data, error } = await supabase
     .from("dependencias")
     .delete()
-    .in("id", id)
+    .in("id", ids)
     .select()
     .single();
   if (error) {
@@ -116,14 +122,65 @@ export const deleteDependences = async (id: string[]) => {
   return data;
 };
 
+export const dependenceCodeExists = async (
+  codigo: string,
+  excludeId?: string,
+): Promise<boolean> => {
+  let query = supabase
+    .from("dependencias")
+    .select("id")
+    .eq("codigo", codigo)
+    .limit(1); // Limitamos la consulta a 1 resultado();
+
+  if (excludeId) {
+    query = query.neq("id", excludeId);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
+};
+
+export const dependenceNameExists = async (
+  name: string,
+  excludeId?: string,
+): Promise<boolean> => {
+  let query = supabase
+    .from("dependencias")
+    .select("id")
+    .ilike("nombre", name)
+    .limit(1); // Limitamos la consulta a 1 resultado();
+
+  if (excludeId) {
+    query = query.neq("id", excludeId);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
+};
+
 export const getStaff = async () => {
   const { data, error } = await supabase.from("staff").select(`
     id,
-    nombre
+    nombre,
+    apellido
     `);
   if (error) {
     throw new Error(error.message);
   }
+  const staff = data.map((s) => ({
+    id: s.id,
+    nombre: `${s.nombre} ${s.apellido}`,
+  }));
 
-  return data;
+  return staff;
 };

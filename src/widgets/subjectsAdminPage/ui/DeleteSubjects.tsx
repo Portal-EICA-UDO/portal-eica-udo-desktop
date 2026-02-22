@@ -1,5 +1,6 @@
 import { useState, type FC } from "react";
 import { deleteSubjects } from "../api";
+import { fi } from "zod/locales";
 
 type Props = {
   data: any[];
@@ -9,16 +10,18 @@ type Props = {
 export const DeleteSubjects: FC<Props> = ({ data, onSuccess }) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       await deleteSubjects(data.map((item) => item.id_materia));
       onSuccess();
       setSuccessMsg("Materias eliminadas correctamente");
     } catch (error) {
       setErrorMsg("Error al eliminar las materias");
-      return;
     }
+    setLoading(false);
   };
 
   return (
@@ -36,7 +39,7 @@ export const DeleteSubjects: FC<Props> = ({ data, onSuccess }) => {
         className="px-4 py-2 rounded bg-sky-700 text-white"
         onClick={handleDelete}
       >
-        Eliminar
+        {isLoading ? "Eliminando..." : "Eliminar"}
       </button>
 
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}

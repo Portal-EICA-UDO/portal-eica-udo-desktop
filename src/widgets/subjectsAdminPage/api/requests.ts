@@ -33,7 +33,7 @@ export const getSubjects = async () => {
   const { data, error } = await supabase
     .from("materias_completas")
     .select(
-      "id_materia, materia_nombre, id_carrera, id_escuela, carrera_nombre, escuela_nombre"
+      "id_materia, materia_nombre, id_carrera, id_escuela, carrera_nombre, escuela_nombre, materia_codigo",
     );
   if (error) {
     throw new Error(error.message);
@@ -54,16 +54,40 @@ export const getDegreesWithSchool = async () => {
   return data || [];
 };
 
+export const subjectCodeExists = async (code: string, excludeId?: string) => {
+  // Busca coincidencias por código (case-insensitive)
+  let query = supabase
+    .from("materias")
+    .select("id")
+    .eq("codigo", code)
+    .limit(1);
+
+  // Si estamos excluyendo un ID, lo agregamos a la consulta
+  if (excludeId) {
+    query = query.neq("id", excludeId);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
+};
+
 export const createSubject = async ({
   nombre,
   id_carrera,
+  codigo,
 }: {
   nombre: string;
   id_carrera: string;
+  codigo: string;
 }) => {
   const { data, error } = await supabase
     .from("materias")
-    .insert({ nombre, id_carrera })
+    .insert({ nombre, id_carrera, codigo })
     .select()
     .single();
   if (error) {
@@ -76,14 +100,16 @@ export const updateSubject = async ({
   id,
   nombre,
   id_carrera,
+  codigo,
 }: {
   id: string;
   nombre: string;
   id_carrera: string;
+  codigo?: string;
 }) => {
   const { data, error } = await supabase
     .from("materias")
-    .update({ nombre, id_carrera })
+    .update({ nombre, id_carrera, codigo })
     .eq("id", id)
     .select()
     .single();

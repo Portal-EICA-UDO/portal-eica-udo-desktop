@@ -118,11 +118,13 @@ export const StaffAdminPage = () => {
 
   const columns = useMemo<ColumnDef<StaffTable, any>[]>(
     () => [
+      { accessorKey: "cedula", header: "Cedula" },
       { accessorKey: "nombre", header: "Nombre" },
       { accessorKey: "apellido", header: "Apellido" },
       { accessorKey: "email", header: "Email" },
       { accessorKey: "telefono", header: "Telefono" },
       { accessorKey: "posicion", header: "Posicion" },
+      { accessorKey: "condicion", header: "Condicion" },
 
       {
         accessorFn: (row) => row.materiasAsociadas as MateriasAsociadas[],

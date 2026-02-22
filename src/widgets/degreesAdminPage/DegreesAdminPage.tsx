@@ -205,6 +205,7 @@ const UsuariosPage = () => {
         // Datos
         data={data || []}
         columns={[
+          { accessorKey: "codigo", header: "Código" },
           { accessorKey: "nombre", header: "Nombre" },
           { accessorKey: "descripcion", header: "Descripcion" },
           {
