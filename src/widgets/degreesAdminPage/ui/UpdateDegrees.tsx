@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDegreesSchema } from "../validations/index";
 import type z from "zod";
 import { getImageUrl } from "@shared/lib";
-import type { Escuela, TableProps } from "../types";
+import type { Escuela, DegreeTable } from "../types";
 import {
   guardarArchivo,
   updateDegree,
@@ -16,8 +16,8 @@ import { file } from "zod";
 type FormData = z.infer<ReturnType<typeof updateDegreesSchema>>; // para tipado
 
 type props = {
-  onSubmitProp: (props: TableProps) => void;
-  initialData: TableProps;
+  onSubmitProp: (props: DegreeTable) => void;
+  initialData: DegreeTable;
   schools: Escuela[];
 };
 
@@ -121,21 +121,24 @@ export const UpdateDegrees: React.FC<props> = ({
         await updateDegreeImage(imageFile as any);
       }
 
-      if (watchedFile[0]) {
-        fileResponse = await updateDegreeFile(
-          watchedFile[0],
-          initialData.horario_url,
-        );
-      } else {
-        // await updateDegree(
-        //   {
-        //     nombre: data.nombre,
-        //     descripcion: data.descripcion,
-        //     id_escuela: data.escuela,
-        //   },
-        //   initialData.id,
-        // );
-      }
+      fileResponse = await updateDegreeFile(
+        watchedFile[0],
+        initialData.horario_url,
+      );
+
+      const nombre_horario =
+        preview === null
+          ? null
+          : watchedFile[0]
+            ? watchedFile[0].name
+            : initialData.nombre_horario;
+      const horario_url =
+        preview === null
+          ? null
+          : watchedFile[0]
+            ? (fileResponse as any).url
+            : initialData.horario_url;
+
       await updateDegree(
         {
           nombre: data.nombre,
@@ -145,12 +148,8 @@ export const UpdateDegrees: React.FC<props> = ({
             : initialData.imagen_url,
           id_escuela: data.escuela,
           codigo: data.codigo,
-          nombre_horario: watchedFile[0]
-            ? watchedFile[0].name
-            : initialData.nombre_horario,
-          horario_url: watchedFile[0]
-            ? (fileResponse as any).url
-            : initialData.horario_url,
+          nombre_horario: nombre_horario,
+          horario_url: horario_url,
         },
         initialData.id,
       );
@@ -165,9 +164,8 @@ export const UpdateDegrees: React.FC<props> = ({
           : initialData.imagen_url,
         escuela_id: data.escuela,
         codigo: data.codigo,
-        horario_url: (watchedFile[0] as any)?.name || initialData.horario_url,
-        nombre_horario:
-          (watchedFile[0] as any)?.name || initialData.nombre_horario,
+        horario_url: horario_url,
+        nombre_horario: nombre_horario,
       });
       // console.log({
       //   id: initialData.id,
@@ -198,7 +196,11 @@ export const UpdateDegrees: React.FC<props> = ({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Codigo
+            Codigo{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <input
             {...register("codigo")}
@@ -214,7 +216,11 @@ export const UpdateDegrees: React.FC<props> = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Nombre
+            Nombre{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <input
             {...register("nombre")}
@@ -231,7 +237,11 @@ export const UpdateDegrees: React.FC<props> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Descripción
+            Descripción{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <textarea
             {...register("descripcion")}
@@ -248,7 +258,11 @@ export const UpdateDegrees: React.FC<props> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Escuela
+            Escuela{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <select
             {...register("escuela")}
@@ -271,7 +285,11 @@ export const UpdateDegrees: React.FC<props> = ({
         {/* Input para imagen con vista previa */}
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Imagen
+            Imagen{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <div className="flex items-start gap-4">
             <div
@@ -410,9 +428,9 @@ export const UpdateDegrees: React.FC<props> = ({
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-4 py-2 rounded bg-sky-700 text-white"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"
           >
-            {isSubmitting ? "Actualizando..." : "Actualizar carrera"}
+            {isSubmitting ? "Actualizando..." : "Actualizar Carrera"}
           </button>
         </div>
       </form>

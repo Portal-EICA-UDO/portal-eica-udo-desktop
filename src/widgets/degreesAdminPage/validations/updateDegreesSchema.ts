@@ -18,22 +18,22 @@ export const updateDegreesSchema = (selectOptions: Escuela[]) => {
     },
   );
   // Preprocess: si recibe FileList (input file), toma el primer File; si no, undefined
-  const fileOrUndefined = z.preprocess((val) => {
-    console.log("entro");
-
-    console.log(val instanceof File);
-    // react-hook-form entrega FileList desde input[type=file]
-    if (typeof FileList !== "undefined" && val instanceof FileList) {
-      console.log("val: ", val);
-      return val.length > 0 ? val[0] : undefined;
-    }
-    // si ya es File
-    if (typeof File !== "undefined" && val instanceof File) {
-      return val;
-    }
-    console.log("returning undefined from preprocess");
-    return undefined;
-  }, z.instanceof(File).optional());
+  const fileOrUndefined = z.preprocess(
+    (val) => {
+      const admittedTypes = ["png", "jpg", "jpeg", "webp", "avif"];
+      if (typeof FileList !== "undefined" && val instanceof FileList) {
+        const fileExtension = val[0]?.name.split(".").pop()?.toLowerCase();
+        return admittedTypes.includes(fileExtension || "") ? val[0] : undefined;
+      }
+      return undefined;
+    },
+    z
+      .instanceof(File, {
+        message:
+          "Por favor selecciona una imagen válida (JPG, PNG, WEBP, AVIF)",
+      })
+      .optional(),
+  );
   // schema base
 
   const base = z.object({
@@ -49,3 +49,5 @@ export const updateDegreesSchema = (selectOptions: Escuela[]) => {
 
   return base;
 };
+
+export type UpdateFormData = z.infer<ReturnType<typeof updateDegreesSchema>>;

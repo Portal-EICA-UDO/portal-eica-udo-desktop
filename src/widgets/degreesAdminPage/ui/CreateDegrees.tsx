@@ -13,7 +13,6 @@ import {
   degreeCodeExists,
 } from "../api";
 import type { DegreeTable, Escuela } from "../types";
-import { file } from "zod";
 
 type FormData = z.infer<ReturnType<typeof createDegreesSchema>>; // para tipado
 
@@ -70,7 +69,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
   // Observar el archivo para la preview
-  const watchedFile = watch("archivo" as any) as unknown as FileList;
+  const watchedFile = watch("horario" as any) as unknown as FileList;
 
   useEffect(() => {
     const file = watchedFile?.[0];
@@ -118,13 +117,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
   const onSubmit = async (data: FormData) => {
     setErrorMsg(null);
     setSuccessMsg(null);
-    console.log(
-      "data: ",
-      data,
-      watchedFile.item(0)?.name,
-      watchedFile,
-      imageFile,
-    );
+    console.log("data: ", data, watchedFile[0]?.name, watchedFile, imageFile);
     try {
       // verificar unicidad del nombre en el submit
       clearErrors("nombre");
@@ -146,8 +139,10 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
         });
         return;
       }
-
-      const fileResponse = await guardarArchivo(watchedFile[0]);
+      let fileResponse = null;
+      if (watchedFile[0]) {
+        fileResponse = await guardarArchivo(watchedFile[0]);
+      }
       await uploadDegreeImage(imageFile as any);
       const degreeData = await createDegree({
         nombre: data.nombre,
@@ -156,7 +151,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
         id_escuela: data.escuela,
         codigo: data.codigo,
         nombre_horario: watchedFile[0]?.name,
-        horario_url: (fileResponse as any).url,
+        horario_url: (fileResponse as any)?.url,
       });
 
       onSuccess({
@@ -168,21 +163,9 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
           opciones.find((option) => option.id === data.escuela)?.nombre || "",
         escuela_id: data.escuela,
         codigo: data.codigo,
-        horario_url: (fileResponse as any).url,
+        horario_url: (fileResponse as any)?.url,
         nombre_horario: watchedFile[0]?.name,
       });
-      // console.log({
-      //   id: "fds",
-      //   nombre: data.nombre,
-      //   descripcion: data.descripcion,
-      //   imagen_url: data.imagen_url.name,
-      //   escuela:
-      //     opciones.find((option) => option.id === data.escuela)?.nombre || "",
-      //   escuela_id: data.escuela,
-      //   codigo: data.codigo,
-      //   horario_url: watchedFile[0]?.name,
-      //   nombre_horario: watchedFile[0]?.name,
-      // });
 
       setSuccessMsg("Carrera creada correctamente");
       setErrorMsg(null);
@@ -195,7 +178,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
       reset();
     } catch (err: any) {
       setSuccessMsg(null);
-      setErrorMsg("Error al crear la carrera");
+      setErrorMsg(err.message || "Error al crear la carrera");
       console.error(err);
     }
   };
@@ -211,7 +194,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Codigo
+            Codigo{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <input
             {...register("codigo")}
@@ -227,7 +214,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Nombre
+            Nombre{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <input
             {...register("nombre")}
@@ -244,7 +235,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Descripción
+            Descripción{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <textarea
             {...register("descripcion")}
@@ -261,7 +256,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Escuela
+            Escuela{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <select
             {...register("escuela")}
@@ -284,7 +283,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
         {/* Input para imagen con vista previa */}
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Imagen
+            Imagen{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <div className="flex items-start gap-4">
             <div
@@ -364,6 +367,11 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
             }}
             className="sr-only"
           />
+          {errors && (errors as any).imagen_url && (
+            <p className="text-sm text-red-600 mt-2">
+              {(errors as any).imagen_url.message}
+            </p>
+          )}
         </div>
         {/* Campo Archivo con Preview */}
         <div>
@@ -417,7 +425,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
                     <label className="relative cursor-pointer bg-white rounded-md font-medium text-sky-600 hover:text-sky-500 focus-within:outline-none">
                       <span>Subir un archivo</span>
                       <input
-                        {...register("archivo" as any)}
+                        {...register("horario")}
                         type="file"
                         className="sr-only"
                       />
@@ -430,13 +438,18 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
               )}
             </div>
           </div>
+          {errors && errors.horario && (
+            <p className="text-sm text-red-600 mt-2">
+              {errors.horario.message}
+            </p>
+          )}
         </div>
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-4 py-2 rounded bg-sky-700 text-white"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"
           >
-            {isSubmitting ? "Cargando..." : "Crear carrera"}
+            {isSubmitting ? "Cargando..." : "Crear Carrera"}
           </button>
         </div>
       </form>

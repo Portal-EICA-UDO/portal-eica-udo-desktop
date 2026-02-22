@@ -2,7 +2,6 @@ import { useState, type FC } from "react";
 import { deleteDegreeImage, deleteDegrees } from "../api";
 import type { DegreeTable } from "../types";
 import { eliminarArchivo } from "@shared/ui/react/EliminarArchive";
-import { set } from "zod";
 
 type Props = {
   data: DegreeTable[];
@@ -42,7 +41,6 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
     } catch (error) {
       setErrorMsg("Error al eliminar las carreras");
       console.error(error);
-      return;
     }
 
     setLoading(false);
