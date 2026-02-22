@@ -5,11 +5,14 @@ import type { CreateStaffForm } from "../validations";
 export const getStaff = async () => {
   const { data, error } = await supabase.from("staff").select(`
       id,
+      cedula,
       created_at,
       nombre,
       apellido,
+      sistesis_curricular,
       email,
       posicion,
+      condicion,
       telefono,
       imagen_url,
       pensum (
@@ -47,12 +50,15 @@ export const createStaff = async (staffData: CreateStaffForm) => {
     .from("staff")
     .insert([
       {
+        cedula: staffData.cedula,
         nombre: staffData.nombre,
         apellido: staffData.apellido,
         email: staffData.email,
+        sistesis_curricular: staffData.sistesis_curricular ?? null,
         posicion: staffData.posicion,
-        telefono: staffData.telefono,
+        telefono: staffData.telefono ?? null,
         imagen_url: staffData.imagen_url,
+        condicion: staffData.condicion,
       },
     ])
     .select();
@@ -75,6 +81,25 @@ export const createStaff = async (staffData: CreateStaffForm) => {
   }
   return data[0];
 };
+export const identityCardExists = async (
+  cedula: string,
+  excludeId?: string,
+) => {
+  let query = supabase.from("staff").select("id").eq("cedula", cedula).limit(1);
+
+  // Si estamos excluyendo un ID, lo agregamos a la consulta
+  if (excludeId) {
+    query = query.neq("id", excludeId);
+  }
+
+  const { data, error } = await query.single();
+
+  if (error && error.code !== "PGRST116") {
+    // PGRST116 es "no se encontraron resultados"
+    throw new Error(error.message);
+  }
+  return !!data;
+};
 
 export const updateStaff = async (
   id: string,
@@ -85,12 +110,15 @@ export const updateStaff = async (
   const { data, error } = await supabase
     .from("staff")
     .update({
+      cedula: staffData.cedula,
       nombre: staffData.nombre,
       apellido: staffData.apellido,
       email: staffData.email,
+      sistesis_curricular: staffData.sistesis_curricular ?? null,
       posicion: staffData.posicion,
-      telefono: staffData.telefono,
+      telefono: staffData.telefono ?? null,
       imagen_url: staffData.imagen_url,
+      condicion: staffData.condicion,
     })
     .eq("id", id)
     .select();
@@ -135,11 +163,11 @@ export const updateStaff = async (
   return data[0];
 };
 
-export const deleteStaff = async (ids: string[]) => {
+export const deleteStaffs = async (ids: string[]) => {
   const { data, error } = await supabase
     .from("staff")
     .delete()
-    .eq("id", ids[0])
+    .in("id", ids)
     .select();
 
   if (error) {

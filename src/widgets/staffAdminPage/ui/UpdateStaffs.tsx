@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import React, { useEffect, useState, useRef } from "react";
 import type { MateriaMultiSelect, StaffTable } from "../types";
 import { MultiSelect } from "@shared/ui/react/MultiSelect";
-import { updateStaff, updateStaffImage } from "../api";
+import { identityCardExists, updateStaff, updateStaffImage } from "../api";
 import { getImageUrl } from "@shared/lib";
+import { CONDITION_TYPES, STAFF_TYPES } from "@features/staff/const";
 
 type FormData = z.infer<typeof updateStaffSchema>; // para tipado
 type Props = {
@@ -25,9 +26,11 @@ export const UpdateStaffs: React.FC<Props> = ({
   const {
     register: registerRegister,
     handleSubmit: handleRegisterSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
     control,
+    clearErrors,
+    setError,
   } = useForm<FormData>({
     resolver: zodResolver(updateStaffSchema as any),
     defaultValues: {
@@ -81,6 +84,18 @@ export const UpdateStaffs: React.FC<Props> = ({
   const onSubmit = async (data: FormData) => {
     let staffData = null;
     try {
+      clearErrors("cedula");
+      const existsIdentityCard = await identityCardExists(
+        data.cedula,
+        initialData.id,
+      );
+      if (existsIdentityCard) {
+        setError("cedula", {
+          type: "manual",
+          message: "Ya existe un staff con esa cédula",
+        });
+        return;
+      }
       if (data.materiasAsociadas) {
         staffData = await updateStaff(
           initialData.id,
@@ -147,11 +162,38 @@ export const UpdateStaffs: React.FC<Props> = ({
 
       {errorMsg && <p className="text-red-600 mb-3">{errorMsg}</p>}
       {successMsg && <p className="text-green-600 mb-3">{successMsg}</p>}
-      <form onSubmit={handleRegisterSubmit(onSubmit)}>
+      <form
+        onSubmit={handleRegisterSubmit(onSubmit)}
+        className="flex flex-col gap-2"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700">
-              Nombre
+              Cédula{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
+            </label>
+            <input
+              {...registerRegister("cedula")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Cedula"
+            />
+            {errors.cedula && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.cedula.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <input
               {...registerRegister("nombre")}
@@ -168,7 +210,11 @@ export const UpdateStaffs: React.FC<Props> = ({
 
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700">
-              Apellido
+              Apellido{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <input
               {...registerRegister("apellido")}
@@ -185,7 +231,11 @@ export const UpdateStaffs: React.FC<Props> = ({
 
           <div className="mb-2 md:col-span-2">
             <label className="block text-sm font-medium text-gray-700">
-              Email
+              Email{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <input
               {...registerRegister("email")}
@@ -202,17 +252,51 @@ export const UpdateStaffs: React.FC<Props> = ({
 
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700">
-              Posición
+              Posición{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
-            <input
+            <select
               {...registerRegister("posicion")}
-              type="text"
-              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
-              placeholder="Ej. Profesor, Asistente"
-            />
+              className="block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+            >
+              <option value="">-- Seleccionar --</option>
+              {Object.values(STAFF_TYPES).map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
             {errors.posicion && (
               <p className="text-sm text-red-600 mt-1">
                 {errors.posicion.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Condición{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
+            </label>
+            <select
+              {...registerRegister("condicion")}
+              className="block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+            >
+              <option value="">-- Seleccionar --</option>
+              {Object.values(CONDITION_TYPES).map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            {errors.condicion && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.condicion.message}
               </p>
             )}
           </div>
@@ -230,6 +314,22 @@ export const UpdateStaffs: React.FC<Props> = ({
             {errors.telefono && (
               <p className="text-sm text-red-600 mt-1">
                 {errors.telefono.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2 md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Síntesis curricular
+            </label>
+            <textarea
+              {...registerRegister("sistesis_curricular")}
+              rows={4}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Breve síntesis curricular (opcional)"
+            />
+            {errors.sistesis_curricular && (
+              <p className="text-sm text-red-600 mt-1">
+                {(errors as any).sistesis_curricular?.message}
               </p>
             )}
           </div>
@@ -254,7 +354,11 @@ export const UpdateStaffs: React.FC<Props> = ({
         {/* Input para imagen con vista previa */}
         <div className="mt-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Imagen
+            Imagen{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <div className="flex items-start gap-4">
             <div
@@ -325,12 +429,12 @@ export const UpdateStaffs: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end">
           <button
             type="submit"
-            className="inline-flex items-center justify-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-md"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"
           >
-            Actualizar
+            {isSubmitting ? "Actualizando..." : "Actualizar staff"}
           </button>
         </div>
       </form>
