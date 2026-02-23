@@ -53,7 +53,7 @@ export default function Biblioteca() {
   const [loading, setLoading] = useState(true);
   const [modalLibro, setModalLibro] = useState<any | null>(null);
 
-  const pageSize = 6;
+  const pageSize = 16;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const listContainerRef = useRef<HTMLDivElement>(null);
