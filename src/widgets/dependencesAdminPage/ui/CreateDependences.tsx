@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import React, { useState } from "react";
 import { createDependencesSchema } from "../validations/CreateDependencesSchema";
 import type { DependenceTable } from "../types";
-import { createDependence } from "../api";
+import {
+  createDependence,
+  dependenceCodeExists,
+  dependenceNameExists,
+} from "../api";
 
 type FormData = z.infer<typeof createDependencesSchema>; // para tipado
 type Props = {
@@ -27,13 +31,42 @@ export const CreateDependences: React.FC<Props> = ({
     handleSubmit: handleRegisterSubmit,
     formState: { errors, isSubmitting },
     reset,
+    clearErrors,
+    setError,
   } = useForm<FormData>({
     resolver: zodResolver(createDependencesSchema as any),
   });
 
   const onSubmit = async (data: FormData) => {
     try {
+      // verificar unicidad del codigo en el submit
+      if (data.codigo) {
+        clearErrors("codigo");
+
+        const existsCode = await dependenceCodeExists(data.codigo);
+        if (existsCode) {
+          setError("codigo", {
+            type: "manual",
+            message: "Ya existe una dependencia con ese codigo",
+          });
+          return;
+        }
+      }
+      // verificar unicidad del nombre en el submit
+
+      clearErrors("nombre");
+
+      const existsCode = await dependenceNameExists(data.nombre);
+      if (existsCode) {
+        setError("nombre", {
+          type: "manual",
+          message: "Ya existe una dependencia con ese nombre",
+        });
+        return;
+      }
+
       const dependenceData = await createDependence({
+        codigo: data.codigo,
         nombre: data.nombre,
         vision: data.vision,
         mision: data.mision,
@@ -45,6 +78,7 @@ export const CreateDependences: React.FC<Props> = ({
       });
 
       onSuccess({
+        codigo: dependenceData.codigo,
         carrera: degrees.find((item) => item.id === data.carrera)?.nombre || "",
         coordinador:
           staff.find((item) => item.id === data.coordinador)?.nombre || "",
@@ -78,11 +112,34 @@ export const CreateDependences: React.FC<Props> = ({
 
       {errorMsg && <p className="text-red-600 mb-3">{errorMsg}</p>}
       {successMsg && <p className="text-green-600 mb-3">{successMsg}</p>}
-      <form onSubmit={handleRegisterSubmit(onSubmit)}>
+      <form
+        onSubmit={handleRegisterSubmit(onSubmit)}
+        className="flex flex-col gap-2"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-2 md:col-span-2 ">
             <label className="block text-sm font-medium text-gray-700">
-              Nombre
+              Código
+            </label>
+            <input
+              {...registerRegister("codigo")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Código"
+            />
+            {errors.codigo && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.codigo.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-2 md:col-span-2 ">
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <input
               {...registerRegister("nombre")}
@@ -98,7 +155,11 @@ export const CreateDependences: React.FC<Props> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Descripción
+              Descripción{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerRegister("descripcion")}
@@ -114,7 +175,11 @@ export const CreateDependences: React.FC<Props> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Mision
+              Mision{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerRegister("mision")}
@@ -131,7 +196,11 @@ export const CreateDependences: React.FC<Props> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Vision
+              Vision{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerRegister("vision")}
@@ -147,7 +216,11 @@ export const CreateDependences: React.FC<Props> = ({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Objetivos
+              Objetivos{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerRegister("objetivos")}
@@ -206,15 +279,19 @@ export const CreateDependences: React.FC<Props> = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            Coordinador
+            Encargado{" "}
+            <span className="text-red-600 ml-1" aria-hidden="true">
+              *
+            </span>
+            <span className="sr-only"> (obligatorio)</span>
           </label>
           <select
             {...registerRegister("coordinador")}
             className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
           >
-            <option value="">--Seleccionar cordinador asociado--</option>
-            {staff.map((opt) => (
-              <option key={opt.nombre} value={opt.id}>
+            <option value="">--Seleccionar encargado asociado--</option>
+            {staff.map((opt, index) => (
+              <option key={index} value={opt.id}>
                 {opt.nombre}
               </option>
             ))}
@@ -226,7 +303,7 @@ export const CreateDependences: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end">
           <button
             type="submit"
             className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"

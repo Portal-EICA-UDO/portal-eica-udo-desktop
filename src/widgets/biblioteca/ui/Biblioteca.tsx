@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import FiltradoBiblioteca from './FiltradoBiblioteca';
 import BibliotecaCard from '@shared/ui/react/BibliotecaCard';
 import { supabase } from '@shared/api/lib/supabaseClient';
+import Toast from '@shared/ui/react/Toast';
 
 function extractDriveId(url: string | null | undefined) {
   if (!url) return null;
@@ -52,17 +53,39 @@ export default function Biblioteca() {
   const [loading, setLoading] = useState(true);
   const [modalLibro, setModalLibro] = useState<any | null>(null);
 
-  const pageSize = 6;
+  const pageSize = 16;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<BookItem[]>([]);
 
+  const [toast, setToast] = useState<{
+    id: string;
+    type: "success" | "error" | "warning" | "info";
+    title: string;
+    message: string;
+  } | null>(null);
 
 
-  const reloadLibros = async () => {
+
+  const reloadLibros = async (Eliminado?: boolean) => {
     await loadLibros();
+    if (Eliminado) {
+      const toastPayload = {
+        type: "success" as const,
+        title: "Libro eliminado",
+        message: "El libro ha sido eliminado exitosamente",
+        duration: 5000,
+      };
+      setToast({
+        id: Date.now().toString(),
+        type: toastPayload.type,
+        title: toastPayload.title,
+        message: toastPayload.message,
+      });
+    }
+
     // Al ejecutarse esto, 'libros' cambia, 'librosFiltered' se recalcula,
     // y si hay más items, 'totalPages' aumentará automáticamente.
   };
@@ -96,7 +119,7 @@ export default function Biblioteca() {
     }
   }, [modalLibro, currentPage]);
 
-  
+
 
   useEffect(() => {
     setTotalCount(librosFiltered.length);
@@ -291,6 +314,15 @@ export default function Biblioteca() {
         {/* Modal (se mantiene igual) */}
         {/* ... */}
       </div>
+      {toast && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
+
   );
 }

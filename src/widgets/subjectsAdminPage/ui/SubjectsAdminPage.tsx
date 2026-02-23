@@ -11,14 +11,23 @@ import { DeleteSubjects } from "./DeleteSubjects";
 import { useStore } from "@nanostores/react";
 import { role } from "@features/auth/nanostore";
 import { isAdminOrSuperAdmin } from "@features/auth/lib";
+import Toast from "@shared/ui/react/Toast";
+import { set } from "zod";
 
 export const SubjectsAdminPage = () => {
   // Estado centralizado en el padre
   const [data, setData] = useState<any[]>();
-  const [schools, setSchools] = useState<School[]>([]);
   const [degrees, setDegrees] = useState<any>([]);
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [toast, setToast] = useState<{
+    id: string;
+    type: string;
+    message: string;
+    title: string;
+    duration: number;
+  } | null>(null);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout | null>(null);
 
   const $role = useStore(role);
 
@@ -28,7 +37,6 @@ export const SubjectsAdminPage = () => {
       const subjects = await getSubjects();
       const degrees = await getDegreesBySchool();
       setData(subjects);
-      setSchools(schools);
       setDegrees(degrees);
 
       setFilters((prev) => {
@@ -125,14 +133,14 @@ export const SubjectsAdminPage = () => {
         ];
       });
     },
-    [filters]
+    [filters],
   );
 
   const handleClearFilter = useCallback((key: string) => {
     setActiveFilters((prev) => {
       if (key === "escuela_nombre") {
         return prev.filter(
-          (f) => f.key !== "carrera_nombre" && f.key !== "escuela_nombre"
+          (f) => f.key !== "carrera_nombre" && f.key !== "escuela_nombre",
         );
       }
       return prev.filter((f) => f.key !== key);
@@ -160,20 +168,36 @@ export const SubjectsAdminPage = () => {
 
   // Handlers de CRUD
   const handleCreateRequest = useCallback((data: any) => {
-    // Abrir modal de crear (si usas estado para controlarlo)
     setData((prev) => [...(prev as any[]), data]);
   }, []);
 
   const handleEditRequest = useCallback((item: any) => {
     setData((prev) => {
       return (prev as any[]).map((u) =>
-        u.id_materia === item.id_materia ? item : u
+        u.id_materia === item.id_materia ? item : u,
       );
+    });
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: "Materia editada",
+      message: "Materia editada correctamente",
+      duration: 5000,
     });
   }, []);
 
   const handleDeleteRequest = useCallback((items: any[]) => {
     setData((prev) => (prev as []).filter((u) => !items.includes(u)));
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: items.length > 1 ? "Materias eliminadas" : "Materia eliminada",
+      message:
+        items.length > 1
+          ? "Materias eliminadas correctamente"
+          : "Materia eliminada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   // Modal contents (definidos en el padre)
@@ -199,9 +223,12 @@ export const SubjectsAdminPage = () => {
   useEffect(() => {
     if (!isAdminOrSuperAdmin($role)) {
       // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
-      setTimeout(() => {
+      const set = setTimeout(() => {
         window.location.href = "/";
       }, 3000);
+      setTimerID(set);
+    } else {
+      timerID && clearTimeout(timerID);
     }
   }, [$role]);
   if (!isAdminOrSuperAdmin($role)) {
@@ -217,12 +244,24 @@ export const SubjectsAdminPage = () => {
 
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          duration={toast.duration}
+          message={toast.message}
+          title={toast.title}
+          type="success"
+          onClose={() => {
+            setToast(null);
+          }}
+        />
+      )}
       <DynamicTable
         //selection
 
         // Datos
         data={data || []}
         columns={[
+          { accessorKey: "materia_codigo", header: "Código" },
           { accessorKey: "materia_nombre", header: "Nombre" },
 
           {

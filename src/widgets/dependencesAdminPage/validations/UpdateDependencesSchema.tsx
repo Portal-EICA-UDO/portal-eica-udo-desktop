@@ -2,13 +2,14 @@ import { z } from "zod";
 
 export const updateDependencesSchema = z
   .object({
+    codigo: z.string().optional().nullable(),
     nombre: z.string().min(1, { message: "Ingrese un nombre válido" }),
     mision: z.string().min(1, { message: "Ingrese una misión" }),
     vision: z.string().min(1, { message: "Ingrese una visión" }),
     objetivos: z.string().min(1, { message: "Ingrese unos objetivos" }),
     descripcion: z.string().min(1, { message: "Ingrese una descripción" }),
-    escuela: z.string().min(1, { message: "Seleccione una escuela valida" }),
-    carrera: z.string().min(1, { message: "Seleccione una carrera valida" }),
+    escuela: z.string().nullable(),
+    carrera: z.string().nullable(),
     coordinador: z
       .string()
       .min(1, { message: "Seleccione un coordinador valido" }),

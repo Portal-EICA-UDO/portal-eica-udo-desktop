@@ -1,11 +1,14 @@
 export type StaffTable = {
   id: string;
-
+  cedula: string;
   nombre: string;
   apellido: string;
   email: string;
+  telefono?: string | null;
   posicion: string;
+  condicion: string;
   imagen_url: string;
+  sistesis_curricular?: string | null;
   materiasAsociadas?: MateriasAsociadas[];
 };
 

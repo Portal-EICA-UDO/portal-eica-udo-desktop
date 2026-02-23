@@ -11,6 +11,8 @@ import { CreateDependences } from "./CreateDependences";
 import { getStaff } from "@widgets/dependencesAdminPage/api";
 import { UpdateDependences } from "./UpdateDependences";
 import { DeleteDependences } from "./DeleteDependences";
+import { isAdminOrSuperAdmin } from "@features/auth/lib";
+import Toast from "@shared/ui/react/Toast";
 
 export const DependencesAdminPage = () => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
@@ -20,6 +22,14 @@ export const DependencesAdminPage = () => {
   const [degrees, setDegrees] = useState<{ id: string; nombre: string }[]>([]);
   const [schools, setSchools] = useState<{ id: string; nombre: string }[]>([]);
   const [staff, setStaff] = useState<{ id: string; nombre: string }[]>([]);
+  const [toast, setToast] = useState<{
+    id: string;
+    type: string;
+    message: string;
+    title: string;
+    duration: number;
+  } | null>(null);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout | null>(null);
 
   const $role = useStore(role);
   useEffect(() => {
@@ -126,18 +136,36 @@ export const DependencesAdminPage = () => {
     setData((prev) => {
       return (prev as any[]).map((u) => (u.id === item.id ? item : u));
     });
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: "Dependencia editada",
+      message: "Dependencia editada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const handleDeleteRequest = useCallback((items: any[]) => {
     setData((prev) => (prev as []).filter((u) => !items.includes(u)));
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title:
+        items.length > 1 ? "Dependencias eliminadas" : "Dependencia eliminada",
+      message:
+        items.length > 1
+          ? "Dependencias eliminadas correctamente"
+          : "Dependencia eliminada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const columns = useMemo<ColumnDef<DependenceTable, any>[]>(
     () => [
+      { accessorKey: "codigo", header: "Codigo" },
       { accessorKey: "nombre", header: "Nombre" },
-
       { accessorKey: "carrera", header: "Carrera" },
-      { accessorKey: "coordinador", header: "Coordinador" },
+      { accessorKey: "coordinador", header: "Encargado" },
       { accessorKey: "descripcion", header: "Descripción" },
       { accessorKey: "escuela", header: "Escuela" },
       { accessorKey: "mision", header: "Mision" },
@@ -177,26 +205,40 @@ export const DependencesAdminPage = () => {
     },
   };
   // gestionar quien entra a la pagina
-  // useEffect(() => {
-  //   if (!isAdminOrSuperAdmin($role)) {
-  //     // navegar pero que sea despues de tres segundo y que no sea del lado del cliente
-  //     setTimeout(() => {
-  //       window.location.href = "/";
-  //     }, 3000);
-  //   }
-  // }, [$role]);
-  // if (!isAdminOrSuperAdmin($role)) {
-  //   return (
-  //     <section className="flex justify-start items-center h-full flex-col flex-1 pt-4">
-  //       <div>
-  //         no tiene permiso para acceder a esta pagina, sera rederijido en tres
-  //         segundo
-  //       </div>
-  //     </section>
-  //   );
-  // }
+  useEffect(() => {
+    if (!isAdminOrSuperAdmin($role)) {
+      // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
+      const set = setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
+      setTimerID(set);
+    } else {
+      timerID && clearTimeout(timerID);
+    }
+  }, [$role]);
+  if (!isAdminOrSuperAdmin($role)) {
+    return (
+      <section className="flex justify-start items-center h-full flex-col flex-1 pt-4">
+        <div>
+          no tiene permiso para acceder a esta pagina, sera rederijido en tres
+          segundo
+        </div>
+      </section>
+    );
+  }
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          duration={toast.duration}
+          message={toast.message}
+          title={toast.title}
+          type="success"
+          onClose={() => {
+            setToast(null);
+          }}
+        />
+      )}
       <DynamicTable
         //selection
 

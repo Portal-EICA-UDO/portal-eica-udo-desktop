@@ -1,8 +1,8 @@
 export type SchoolTable = {
-  id: number;
+  id: string;
   nombre: string;
   descripcion: string;
-  codigo: string;
+  codigo?: string | null;
   objetivos: string;
   mision: string;
   vision: string;
@@ -17,7 +17,7 @@ export type SchoolTable = {
 export type SchoolCreateFormData = {
   nombre: string;
   descripcion: string;
-  codigo?: string;
+  codigo?: string | null;
   objetivos: string;
   mision: string;
   vision: string;
@@ -26,7 +26,7 @@ export type SchoolCreateFormData = {
 export type SchoolUpdateFormData = {
   nombre: string;
   descripcion: string;
-  codigo?: string;
+  codigo?: string | null;
   objetivos: string;
   mision: string;
   vision: string;

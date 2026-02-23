@@ -20,18 +20,19 @@ export const createDegreesSchema = (selectOptions: Escuela[]) => {
     },
   );
   // Preprocess: si recibe FileList (input file), toma el primer File; si no, undefined
-  const fileOrUndefined = z.preprocess((val) => {
-    console.log(val instanceof File);
-    // react-hook-form entrega FileList desde input[type=file]
-    if (typeof FileList !== "undefined" && val instanceof FileList) {
-      return val.length > 0 ? val[0] : undefined;
-    }
-    // si ya es File
-    if (typeof File !== "undefined" && val instanceof File) {
-      return val;
-    }
-    return undefined;
-  }, z.instanceof(File));
+  const fileOrUndefined = z.preprocess(
+    (val) => {
+      const admittedTypes = ["png", "jpg", "jpeg", "webp", "avif"];
+      if (typeof FileList !== "undefined" && val instanceof FileList) {
+        const fileExtension = val[0]?.name.split(".").pop()?.toLowerCase();
+        return admittedTypes.includes(fileExtension || "") ? val[0] : undefined;
+      }
+      return undefined;
+    },
+    z.instanceof(File, {
+      message: "Por favor selecciona una imagen válida (JPG, PNG, WEBP, AVIF)",
+    }),
+  );
 
   // schema base
 
@@ -42,7 +43,10 @@ export const createDegreesSchema = (selectOptions: Escuela[]) => {
     imagen_url: fileOrUndefined,
     // campo que representa el select (puedes cambiar el nombre a lo que uses en el form)
     escuela: schoolsSelectSchema,
+    horario: z.instanceof(FileList).optional(), // opcional, pero si se proporciona debe ser un FileList
   });
 
   return base;
 };
+
+export type CreateFormData = z.infer<ReturnType<typeof createDegreesSchema>>;

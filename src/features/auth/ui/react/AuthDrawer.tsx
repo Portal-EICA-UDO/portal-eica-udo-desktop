@@ -1,128 +1,167 @@
 import { role } from "@features/auth/nanostore";
 import { useStore } from "@nanostores/react";
+import type { Link } from "@shared/types/drawer";
 import Drawer from "@shared/ui/react/Drawer";
-import { ShieldUser, User } from "lucide-react";
+import {
+  ShieldUser,
+  User,
+  LibraryBig,
+  GraduationCap,
+  School,
+  MailQuestionMark,
+  MessageSquareText,
+  SquareUserRound,
+} from "lucide-react";
 
-const SUPER_ADMIN_LINKS = [
+const SUPER_ADMIN_LINKS: Link[] = [
   {
     label: "Crear Usuarios",
     href: "/privado/crear-usuarios",
+    admin: true,
   },
   {
     label: "Biblioteca",
     href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Carreras",
     href: "/carreras",
+    icon: <GraduationCap />,
   },
   {
     label: "Comunicados",
     href: "/comunicados",
+    icon: <MessageSquareText />,
   },
   {
     label: "Staff",
     href: "/staff",
+    icon: <SquareUserRound />,
   },
   {
     label: "Escuelas",
     href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Realizar una pregunta",
     href: "/preguntas",
+    icon: <MailQuestionMark />,
   },
   {
-    label: "Gestionar  Escuelas",
+    label: "Escuelas",
     href: "/privado/escuelas",
+    admin: true,
   },
   {
-    label: "Gestionar Carreras",
+    label: "Carreras",
     href: "/privado/carreras",
+    admin: true,
   },
   {
-    label: "Gestionar materias",
+    label: "Materias",
     href: "/privado/materias",
+    admin: true,
   },
   {
-    label: "Gestionar  staff",
+    label: "Staff",
     href: "/privado/staff",
+    admin: true,
   },
   {
-    label: "Gestionar Dependencias",
+    label: "Dependencias",
     href: "/privado/dependencias",
+    admin: true,
   },
 ];
 const ADMIN_LINKS = [
   {
     label: "Biblioteca",
     href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Carreras",
     href: "/carreras",
+    icon: <GraduationCap />,
   },
   {
     label: "Comunicados",
     href: "/comunicados",
+    icon: <MessageSquareText />,
   },
   {
     label: "Staff",
     href: "/staff",
+    icon: <SquareUserRound />,
   },
   {
     label: "Escuelas",
     href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Realizar una pregunta",
     href: "/preguntas",
+    icon: <MailQuestionMark />,
   },
   {
-    label: "Gestionar  Escuelas",
+    label: "Escuelas",
     href: "/privado/escuelas",
+    admin: true,
   },
   {
-    label: "Gestionar Carreras",
+    label: "Carreras",
     href: "/privado/carreras",
+    admin: true,
   },
   {
-    label: "Gestionar materias",
+    label: "Materias",
     href: "/privado/materias",
+    admin: true,
   },
   {
-    label: "Gestionar  staff",
+    label: "Staff",
     href: "/privado/staff",
+    admin: true,
   },
   {
-    label: "Gestionar Dependencias",
+    label: "Dependencias",
     href: "/privado/dependencias",
+    admin: true,
   },
 ];
 const USER_LINKS = [
   {
     label: "Biblioteca",
     href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Carreras",
     href: "/carreras",
+    icon: <GraduationCap />,
   },
   {
     label: "Comunicados",
     href: "/comunicados",
+    icon: <MessageSquareText />,
   },
   {
     label: "Staff",
     href: "/staff",
+    icon: <SquareUserRound />,
   },
   {
     label: "Escuelas",
     href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Realizar una pregunta",
     href: "/preguntas",
+    icon: <MailQuestionMark />,
   },
 ];
 export const AuthDrawer = () => {

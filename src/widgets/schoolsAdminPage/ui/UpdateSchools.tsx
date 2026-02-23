@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, type FC } from "react";
 import type { SchoolTable } from "../types";
-import { updateSchool } from "../api";
+import { schoolCodeExists, schoolNameExists, updateSchool } from "../api";
 
 type FormData = z.infer<typeof updateSchoolsSchema>; // para tipado
 
@@ -19,6 +19,8 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
     register: registerUpdate,
     handleSubmit: handleUpdateSubmit,
     formState: { errors, isSubmitting },
+    clearErrors,
+    setError,
   } = useForm<FormData>({
     resolver: zodResolver(updateSchoolsSchema as any),
     defaultValues: {
@@ -31,16 +33,36 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
     },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     try {
+      clearErrors("nombre");
+      const exists = await schoolNameExists(data.nombre, initialData.id);
+      if (exists) {
+        setError("nombre", {
+          type: "manual",
+          message: "Ya existe una escuela con ese nombre",
+        });
+        return;
+      }
+      // verificar unicidad del codigo en el submit
+      if (data.codigo) {
+        clearErrors("codigo");
+
+        const existsCode = await schoolCodeExists(data.codigo, initialData.id);
+        if (existsCode) {
+          setError("codigo", {
+            type: "manual",
+            message: "Ya existe una escuela con ese codigo",
+          });
+          return;
+        }
+      }
       const schoolData = updateSchool(initialData.id, data);
-      console.log(data);
       onSuccess({
         ...initialData,
         ...data,
       });
     } catch (error) {
-      console.error(error);
       setErrorMsg("Error al actualizar la escuela");
     }
   };
@@ -55,24 +77,11 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
 
       {errorMsg && <p className="text-red-600 mb-3">{errorMsg}</p>}
 
-      <form onSubmit={handleUpdateSubmit(onSubmit)}>
+      <form
+        onSubmit={handleUpdateSubmit(onSubmit)}
+        className="flex flex-col gap-2"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="mb-2 md:col-span-2 ">
-            <label className="block text-sm font-medium text-gray-700">
-              Nombre
-            </label>
-            <input
-              {...registerUpdate("nombre")}
-              type="text"
-              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
-              placeholder="Nombre"
-            />
-            {errors.nombre && (
-              <p className="text-sm text-red-600 mt-1">
-                {errors.nombre.message}
-              </p>
-            )}
-          </div>
           <div className="mb-2 md:col-span-2 ">
             <label className="block text-sm font-medium text-gray-700">
               Codigo
@@ -89,9 +98,34 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
               </p>
             )}
           </div>
+          <div className="mb-2 md:col-span-2 ">
+            <label className="block text-sm font-medium text-gray-700">
+              Nombre{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
+            </label>
+            <input
+              {...registerUpdate("nombre")}
+              type="text"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:ring-sky-500 focus:border-sky-500"
+              placeholder="Nombre"
+            />
+            {errors.nombre && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.nombre.message}
+              </p>
+            )}
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Descripción
+              Descripción{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerUpdate("descripcion")}
@@ -107,7 +141,11 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Mision
+              Mision{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerUpdate("mision")}
@@ -124,7 +162,11 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Vision
+              Vision{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerUpdate("vision")}
@@ -140,7 +182,11 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Objetivos
+              Objetivos{" "}
+              <span className="text-red-600 ml-1" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only"> (obligatorio)</span>
             </label>
             <textarea
               {...registerUpdate("objetivos")}
@@ -156,7 +202,7 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end">
           <button
             type="submit"
             className="inline-flex items-center justify-center px-4 py-2 bg-[#0A5C8D] hover:scale-105  transition-transform  text-white font-medium rounded-md"

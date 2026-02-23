@@ -11,6 +11,7 @@ import { UpdateSchools } from "./UpdateSchools";
 import { CreateSchools } from "./CreateSchools";
 import { DeleteSchools } from "./deleteSchools";
 import { isAdminOrSuperAdmin } from "@features/auth/lib";
+import Toast from "@shared/ui/react/Toast";
 
 export const SchoolsAdminPage = () => {
   // Estado centralizado en el padre
@@ -18,6 +19,14 @@ export const SchoolsAdminPage = () => {
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [toast, setToast] = useState<{
+    id: string;
+    type: string;
+    message: string;
+    title: string;
+    duration: number;
+  } | null>(null);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout | null>(null);
 
   const $role = useStore(role);
 
@@ -77,10 +86,27 @@ export const SchoolsAdminPage = () => {
     setData((prev) => {
       return (prev as any[]).map((u) => (u.id === item.id ? item : u));
     });
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: "Escuela editada",
+      message: "Escuela editada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const handleDeleteRequest = useCallback((items: any[]) => {
     setData((prev) => (prev as []).filter((u) => !items.includes(u)));
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: items.length > 1 ? "Escuelas eliminadas" : "Escuela eliminada",
+      message:
+        items.length > 1
+          ? "Escuelas eliminadas correctamente"
+          : "Escuela eliminada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   // Modal contents (definidos en el padre)
@@ -99,6 +125,7 @@ export const SchoolsAdminPage = () => {
   };
   const columns = useMemo<ColumnDef<any, any>[]>(
     () => [
+      { accessorKey: "codigo", header: "Código" },
       { accessorKey: "nombre", header: "Nombre" },
 
       {
@@ -108,12 +135,9 @@ export const SchoolsAdminPage = () => {
         header: "Cantidad de carreras",
 
         cell: (info) => (
-          console.log("info: ", info),
-          (
-            <div className="px-3 py-2 truncate max-w-xs">
-              {info.getValue()?.toString() || "-"}
-            </div>
-          )
+          <div className="px-3 py-2 truncate max-w-xs">
+            {info.getValue()?.toString() || "-"}
+          </div>
         ),
       },
       {
@@ -123,12 +147,9 @@ export const SchoolsAdminPage = () => {
         header: "Cantidad de dependencias",
 
         cell: (info) => (
-          console.log("info: ", info),
-          (
-            <div className="px-3 py-2 truncate max-w-xs">
-              {info.getValue()?.toString() || "-"}
-            </div>
-          )
+          <div className="px-3 py-2 truncate max-w-xs">
+            {info.getValue()?.toString() || "-"}
+          </div>
         ),
       },
     ],
@@ -138,9 +159,12 @@ export const SchoolsAdminPage = () => {
   useEffect(() => {
     if (!isAdminOrSuperAdmin($role)) {
       // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
-      setTimeout(() => {
+      const set = setTimeout(() => {
         window.location.href = "/";
       }, 3000);
+      setTimerID(set);
+    } else {
+      timerID && clearTimeout(timerID);
     }
   }, [$role]);
   if (!isAdminOrSuperAdmin($role)) {
@@ -156,6 +180,17 @@ export const SchoolsAdminPage = () => {
 
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          duration={toast.duration}
+          message={toast.message}
+          title={toast.title}
+          type="success"
+          onClose={() => {
+            setToast(null);
+          }}
+        />
+      )}
       <DynamicTable
         //selection
 

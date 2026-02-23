@@ -12,6 +12,7 @@ import type { DegreeTable } from "./types";
 import { role } from "@features/auth/nanostore";
 import { useStore } from "@nanostores/react";
 import { isAdminOrSuperAdmin } from "@features/auth/lib";
+import Toast from "@shared/ui/react/Toast";
 
 type Escuela = {
   id: string;
@@ -26,6 +27,14 @@ const UsuariosPage = () => {
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [opciones, setOpciones] = useState<Escuela[]>([]);
+  const [toast, setToast] = useState<{
+    id: string;
+    type: string;
+    message: string;
+    title: string;
+    duration: number;
+  } | null>(null);
+  const [timerID, setTimerID] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +42,6 @@ const UsuariosPage = () => {
       setData(data);
       const respEsc = await supabase.from("escuelas").select("nombre, id");
       if (respEsc.error) {
-        console.error("Error fetching escuelas:", respEsc.error);
         setOpciones([]);
       } else {
         setOpciones(respEsc.data || []);
@@ -70,7 +78,6 @@ const UsuariosPage = () => {
   // Handlers de filtros
   const handleApplyFilter = useCallback(
     (key: string, value: any, type: FilterConfig["type"]) => {
-      console.log("estoy en handleApplyFilter");
       setActiveFilters((prev) => {
         const existing = prev.filter((f) => f.key !== key);
         if (value === "" || value === null || value === undefined) {
@@ -111,21 +118,34 @@ const UsuariosPage = () => {
 
   // Handlers de CRUD
   const handleCreateRequest = useCallback((item: any) => {
-    console.log("handleCreateRequest");
     setData((prev) => [...(prev as any[]), item]);
   }, []);
 
   const handleEditRequest = useCallback((item: any) => {
-    console.log("item in handleEdit: ", item);
-    console.log("data in handleEdit: ", data);
     setData((prev) =>
       (prev as any[]).map((u) => (u.id === item.id ? item : u)),
     );
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: "Carrera editada",
+      message: "Carrera editada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   const handleDeleteRequest = useCallback((items: any[]) => {
-    console.log("delete items: ", items);
     setData((prev) => (prev as []).filter((u) => !items.includes(u)));
+    setToast({
+      id: Date.now().toString(),
+      type: "success",
+      title: items.length > 1 ? "Carreras eliminadas" : "Carrera eliminada",
+      message:
+        items.length > 1
+          ? "Carreras eliminadas correctamente"
+          : "Carrera eliminada correctamente",
+      duration: 5000,
+    });
   }, []);
 
   // Modal contents (definidos en el padre)
@@ -149,9 +169,12 @@ const UsuariosPage = () => {
   useEffect(() => {
     if (!isAdminOrSuperAdmin($role)) {
       // navergar pero que sea despues de tres segundo y que no sea del lado del cliente
-      setTimeout(() => {
+      const set = setTimeout(() => {
         window.location.href = "/";
       }, 3000);
+      setTimerID(set);
+    } else {
+      timerID && clearTimeout(timerID);
     }
   }, [$role]);
   if (!isAdminOrSuperAdmin($role)) {
@@ -167,10 +190,22 @@ const UsuariosPage = () => {
 
   return (
     <div className="p-6">
+      {toast && (
+        <Toast
+          duration={toast.duration}
+          message={toast.message}
+          title={toast.title}
+          type="success"
+          onClose={() => {
+            setToast(null);
+          }}
+        />
+      )}
       <DynamicTable
         // Datos
         data={data || []}
         columns={[
+          { accessorKey: "codigo", header: "Código" },
           { accessorKey: "nombre", header: "Nombre" },
           { accessorKey: "descripcion", header: "Descripcion" },
           {
