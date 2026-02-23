@@ -133,7 +133,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Campo Nombre */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre del Archivo</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre del Archivo <span className="text-red-600">*</span></label>
                     <input
                         {...register("nombre" as any)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all"
@@ -143,7 +143,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
 
                 {/* Campo Descripción */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Descripción</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Descripción *<span className="text-red-600">*</span></label>
                     <textarea
                         {...register("descripcion" as any)}
                         rows={3}
@@ -155,7 +155,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
                 {/* Campo Etiquetas (Tags) */}
                 <div className="mt-4 z-10">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Etiquetas
+                        Etiquetas <span className="text-red-600">*</span>
                     </label>
                     <MultiSelect
                         control={control}
@@ -172,7 +172,7 @@ export const CreateBook: FC<Props> = ({reloadLibros }) => {
 
                 {/* Campo Archivo con Preview */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Seleccionar Archivo</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Seleccionar Archivo <span className="text-red-600">*</span></label>
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-sky-400 transition-colors bg-gray-50 relative">
                         <div className="space-y-1 text-center">
                             {preview ? (

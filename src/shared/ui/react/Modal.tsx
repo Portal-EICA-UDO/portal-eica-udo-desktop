@@ -48,6 +48,7 @@ export function Modal({
     const $role = useStore(role);
     console.log(tags);
     console.log(dependency);
+    const isProfesor = typeof position === 'string' && position.toLowerCase().startsWith('profesor');
 
     return (
         <article className="max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
@@ -142,7 +143,7 @@ export function Modal({
 
 
                     {
-                        position === "Docente" && materias && materias.length > 0 ? (
+                        isProfesor && materias && materias.length > 0 ? (
                             <div className="mb-6 sm:mb-8">
                                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Materias que imparte:</h4>
                                 <ul className="space-y-2">
@@ -167,7 +168,7 @@ export function Modal({
                                     ))}
                                 </ul>
                             </div>
-                        ) : position === "Docente" ? (
+                        ) : isProfesor ? (
                             <div className="mb-6 sm:mb-8">
                                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Materias que imparte:</h4>
                                 <p className="text-gray-500 italic">No hay materias asignadas</p>

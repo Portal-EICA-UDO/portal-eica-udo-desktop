@@ -1,15 +1,22 @@
 import { useState, type FC } from "react";
 import { supabase } from '@shared/api/lib/supabaseClient';
 import { eliminarArchivo } from "@shared/ui/react/EliminarArchive";
+import Toast from "@shared/ui/react/Toast";
 type Props = {
     libroId: string;
-    reloadLibros?: () => void;
+    reloadLibros?: (Eliminado?: boolean) => void;
 }
 
 
-export const EliminarLibro: FC<Props> = ({ libroId, reloadLibros}) => {
+export const EliminarLibro: FC<Props> = ({ libroId, reloadLibros }) => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState<{
+        id: string;
+        type: "success" | "error" | "warning" | "info";
+        title: string;
+        message: string;
+    } | null>(null);
     const deleteBook = async (libroId: string) => {
         // 1. Obtener la URL del archivo antes de borrar el registro
         const { data: libro, error: fetchError } = await supabase
@@ -43,10 +50,9 @@ export const EliminarLibro: FC<Props> = ({ libroId, reloadLibros}) => {
             return;
         } finally {
             setLoading(false);
-            reloadLibros && reloadLibros();
+            reloadLibros && reloadLibros(true);
         }
     }
-
 
     return (
         <div>

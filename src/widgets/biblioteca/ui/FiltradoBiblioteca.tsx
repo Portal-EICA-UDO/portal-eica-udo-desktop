@@ -5,6 +5,8 @@ import { supabase } from '@shared/api/lib/supabaseClient';
 import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
 import { CreateBook } from './CrearLibro';
 import { ManageEtiquetas } from './GestionarEtiquetas';
+import { role } from '@features/auth/nanostore';
+import { useStore } from '@nanostores/react';
 
 interface Props {
   control: Control<any>;
@@ -18,28 +20,29 @@ export default function FiltradoBiblioteca({ control, name = 'interests', reload
   const { field: nameField } = useController({ name: 'name', control, defaultValue: '' });
 
   const loadEtiquetas = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('etiquetas')
-          .select('id, nombre');
-        if (error) throw error;
-        if (Array.isArray(data)) {
-          // Use tag name as id so the multi-select returns tag names (matches libro.etiquetas)
-          setOptions(data.map((e: any) => ({ id: e.nombre, name: e.nombre })));
-        }
-      } catch (err) {
-        console.error('loadEtiquetas error:', err);
+    try {
+      const { data, error } = await supabase
+        .from('etiquetas')
+        .select('id, nombre');
+      if (error) throw error;
+      if (Array.isArray(data)) {
+        // Use tag name as id so the multi-select returns tag names (matches libro.etiquetas)
+        setOptions(data.map((e: any) => ({ id: e.nombre, name: e.nombre })));
       }
-    };
-    
+    } catch (err) {
+      console.error('loadEtiquetas error:', err);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
-    
+
     loadEtiquetas();
     return () => {
       mounted = false;
     };
   }, []);
+  const $role = useStore(role);
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 space-y-6 mb-4">
@@ -48,14 +51,16 @@ export default function FiltradoBiblioteca({ control, name = 'interests', reload
           <h2 className="text-2xl font-bold text-gray-800">Biblioteca</h2>
           <p className="text-gray-600 mt-1">Buscar libros por nombre y etiquetas</p>
         </div>
-        <div className="flex gap-2">
-          <RCActiveModalButton label="Agregar Libro" icon="📚">
-            <CreateBook reloadLibros={reloadLibros} />
-          </RCActiveModalButton>
-          <RCActiveModalButton label="Etiquetas" icon="🏷️">
-            <ManageEtiquetas reloadEtiquetas={loadEtiquetas} />
-          </RCActiveModalButton>
-        </div>
+        {$role === 'admin' || $role === 'superAdmin' ? (
+          <div className="flex gap-2">
+            <RCActiveModalButton label="Agregar Libro" icon="📚">
+              <CreateBook reloadLibros={reloadLibros} />
+            </RCActiveModalButton>
+            <RCActiveModalButton label="Etiquetas" icon="🏷️">
+              <ManageEtiquetas reloadEtiquetas={loadEtiquetas} />
+            </RCActiveModalButton>
+          </div>
+        ) : null}
       </div>
 
       <div className="space-y-3">

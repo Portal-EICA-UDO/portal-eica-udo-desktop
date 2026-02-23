@@ -89,20 +89,20 @@ const ComentarioCard: React.FC<ComentarioCardProps> = ({ comment, currentUser, o
 
                 <div className='mt-2 flex items-center space-x-4'>
                     {replies.length > 0 && (
-                        <button onClick={() => setShowReplies(prev => !prev)} className='flex items-center text-xs text-blue-500 hover:text-blue-600 font-medium transition-colors'>
+                        <button onClick={() => setShowReplies(prev => !prev)} className='flex items-center text-xs text-blue-500 hover:text-blue-600 font-medium transition-colors cursor-pointer'>
                             <MessageSquare className="w-3 h-3 mr-1" />
                             {replies.length > 0 ? `Ver ${replies.length} respuesta${replies.length > 1 ? 's' : ''}` : 'Ver respuestas'}
                         </button>
                     )}
 
                     {$role !== 'unauthenticated' && $role !== 'vacio' && (
-                        <button onClick={() => { setShowReplyForm(prev => !prev); setShowReplies(true); }} className='text-xs text-gray-600 hover:text-gray-700 font-medium'>
+                        <button onClick={() => { setShowReplyForm(prev => !prev); setShowReplies(true); }} className='text-xs text-gray-600 hover:text-gray-700 font-medium cursor-pointer'>
                             Responder
                         </button>
                     )}
 
                     {($role === 'admin' || $role === 'superAdmin') && (
-                        <button onClick={() => onDelete?.(comment.id, false)} className="text-xs text-red-600 hover:text-red-700">Eliminar</button>
+                        <button onClick={() => onDelete?.(comment.id, false)} className="text-xs text-red-600 hover:text-red-700 cursor-pointer">Eliminar</button>
                     )}
                 </div>
 
@@ -111,8 +111,8 @@ const ComentarioCard: React.FC<ComentarioCardProps> = ({ comment, currentUser, o
                         <textarea value={replyContent} onChange={e => setReplyContent(e.target.value)} rows={2} placeholder="Escribe tu respuesta..."
                             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm resize-none" />
                         <div className="mt-2 flex justify-end space-x-2">
-                            <button type="button" onClick={() => setShowReplyForm(false)} className="px-3 py-1 text-xs bg-gray-200 rounded-md">Cancelar</button>
-                            <button type="submit" disabled={isReplySubmitting || !replyContent.trim()} className="px-3 py-1 text-xs bg-blue-600 text-white rounded-md disabled:opacity-50">{isReplySubmitting ? 'Enviando...' : 'Responder'}</button>
+                            <button type="button" onClick={() => setShowReplyForm(false)} className="px-3 py-1 text-xs bg-gray-200 rounded-md cursor-pointer">Cancelar</button>
+                            <button type="submit" disabled={isReplySubmitting || !replyContent.trim()} className="cursor-pointer px-3 py-1 text-xs bg-blue-600 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed">{isReplySubmitting ? 'Enviando...' : 'Responder'}</button>
                         </div>
                     </form>
                 )}
@@ -135,7 +135,7 @@ const ComentarioCard: React.FC<ComentarioCardProps> = ({ comment, currentUser, o
                                         <p className="text-sm text-gray-700 mt-1 whitespace-pre-wrap">{r.contenido}</p>
                                         {($role === 'admin' || $role === 'superAdmin') && (
                                             <div className="mt-2">
-                                                <button onClick={() => onDelete?.(r.id, true)} className="text-xs text-red-600 hover:text-red-700">Eliminar</button>
+                                                <button onClick={() => onDelete?.(r.id, true)} className="text-xs text-red-600 hover:text-red-700 cursor-pointer">Eliminar</button>
                                             </div>
                                         )}
                                     </div>
@@ -386,14 +386,14 @@ const ComentariosModal: React.FC<ComentariosModalProps> = ({ idComunicado, onClo
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting || !newCommentContent.trim()}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? 'Enviando...' : 'Enviar'}
                                 </button>
@@ -411,8 +411,8 @@ const ComentariosModal: React.FC<ComentariosModalProps> = ({ idComunicado, onClo
                                 <h3 className="text-lg font-semibold mb-2">Confirmar eliminación</h3>
                                 <p className="text-sm text-gray-600 mb-4">¿Seguro que deseas eliminar este comentario? Esta acción no se puede deshacer.</p>
                                 <div className="flex justify-end space-x-2">
-                                    <button onClick={() => { setDeleteModalOpen(false); setDeleteTarget(null); }} className="px-3 py-1 bg-gray-200 rounded">Cancelar</button>
-                                    <button onClick={() => performDelete(deleteTarget.id, deleteTarget.isChild)} disabled={isDeleting} className="px-3 py-1 bg-red-600 text-white rounded">{isDeleting ? 'Eliminando...' : 'Eliminar'}</button>
+                                    <button onClick={() => { setDeleteModalOpen(false); setDeleteTarget(null); }} className="px-3 py-1 bg-gray-200 rounded cursor-pointer">Cancelar</button>
+                                    <button onClick={() => performDelete(deleteTarget.id, deleteTarget.isChild)} disabled={isDeleting} className="px-3 py-1 bg-red-600 text-white rounded cursor-pointer">{isDeleting ? 'Eliminando...' : 'Eliminar'}</button>
                                 </div>
                             </div>
                         </div>
