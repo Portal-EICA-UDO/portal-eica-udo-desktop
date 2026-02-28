@@ -47,7 +47,7 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <h2>Eliminar usuarios</h2>
       <p>
         ¿Estás seguro de que deseas eliminar{" "}
@@ -58,7 +58,7 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
       </p>
       <button
         type="button"
-        className="px-4 py-2 rounded bg-sky-700 text-white"
+        className="px-4 py-2 rounded bg-[#0A5C8D] hover:scale-105 text-white transition-transform cursor-pointer"
         onClick={handleDelete}
       >
         {isLoading ? "Eliminando..." : "Eliminar"}

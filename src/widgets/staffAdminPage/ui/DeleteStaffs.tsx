@@ -34,7 +34,7 @@ export const DeleteStaffs: FC<Props> = ({ data, onSuccess }) => {
       </p>
       <button
         type="button"
-        className="px-4 py-2 rounded bg-[#0A5C8D] hover:scale-105 text-white transition-transform "
+        className="px-4 py-2 rounded bg-[#0A5C8D] hover:scale-105 text-white transition-transform cursor-pointer"
         onClick={handleDelete}
       >
         {isLoading ? "Eliminando..." : "Eliminar"}
