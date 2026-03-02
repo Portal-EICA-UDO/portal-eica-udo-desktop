@@ -29,7 +29,9 @@ export const Schools = () => {
             dependencias: escuela.dependencias.map((dep: any) => {
               return {
                 nombre: dep.nombre,
-                coordinador: dep.staff.nombre + " " + dep.staff.apellido,
+                coordinador: dep.staff
+                  ? dep.staff.nombre + " " + dep.staff.apellido
+                  : "Sin coordinador",
               };
             }),
           };
