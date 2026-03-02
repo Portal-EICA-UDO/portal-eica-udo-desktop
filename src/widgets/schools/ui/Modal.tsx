@@ -117,11 +117,13 @@ export const Modal: React.FC<props> = ({ school: schoolData }) => {
                 (schoolData.dependencias || []).map((d, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center p-2 bg-gray-50 rounded gap-1"
+                    className="flex justify-between sm:items-center p-2 bg-gray-50 rounded gap-1 sm:flex-row items-start flex-col"
                   >
                     <div className="font-medium text-gray-800">{d.nombre}</div>
-                    <div className="text-sm text-gray-600">
-                      Coordinador: {d.coordinador}
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      <span className="text-xs text-[#0A5C8D] bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                        👤 {d.coordinador}
+                      </span>
                     </div>
                   </div>
                 ))
