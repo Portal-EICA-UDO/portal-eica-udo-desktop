@@ -15,14 +15,9 @@ import {
 
 const SUPER_ADMIN_LINKS: Link[] = [
   {
-    label: "Crear Usuarios",
-    href: "/privado/crear-usuarios",
-    admin: true,
-  },
-  {
-    label: "Biblioteca",
-    href: "/biblioteca",
-    icon: <LibraryBig />,
+    label: "Escuelas",
+    href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Carreras",
@@ -30,24 +25,29 @@ const SUPER_ADMIN_LINKS: Link[] = [
     icon: <GraduationCap />,
   },
   {
-    label: "Comunicados",
-    href: "/comunicados",
-    icon: <MessageSquareText />,
-  },
-  {
     label: "Staff",
     href: "/staff",
     icon: <SquareUserRound />,
   },
   {
-    label: "Escuelas",
-    href: "/escuelas",
-    icon: <School />,
+    label: "Comunicados",
+    href: "/comunicados",
+    icon: <MessageSquareText />,
+  },
+  {
+    label: "Biblioteca",
+    href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Realizar una pregunta",
     href: "/preguntas",
     icon: <MailQuestionMark />,
+  },
+  {
+    label: "Crear Usuarios",
+    href: "/privado/crear-usuarios",
+    admin: true,
   },
   {
     label: "Escuelas",
@@ -77,9 +77,9 @@ const SUPER_ADMIN_LINKS: Link[] = [
 ];
 const ADMIN_LINKS = [
   {
-    label: "Biblioteca",
-    href: "/biblioteca",
-    icon: <LibraryBig />,
+    label: "Escuelas",
+    href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Carreras",
@@ -87,19 +87,19 @@ const ADMIN_LINKS = [
     icon: <GraduationCap />,
   },
   {
-    label: "Comunicados",
-    href: "/comunicados",
-    icon: <MessageSquareText />,
-  },
-  {
     label: "Staff",
     href: "/staff",
     icon: <SquareUserRound />,
   },
   {
-    label: "Escuelas",
-    href: "/escuelas",
-    icon: <School />,
+    label: "Comunicados",
+    href: "/comunicados",
+    icon: <MessageSquareText />,
+  },
+  {
+    label: "Biblioteca",
+    href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Realizar una pregunta",
@@ -134,9 +134,9 @@ const ADMIN_LINKS = [
 ];
 const USER_LINKS = [
   {
-    label: "Biblioteca",
-    href: "/biblioteca",
-    icon: <LibraryBig />,
+    label: "Escuelas",
+    href: "/escuelas",
+    icon: <School />,
   },
   {
     label: "Carreras",
@@ -144,19 +144,19 @@ const USER_LINKS = [
     icon: <GraduationCap />,
   },
   {
-    label: "Comunicados",
-    href: "/comunicados",
-    icon: <MessageSquareText />,
-  },
-  {
     label: "Staff",
     href: "/staff",
     icon: <SquareUserRound />,
   },
   {
-    label: "Escuelas",
-    href: "/escuelas",
-    icon: <School />,
+    label: "Comunicados",
+    href: "/comunicados",
+    icon: <MessageSquareText />,
+  },
+  {
+    label: "Biblioteca",
+    href: "/biblioteca",
+    icon: <LibraryBig />,
   },
   {
     label: "Realizar una pregunta",

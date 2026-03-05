@@ -38,7 +38,6 @@ export const Schools = () => {
         });
         if (error) throw error;
         setData(newData || []);
-        console.log(data);
       } catch (e) {
         setError(e as any);
       } finally {
@@ -57,7 +56,6 @@ export const Schools = () => {
   }
 
   if (error) {
-    console.log("Renderizando error:", error);
     return (
       <div className="col-span-full text-center py-12">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">

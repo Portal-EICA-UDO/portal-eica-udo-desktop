@@ -59,8 +59,7 @@ export const UpdateDegrees: React.FC<props> = ({
 
   useEffect(() => {
     const file = watchedFile?.[0];
-    console.log("file: ", file);
-    console.log("initialData: ", initialData);
+
     if (file) {
       const isImage = file.type.startsWith("image/");
       if (isImage) {
@@ -105,7 +104,6 @@ export const UpdateDegrees: React.FC<props> = ({
     // Si no hay archivo nuevo, usar la imagen existente del servidor (si la hay)
     if (initialData && initialData.imagen_url) {
       setImagePreview(getImageUrl("carreras-imagenes", initialData.imagen_url));
-      console.log(getImageUrl("carreras-imagenes", initialData.imagen_url));
     } else {
       setImagePreview(null);
     }
@@ -114,8 +112,6 @@ export const UpdateDegrees: React.FC<props> = ({
   }, [imageFile]);
 
   const onSubmit = async (data: FormData) => {
-    console.log("data: ", data);
-    console.log("imageFile: ", watchedFile[0], initialData.horario_url);
     let fileResponse = null;
     try {
       if (!!data.imagen_url) {
@@ -168,18 +164,6 @@ export const UpdateDegrees: React.FC<props> = ({
         horario_url: horario_url,
         nombre_horario: nombre_horario,
       });
-      // console.log({
-      //   id: initialData.id,
-      //   nombre: data.nombre,
-      //   descripcion: data.descripcion,
-      //   escuela: schools.find((op) => op.id === data.escuela)?.nombre as string,
-      //   imagen_url: (data.imagen_url as any)?.nombre || initialData.imagen_url,
-      //   escuela_id: data.escuela,
-      //   codigo: data.codigo,
-      //   horario_url: (watchedFile[0] as any)?.name || initialData.horario_url,
-      //   nombre_horario:
-      //     (watchedFile[0] as any)?.name || initialData.nombre_horario,
-      // });
       setSuccessMsg("Carrera creada correctamente");
     } catch (err: any) {
       setSuccessMsg(null);

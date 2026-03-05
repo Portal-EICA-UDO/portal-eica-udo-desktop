@@ -95,8 +95,6 @@ export const updateDependence = async (
   },
   id: string,
 ) => {
-  console.log(formData);
-  console.log(id);
   const { data, error } = await supabase
     .from("dependencias")
     .update(formData)

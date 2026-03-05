@@ -55,7 +55,6 @@ export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
         ...data,
         codigo: data.codigo ? data.codigo : "sin codigo",
       });
-      console.log(schoolData);
       onSuccess({
         id: schoolData.id,
         carreras: [
@@ -77,7 +76,6 @@ export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
       });
 
       setSuccessMsg("Escuela creada correctamente");
-      console.log(data);
     } catch (error) {
       setErrorMsg("Error al crear la escuela");
     }

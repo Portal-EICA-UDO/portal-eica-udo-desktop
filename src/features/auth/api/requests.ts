@@ -14,7 +14,7 @@ export const loginRequest = async (loginData: LoginData) => {
 
 export const signUpRequest = async (
   loginData: LoginData,
-  userData?: UserData
+  userData?: UserData,
 ) => {
   const { data, error } = await supabase.auth.signUp({
     email: loginData.email,
@@ -62,7 +62,6 @@ export const logoutRequest = async () => {
 };
 
 export const getProfileRequest = async (userID: string) => {
-  console.log("userID: ", userID);
   const { data, error } = await supabase
     .from("roles")
     .select("*")
@@ -71,7 +70,5 @@ export const getProfileRequest = async (userID: string) => {
   if (error) {
     throw new Error();
   }
-  console.log("data: ", data);
-  console.log("profile: ", data[0]);
   return data[0];
 };

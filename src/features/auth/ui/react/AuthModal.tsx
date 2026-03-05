@@ -49,8 +49,6 @@ export const AuthModal: React.FC = () => {
         name.set(profile.name);
         fullName.set(profile.full_name);
       }
-
-      console.log(resp);
     } catch (err: any) {
       setErrorMsg(err.message || "Error al iniciar sesión");
     } finally {

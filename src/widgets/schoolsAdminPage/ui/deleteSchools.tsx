@@ -16,7 +16,6 @@ export const DeleteSchools: FC<Props> = ({ data, onSuccess }) => {
     setLoading(true);
     try {
       await deleteSchools(data.map((item) => item.id));
-      console.log("Carreras eliminadas correctamente: ", data);
       onSuccess();
     } catch (error) {
       console.error(error);

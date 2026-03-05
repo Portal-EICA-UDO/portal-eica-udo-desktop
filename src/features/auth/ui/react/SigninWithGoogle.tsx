@@ -1,9 +1,6 @@
-import { supabase } from "@shared/api";
-import { useEffect, useState, type JSX } from "react";
-import { email, role, name } from "../../nanostore";
+import { useState } from "react";
+import { role } from "../../nanostore";
 import { useStore } from "@nanostores/react";
-import { Circle, CircleUserRound, ChevronDown } from "lucide-react";
-import { ShieldUser } from "lucide-react";
 
 import type { Session } from "@supabase/supabase-js";
 import { signUpWithOAuthRequest } from "@features/auth/api/requests";

@@ -38,13 +38,7 @@ const { siteTitle, description } = Astro.props;
       chargingContainer.classList.remove("hidden");
       chargingContainer.classList.add("flex");
     }
-    console.log(ev.loader);
     // This event is triggered before the page is prepared
-    console.log("Preparando la página...");
-  });
-  document.addEventListener("astro:after-preparation", () => {
-    // This event is triggered before the page is prepared
-    console.log("Página preparada");
   });
   document.addEventListener("astro:after-swap", () => {
     const chargingContainer = document.querySelector(".charging-container");
@@ -54,7 +48,6 @@ const { siteTitle, description } = Astro.props;
       chargingContainer.classList.add("hidden");
     }
     // This event is triggered after the page transition
-    console.log("Página cargada");
   });
 </script>
 

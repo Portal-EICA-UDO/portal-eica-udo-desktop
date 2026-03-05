@@ -21,7 +21,6 @@ export const getSchools = async () => {
         count
       )
   `);
-  console.log("Schools data:", data);
 
   if (error) {
     throw new Error(error.message);
@@ -31,7 +30,6 @@ export const getSchools = async () => {
 };
 
 export const createSchool = async (schoolData: SchoolCreateFormData) => {
-  console.log("Creating school with data:", schoolData);
   const { data, error } = await supabase
     .from("escuelas")
     .insert(schoolData)

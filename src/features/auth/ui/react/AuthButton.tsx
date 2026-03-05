@@ -28,7 +28,6 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
         const profile = await getProfileRequest(user.id);
 
         if (profile) {
-          console.log("estoy entrandoooooo");
           role.set(profile.role_name);
           email.set(profile.email as string);
           name.set(profile.name);
@@ -40,18 +39,13 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(event, session);
       !session && role.set("unauthenticated");
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log($role);
-  }, [$role]);
   const signOut = async () => {
-    console.log("signing out");
     await logoutRequest();
     role.set("unauthenticated");
     email.set("");

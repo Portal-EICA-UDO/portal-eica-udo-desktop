@@ -41,7 +41,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
         if (mounted) setLoadingOptions(false);
       }
     })();
-    console.log("opciones: ", opciones);
+
     return () => {
       mounted = false;
     };
@@ -117,7 +117,7 @@ export const CreateDegrees: FC<Props> = ({ onSuccess }) => {
   const onSubmit = async (data: FormData) => {
     setErrorMsg(null);
     setSuccessMsg(null);
-    console.log("data: ", data, watchedFile[0]?.name, watchedFile, imageFile);
+
     try {
       // verificar unicidad del nombre en el submit
       clearErrors("nombre");
