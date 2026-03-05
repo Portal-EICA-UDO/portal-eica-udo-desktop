@@ -76,7 +76,7 @@ export const AuthButton: React.FC<props> = ({ drawer }) => {
       <div className="flex gap-1.5 md:w-auto w-full items-center  justify-between">
         <div
           onClick={signOut}
-          className="px-3 py-2.5  flex relative text-center gap-1  text-(length:--font-default) font-medium rounded-full  text-red-400    border-2 border-red-400 hover:scale-105 transition"
+          className="px-3 py-2.5  flex relative text-center gap-1  text-(length:--font-default) font-medium rounded-full  text-red-400    border-2 border-red-400 hover:scale-105 transition cursor-pointer"
         >
           <div className="w-max h-full">Cerrar Sesion</div>
           {/* <div className=" w-full h-full">{$name.split(" ")[0]}</div> */}
