@@ -24,7 +24,7 @@ interface TableHeaderProps {
   onApplyFilter?: (
     filterKey: string,
     value: any,
-    type: FilterConfig["type"]
+    type: FilterConfig["type"],
   ) => void;
   onClearFilter?: (filterKey: string) => void;
   onClearAllFilters?: () => void;
@@ -67,25 +67,13 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   } = useFilterState(filters);
 
   useEffect(() => {
-    console.log("activeFilters: ", activeFilters);
     if (activeFilters.length <= 0) {
-      console.log("no active filters");
-
       //limpiar filtros
       clearAllFilterValues();
     }
   }, [activeFilters]);
 
-  useEffect(() => {
-    console.log(
-      "selectedCount: ",
-      selectedCount,
-      "canEdit: ",
-      canEdit,
-      "canDelete: ",
-      canDelete
-    );
-  }, [selectedCount, canEdit, canDelete]);
+  useEffect(() => {}, [selectedCount, canEdit, canDelete]);
 
   const selectedFilter = filters.find((f) => f.key === selectedFilterKey);
 
@@ -179,7 +167,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
                   updateFilterRange(
                     selectedFilter.key,
                     e.target.value ? Number(e.target.value) : undefined,
-                    currentRange.max
+                    currentRange.max,
                   )
                 }
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -193,7 +181,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
                   updateFilterRange(
                     selectedFilter.key,
                     currentRange.min,
-                    e.target.value ? Number(e.target.value) : undefined
+                    e.target.value ? Number(e.target.value) : undefined,
                   )
                 }
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

@@ -105,7 +105,6 @@ export const uploadDegreeImage = async (file: File) => {
       upsert: false,
     });
   if (error) {
-    console.log("Error uploading image:", error);
     throw new Error(
       "Hubó un error al subir la imagen. Por favor compruebe que no tenga el mismo nombre de otra imagen.",
     );

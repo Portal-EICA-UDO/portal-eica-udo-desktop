@@ -20,8 +20,6 @@ export const DeleteDependences: FC<Props> = ({ data, onSuccess }) => {
     try {
       await deleteDependences(data.map((item) => item.id));
       onSuccess();
-
-      console.log("Carreras eliminadas correctamente: ", data);
     } catch (error) {
       if (data.length === 1) {
         setSuccessMsg("Dependencia eliminada correctamente");

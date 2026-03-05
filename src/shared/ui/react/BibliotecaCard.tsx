@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from '@shared/ui/react/Card';
-import { RCActiveModalButton } from '@shared/ui/react/RCModalButton';
-import { Modal } from '@shared/ui/react/Modal';
+import React, { useEffect, useState } from "react";
+import { Card } from "@shared/ui/react/Card";
+import { RCActiveModalButton } from "@shared/ui/react/RCModalButton";
+import { Modal } from "@shared/ui/react/Modal";
 
 type Props = {
   libro: any;
@@ -37,37 +37,43 @@ function driveThumbnailUrl(driveId: string, size = 600) {
 }
 
 function isHttpUrl(value: any) {
-  return typeof value === 'string' && /^(https?:)?\/\//.test(value);
+  return typeof value === "string" && /^(https?:)?\/\//.test(value);
 }
 
 // Render first page of PDF to dataURL using pdf.js
 async function renderPdfToDataUrl(url: string) {
   try {
-    const pdfjs = await import('pdfjs-dist/legacy/build/pdf');
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf");
     // @ts-ignore
     pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
     const loadingTask = pdfjs.getDocument({ url });
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 1.5 });
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     if (!ctx) return null;
     canvas.width = viewport.width;
     canvas.height = viewport.height;
     const renderTask = page.render({ canvasContext: ctx, viewport });
     await renderTask.promise;
-    const dataUrl = canvas.toDataURL('image/png');
-    try { pdf.destroy(); } catch (e) {}
+    const dataUrl = canvas.toDataURL("image/png");
+    try {
+      pdf.destroy();
+    } catch (e) {}
     return dataUrl;
   } catch (err) {
-    console.error('renderPdfToDataUrl error:', err);
+    console.error("renderPdfToDataUrl error:", err);
     return null;
   }
 }
 
-export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros }: Props) {
-  const [thumbnail, setThumbnail] = useState<string>('/images/placeholder.png');
+export default function BibliotecaCard({
+  libro,
+  onOpenDescription,
+  reloadLibros,
+}: Props) {
+  const [thumbnail, setThumbnail] = useState<string>("/images/placeholder.png");
 
   useEffect(() => {
     let mounted = true;
@@ -77,14 +83,14 @@ export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros 
       if (isHttpUrl(libro.portada)) {
         if (mounted) {
           setThumbnail(libro.portada);
-          console.debug('BibliotecaCard: using portada', libro.portada);
+          console.debug("BibliotecaCard: using portada", libro.portada);
         }
         return;
       }
       if (isHttpUrl(libro.imagen_url)) {
         if (mounted) {
           setThumbnail(libro.imagen_url);
-          console.debug('BibliotecaCard: using imagen_url', libro.imagen_url);
+          console.debug("BibliotecaCard: using imagen_url", libro.imagen_url);
         }
         return;
       }
@@ -95,16 +101,16 @@ export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros 
         if (mounted) {
           const src = driveThumbnailUrl(id, 600);
           setThumbnail(src);
-          console.debug('BibliotecaCard: using drive thumbnail', src);
+          console.debug("BibliotecaCard: using drive thumbnail", src);
         }
         return;
       }
 
-      if (typeof url === 'string' && url.toLowerCase().endsWith('.pdf')) {
+      if (typeof url === "string" && url.toLowerCase().endsWith(".pdf")) {
         const dataUrl = await renderPdfToDataUrl(url);
         if (dataUrl && mounted) {
           setThumbnail(dataUrl);
-          console.debug('BibliotecaCard: rendered PDF to dataUrl');
+          console.debug("BibliotecaCard: rendered PDF to dataUrl");
           return;
         }
       }
@@ -116,24 +122,24 @@ export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros 
           if (mounted) {
             const src = driveViewUrl(id2);
             setThumbnail(src);
-            console.debug('BibliotecaCard: using drive view url', src);
+            console.debug("BibliotecaCard: using drive view url", src);
           }
           return;
         }
         if (mounted) {
           setThumbnail(url);
-          console.debug('BibliotecaCard: using raw url', url);
+          console.debug("BibliotecaCard: using raw url", url);
         }
         return;
       }
 
       // final fallback to placeholder (ensures no null/empty src)
-      if (mounted) setThumbnail((prev) => prev || '/images/placeholder.png');
-
-      
+      if (mounted) setThumbnail((prev) => prev || "/images/placeholder.png");
     };
     load();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [libro]);
 
   const getDownloadHref = (lib: any) => {
@@ -149,24 +155,30 @@ export default function BibliotecaCard({ libro, onOpenDescription, reloadLibros 
   const downloadHref = getDownloadHref(libro);
 
   return (
-    <Card imageSrc={thumbnail ?? '/images/placeholder.png'} title={libro.nombre}>
+    <Card
+      imageSrc={thumbnail ?? "/images/placeholder.png"}
+      title={libro.nombre}
+    >
       <div className="flex items-center gap-2">
         {libro.descripcion && (
           <RCActiveModalButton label={"Descripción"}>
             <Modal
               id={libro.id}
               title={libro.nombre}
-              imageSrc={thumbnail ?? '/images/placeholder.png'}
+              imageSrc={thumbnail ?? "/images/placeholder.png"}
               imageAlt={libro.nombre}
               description={libro.descripcion}
               tags={(() => {
                 const etiquetas = libro.etiquetas ?? [];
-                console.log('Raw etiquetas:', etiquetas);
                 let arr = etiquetas;
-                if (typeof etiquetas === 'string') {
-                  try { arr = JSON.parse(etiquetas); } catch { arr = []; }
+                if (typeof etiquetas === "string") {
+                  try {
+                    arr = JSON.parse(etiquetas);
+                  } catch {
+                    arr = [];
+                  }
                 }
-                console.log('Parsed etiquetas:', arr);
+
                 arr = Object.values(arr);
                 if (!Array.isArray(arr)) arr = [];
                 return arr.map((a: any) => String(a));

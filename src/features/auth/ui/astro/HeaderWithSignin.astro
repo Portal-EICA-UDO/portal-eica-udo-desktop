@@ -3,7 +3,6 @@
 import Header from "@shared/ui/astro/Header.astro";
 // icons
 import { AuthButton } from "../react/AuthButton";
-import Drawer from "@shared/ui/react/Drawer";
 import { AuthDrawer } from "../react/AuthDrawer";
 ---
 
@@ -15,23 +14,4 @@ import { AuthDrawer } from "../react/AuthDrawer";
       </div>
     </AuthButton>
   </div>
-
-  <!-- <script>
-  import { supabase } from "@shared/api";
-
-  const { data, error } = await supabase.from("staff").select(`
-  id,
-  nombre,
-  carreras (
-    id,
-    nombre,
-    materias (
-      id,
-      nombre
-    )
-  )
-`);
-  console.log(`data`, data);
-  console.log(`error`, error);
-</script> -->
 </Header>

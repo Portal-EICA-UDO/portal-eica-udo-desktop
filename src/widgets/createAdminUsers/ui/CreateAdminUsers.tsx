@@ -14,7 +14,7 @@ export const CreateAdminUsers = () => {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const $role = useStore(role);
-  console.log("role desde create admin", $role);
+
   const {
     register: registerRegister,
     handleSubmit: handleRegisterSubmit,
@@ -24,7 +24,7 @@ export const CreateAdminUsers = () => {
   const onRegister = async (data: RegisterForm) => {
     setErrorMsg(null);
     setLoading(true);
-    console.log(data);
+
     try {
       const signupData = await signUpRequest(data, {
         email: data.email,
@@ -32,7 +32,6 @@ export const CreateAdminUsers = () => {
         full_name: data.fullName,
       });
 
-      console.log("signupData: ", signupData);
       //actualizar el role_name del usuario en la tabla roles siempre y cuando asi lo haya creado
       if (signupData.user !== null && data.role === "admin") {
         const user_id = signupData.user.id;

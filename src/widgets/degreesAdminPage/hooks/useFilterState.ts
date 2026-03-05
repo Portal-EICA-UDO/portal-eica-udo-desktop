@@ -5,7 +5,7 @@ import { fi } from "zod/locales";
 
 export const useFilterState = (initialFilters: FilterConfig[] = []) => {
   const [selectedFilterKey, setSelectedFilterKey] = useState<string | null>(
-    null
+    null,
   );
 
   // Estado para valores de cada filtro individual
@@ -30,7 +30,7 @@ export const useFilterState = (initialFilters: FilterConfig[] = []) => {
         [key]: { min, max },
       }));
     },
-    []
+    [],
   );
 
   // Obtener valor actual de un filtro
@@ -38,7 +38,7 @@ export const useFilterState = (initialFilters: FilterConfig[] = []) => {
     (key: string) => {
       return filterValues[key];
     },
-    [filterValues]
+    [filterValues],
   );
 
   // Obtener rango actual de un filtro
@@ -46,7 +46,7 @@ export const useFilterState = (initialFilters: FilterConfig[] = []) => {
     (key: string) => {
       return filterRanges[key] || {};
     },
-    [filterRanges]
+    [filterRanges],
   );
 
   // Limpiar valores de un filtro específico
@@ -63,10 +63,6 @@ export const useFilterState = (initialFilters: FilterConfig[] = []) => {
       return newRanges;
     });
   }, []);
-
-  useEffect(() => {
-    console.log("filterValues: ", filterValues);
-  }, [filterValues]);
 
   // Limpiar todos los valores
   const clearAllFilterValues = useCallback(() => {

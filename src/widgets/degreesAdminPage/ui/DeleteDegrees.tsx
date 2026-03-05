@@ -14,7 +14,6 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
   const [isLoading, setLoading] = useState(false);
 
   const handleDelete = async () => {
-    console.log("data: ", data);
     setLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -37,7 +36,6 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
 
       onSuccess();
       setSuccessMsg("Carreras eliminadas correctamente");
-      console.log("Carreras eliminadas correctamente: ", data);
     } catch (error) {
       setErrorMsg("Error al eliminar las carreras");
       console.error(error);

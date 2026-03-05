@@ -291,10 +291,6 @@ export const DynamicTable = <T extends { id: string | number }>({
                 pageIndex: 0,
                 pageSize: Number(e.target.value),
               });
-              console.log({
-                pageIndex: 0,
-                pageSize: Number(e.target.value),
-              });
             }}
             className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 "
           >
