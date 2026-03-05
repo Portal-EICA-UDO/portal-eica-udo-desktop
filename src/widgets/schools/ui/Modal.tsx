@@ -65,7 +65,7 @@ export const Modal: React.FC<props> = ({ school: schoolData }) => {
     <article className="container mx-auto p-6 md:p-8 lg:p-10 bg-white  rounded-xl max-w-4xl mt-10 w-full grid md:grid-cols-3 gap-4 grid-cols-1 ">
       {/* Nombre de la escuela */}
       <div className="flex  text-center self-center md:gap-4 flex-col gap-2">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-[#0A5C8D] leading-tight">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-[#0A5C8D] leading-tight hyphens-auto">
           {schoolData.nombre}
         </h1>
         <p className="text-lg text-gray-600 ">

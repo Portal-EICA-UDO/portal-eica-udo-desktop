@@ -25,6 +25,8 @@ export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
   });
 
   const onSubmit = async (data: FormData) => {
+    setErrorMsg(null);
+    setSuccessMsg(null);
     try {
       // verificar unicidad del nombre en el submit
       clearErrors("nombre");
@@ -66,7 +68,7 @@ export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
             count: 0,
           },
         ],
-        codigo: data.codigo ? data.codigo : "sin codigo",
+        codigo: data.codigo ? data.codigo : null,
         descripcion: data.descripcion,
         mision: data.mision,
         nombre: data.nombre,
@@ -77,7 +79,7 @@ export const CreateSchools: React.FC<Props> = ({ onSuccess }) => {
       setSuccessMsg("Escuela creada correctamente");
       console.log(data);
     } catch (error) {
-      console.error(error);
+      setErrorMsg("Error al crear la escuela");
     }
   };
   return (

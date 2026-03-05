@@ -65,7 +65,7 @@ export const Drawer: React.FC<DrawerProps> = ({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className=" text-center hover:bg-transparent px-4 py-1 md:text-(length:--font-default) font-medium rounded-full border border-sky-700 text-[#0A5C8D] hover:scale-105 transition "
+        className=" text-center hover:bg-transparent px-4 py-1 md:text-(length:--font-default) font-medium rounded-full border border-sky-700 text-[#0A5C8D] hover:scale-105 transition cursor-pointer"
         aria-expanded={open}
         aria-controls="site-drawer"
       >

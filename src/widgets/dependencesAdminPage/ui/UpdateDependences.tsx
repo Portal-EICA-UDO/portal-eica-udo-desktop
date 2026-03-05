@@ -83,7 +83,7 @@ export const UpdateDependences: React.FC<Props> = ({
       }
       const dependenceData = await updateDependence(
         {
-          codigo: data.codigo,
+          codigo: data.codigo ? data.codigo : null,
           nombre: data.nombre,
           vision: data.vision,
           mision: data.mision,
