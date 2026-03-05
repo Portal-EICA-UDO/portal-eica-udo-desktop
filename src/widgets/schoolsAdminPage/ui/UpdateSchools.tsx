@@ -57,7 +57,10 @@ export const UpdateSchools: React.FC<Props> = ({ initialData, onSuccess }) => {
           return;
         }
       }
-      const schoolData = updateSchool(initialData.id, data);
+      const schoolData = updateSchool(initialData.id, {
+        ...data,
+        codigo: data.codigo ? data.codigo : null,
+      });
       onSuccess({
         ...initialData,
         ...data,

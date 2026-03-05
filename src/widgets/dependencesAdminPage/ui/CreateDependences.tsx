@@ -38,6 +38,8 @@ export const CreateDependences: React.FC<Props> = ({
   });
 
   const onSubmit = async (data: FormData) => {
+    setErrorMsg(null);
+    setSuccessMsg(null);
     try {
       // verificar unicidad del codigo en el submit
       if (data.codigo) {
@@ -66,7 +68,7 @@ export const CreateDependences: React.FC<Props> = ({
       }
 
       const dependenceData = await createDependence({
-        codigo: data.codigo,
+        codigo: data.codigo ? data.codigo : null,
         nombre: data.nombre,
         vision: data.vision,
         mision: data.mision,
