@@ -31,7 +31,7 @@ export const DeleteDegrees: FC<Props> = ({ data, onSuccess }) => {
 
       await Promise.all(
         data.map(async (item) => {
-          await eliminarArchivo(item.horario_url);
+          if (item.horario_url) await eliminarArchivo(item.horario_url);
         }),
       );
 

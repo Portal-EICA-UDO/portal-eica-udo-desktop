@@ -208,7 +208,8 @@ export const uploadStaffImage = async (file: File) => {
   }
 };
 
-export const updateStaffImage = async (file: File) => {
+export const updateStaffImage = async (file: File, oldFilePath: string) => {
+  if (oldFilePath) await deleteStaffImage(oldFilePath);
   const { data, error } = await supabase.storage
     .from("staff-imagenes")
     .upload(file.name, file, {

@@ -112,7 +112,8 @@ export const uploadDegreeImage = async (file: File) => {
   }
 };
 
-export const updateDegreeImage = async (file: File) => {
+export const updateDegreeImage = async (file: File, oldFilePath: string) => {
+  if (oldFilePath) await deleteDegreeImage(oldFilePath);
   const { data, error } = await supabase.storage
     .from("carreras-imagenes")
     .upload(file.name, file, {
@@ -129,10 +130,9 @@ export const updateDegreeFile = async (
   file?: File,
   oldFilePath?: string | null,
 ) => {
-  // Primero eliminamos el archivo antiguo
+  if (!file) return;
   if (oldFilePath) await eliminarArchivo(oldFilePath);
   // Luego subimos el nuevo archivo
-  if (!file) return;
   return await guardarArchivo(file);
 };
 

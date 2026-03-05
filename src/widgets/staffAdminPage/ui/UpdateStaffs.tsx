@@ -123,7 +123,7 @@ export const UpdateStaffs: React.FC<Props> = ({
       }
 
       if (data.imagen_url) {
-        updateStaffImage(imageFile!);
+        updateStaffImage(imageFile!, initialData.imagen_url);
       }
       onSuccess({
         id: staffData.id,

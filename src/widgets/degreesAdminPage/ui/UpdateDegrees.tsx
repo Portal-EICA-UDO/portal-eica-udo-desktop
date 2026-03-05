@@ -115,10 +115,11 @@ export const UpdateDegrees: React.FC<props> = ({
 
   const onSubmit = async (data: FormData) => {
     console.log("data: ", data);
+    console.log("imageFile: ", watchedFile[0], initialData.horario_url);
     let fileResponse = null;
     try {
       if (!!data.imagen_url) {
-        await updateDegreeImage(imageFile as any);
+        await updateDegreeImage(imageFile as any, initialData.imagen_url);
       }
 
       fileResponse = await updateDegreeFile(
