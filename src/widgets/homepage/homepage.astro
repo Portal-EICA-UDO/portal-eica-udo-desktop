@@ -5,13 +5,14 @@ const {
   title = "Escuela de Ingenierías y Ciencias Aplicadas",
   subtitle = "Del pueblo venimos y hacia el pueblo vamos",
   heroImage = "/images/fondoUDO.webp",
+  logoSrc = "/images/logoUDO.png",
   mission = {
     title: "Mision",
-    body: "Ser un ente Rector en la Educación Superior que asuma una filosofía democrática y participativa; orientada hacia la plena autonomía, comprometida a dedicar sus esfuerzos a la formación de recursos humanos competitivos para el mercado laboral, prestando servicio de calidad en las áreas del conocimiento científico, humanístico y tecnológico mediante la realizacion de funciones de investigación, docencia y extensión, atendiendo la pertinencia social de cada núcleo, respondiendo oportunamente a las exigencias de su entorno y a las demandas de cambios e innovacion que caracterizan a nuestra época.",
+    body: "Ser un ente Rector en la Educación Superior que asuma una filosofía democrática y participativa; orientada hacia la plena autonomía, comprometida a dedicar sus esfuerzos a la formación de recursos humanos competitivos para el mercado laboral, prestando servicio de calidad en las áreas del conocimiento científico, humanístico y tecnológico mediante la realización de funciones de investigación, docencia y extensión, atendiendo la pertinencia social de cada núcleo, respondiendo oportunamente a las exigencias de su entorno y a las demandas de cambios e innovación que caracterizan a nuestra época.",
   },
   vision = {
     title: "Vision",
-    body: "Contribuir a la formación de profesionales de excelencia, de valores éticos y morales, críticos, creativos e integrales en la prestación de servicios en las diferentes áreas del conocimiento y desarrollando actividades de investigación, docencia y extensión para cooperar en la construcción de una sociedad venezolana de la Región Oriental -Insular - Sur del pais.",
+    body: "Contribuir a la formación de profesionales de excelencia, de valores éticos y morales, críticos, creativos e integrales en la prestación de servicios en las diferentes áreas del conocimiento y desarrollando actividades de investigación, docencia y extensión para cooperar en la construcción de una sociedad venezolana de la Región Oriental -Insular - Sur del país.",
   },
 } = Astro.props;
 ---
@@ -20,9 +21,32 @@ const {
   class="h-full homepage-hero max-w-8xl mx-auto px-2 md:px-4 lg:px-8 pb-4"
 >
   <div class="h-full relative rounded-3xl shadow-lg">
-    <!-- background image -->
+    <!-- mobile version-->
     <div
-      class="h-full md:h-full bg-center bg-cover rounded-3xl"
+      class="md:hidden h-full bg-center bg-cover rounded-3xl"
+      style={`background-image: url("${heroImage}")`}
+    >
+      <div class="flex flex-col items-center justify-center h-full p-6">
+        <div class="w-40 h-40 rounded-full mt-6" style="background: radial-gradient(circle, white 50%, transparent 50%);">
+          <img class="w-full h-full object-contain" src={logoSrc} alt="Logo" />
+        </div>
+        <h1 class="text-3xl font-bold text-white text-center drop-shadow">
+          {title}
+        </h1>
+        <!-- subtitle card: semi-transparent with backdrop blur -->
+        <div
+          class="inline-flex items-center justify-center bg-white/20 backdrop-blur-xs text-white p-2 rounded-3xl shadow-md mt-6 max-w-prose"
+        >
+          <p class="m-0 mx-4 text-center text-white/90 text-sm">
+            {subtitle}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- desktop version -->
+    <div
+      class="hidden md:block h-full bg-center bg-cover rounded-3xl"
       style={`background-image: url("${heroImage}")`}
       aria-hidden="true"
     >
