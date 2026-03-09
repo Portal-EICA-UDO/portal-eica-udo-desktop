@@ -37,6 +37,7 @@ export const UpdateDependences: React.FC<Props> = ({
   } = useForm<FormData>({
     resolver: zodResolver(updateDependencesSchema as any),
     defaultValues: {
+      codigo: initialData.codigo,
       nombre: initialData.nombre,
       vision: initialData.vision,
       mision: initialData.mision,
