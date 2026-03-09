@@ -45,7 +45,7 @@ const SUPER_ADMIN_LINKS: Link[] = [
     icon: <MailQuestionMark />,
   },
   {
-    label: "Crear Usuarios",
+    label: "Usuarios",
     href: "/privado/crear-usuarios",
     admin: true,
   },
